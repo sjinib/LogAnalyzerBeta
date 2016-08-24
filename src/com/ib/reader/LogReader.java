@@ -5,22 +5,22 @@ import com.ib.message.*;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
-import org.w3c.dom.Element;
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
-import java.util.HashMap;
+import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 
 public class LogReader {
 	boolean isTWS;
-	private String twsLogFile = "tws.log";
-	private String settingsFile = "tws.error.xml";
+	private String twsLogFile = new String();
+	private String settingsFile = new String();
 	
 	private String zipLocation = null;
 	private String outputDirectory = null;
-	private List<File> fileList;
+	private List<File> twsLogFileList;
+        private List<File> settingsFileList;
 	
 	private MarketDataSettingsMessage mdSettingsMessage;
 	private ApiSettingsMessage apiSettingsMessage;
@@ -53,19 +53,60 @@ public class LogReader {
 		}
 	}
 	
-	public void loadFilesList() throws Exception{
+	public void loadTwsLogFilesList() throws Exception{
 		if(outputDirectory == null){
 			throw new Exception("Invalid Directory");
 		}
 		
-		if(fileList == null){
+		if(twsLogFileList == null){
 			File dir = new File(outputDirectory);
-			fileList = (List<File>) FileUtils.listFiles(dir, new String[] {"log", "xml"}, true);
+			//fileList = (List<File>) FileUtils.listFiles(dir, new String[] {"log", "xml"}, true);
+                        IOFileFilter fileFilter = new WildcardFileFilter(Arrays.asList("tws.log", "tws.*.log", "log.*.txt"));
+                        twsLogFileList = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
+                        
+                        /*
+                        for(int i = 0; i < twsLogFileList.size(); i++){
+                            System.out.println(twsLogFileList.get(i).getName());
+                        }*/
+                        
+                        boolean hasToday = false;
+                        for(File file : twsLogFileList){
+                            
+                        }
+		}
+	}
+        
+        public void loadSettingsFilesList() throws Exception{
+		if(outputDirectory == null){
+			throw new Exception("Invalid Directory");
+		}
+		
+		if(settingsFileList == null){
+			File dir = new File(outputDirectory);
+			//fileList = (List<File>) FileUtils.listFiles(dir, new String[] {"log", "xml"}, true);
+                        IOFileFilter fileFilter = new WildcardFileFilter(Arrays.asList("tws.*.xml"));
+                        settingsFileList = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
+                        
+                        /* Test read file list
+                        for(int i = 0; i < fileList.size(); i++){
+                            System.out.println(fileList.get(i).toString());
+                        }*/
+                        
+                        boolean hasToday = false;
+                        for(File file : settingsFileList){
+                            if(file.getName().equals("tws.error.xml")){
+                                settingsFile = "tws.error.xml";
+                                hasToday = true;
+                            }
+                        }
+                        if(hasToday = false){
+                            settingsFile = settingsFileList.get(0).getName();
+                        }
 		}
 	}
 	
 	public File getSettingsFile(){
-		for(File file: fileList){
+		for(File file: settingsFileList){
 			if(file.getName().equals(this.settingsFile)){
 				return new File(file.getPath());
 			}
@@ -74,9 +115,7 @@ public class LogReader {
 	}
 	
 	public File getTwsLogFile() throws Exception{
-		loadFilesList();
-		
-		for(File file: fileList){
+		for(File file: twsLogFileList){
 			if(file.getName().equals(this.twsLogFile)){
 				return new File(file.getPath());
 			}

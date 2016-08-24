@@ -20,7 +20,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import com.ib.visulizer.NewTabbedPanel;
-import com.ib.mamager.*;
+import com.ib.manager.*;
 
 public class MainFrame extends JFrame {
 	static MainFrame INSTANCE;

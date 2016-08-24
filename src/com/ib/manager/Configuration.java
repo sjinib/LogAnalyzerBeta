@@ -1,4 +1,4 @@
-package com.ib.mamager;
+package com.ib.manager;
 
 public class Configuration {
 	String TWSBuild;
