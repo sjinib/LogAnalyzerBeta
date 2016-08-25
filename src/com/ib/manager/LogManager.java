@@ -8,10 +8,10 @@ import com.ib.parser.Choices;
 public class LogManager {
 	private LogReader reader;
 	private boolean isDeepDiagnostic;
+        private boolean isTWS;
 	
 	public LogManager(){
-		reader = new LogReader(true);
-		this.isDeepDiagnostic = true;
+		reader = new LogReader();
 	}
 	
 	public void extract(){
@@ -22,6 +22,10 @@ public class LogManager {
 		}
 	}
 	
+        public void setIsTws(boolean isTws){
+            isTWS = isTws;
+        }
+        
 	public void setReaderLocation(String zipLocation, String outputDirectory){
 		if(zipLocation != null){
 			reader.setZipLocation(zipLocation);
@@ -31,18 +35,62 @@ public class LogManager {
 		}
 	}
         
-        public void loadFileList(){
-            
+        public String[] getLogFileListNames(){
+            if(isTWS == true){
+                return reader.getTwsLogFileListNames();
+            } else {
+                return reader.getIBGLogFilesListNames();
+            }
+        }
+        
+        public String[] getSettingsFileListNames(){
+            if(isTWS == true){
+                return reader.getTwsSettingsFilesListNames();
+            } else {
+                return reader.getIbgSettingsFilesListNames();
+            }
+        }
+        
+        public String getTodayLogFileName(){
+            if(isTWS == true){
+                return reader.getTodayTwsLogFileName();
+            } else {
+                return reader.getTodayIbgLogFileName();
+            }
+        }
+        
+        public String getTodaySettingsFileName(){
+            if(isTWS == true){
+                return reader.getTodayTwsSettingsFileName();
+            } else {
+                return reader.getTodayIbgSettingsFileName();
+            }
+        }
+        
+        public void selectLogFile(String s){
+            if(isTWS == true){
+                reader.selectTwsLogFile(s);
+            } else {
+                reader.selectIbgLogFile(s);
+            }
+        }
+        
+        public void selectSettingsFile(String s){
+            if(isTWS == true){
+                reader.selectTwsSettingsLogFile(s);
+            } else {
+                reader.selectIbgSettingsLogFile(s);
+            }
         }
 	
 	public void start(){
 		try {
-			reader.loadTwsLogFilesList();
+			reader.loadTwsLogFileList();
 			//File currentSettingsFile = reader.getTwsErrorXml();
 			//reader.parseSettingsFile(currentSettingsFile, Choices.API);
 			//reader.parseSettingsFile(currentSettingsFile, Choices.MD);
 			if(this.isDeepDiagnostic == true){
-				//reader.parseTwsLogFileDeep(Choices.ENV);
+				reader.parseTwsLogFileDeep(Choices.ENV);
 			} else if(this.isDeepDiagnostic == false){
 				//reader.parseTwsLogFileShallow(Choices.ENV);
 			}

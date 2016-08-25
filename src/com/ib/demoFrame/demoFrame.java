@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package com.ib.demoFrame;
 
 import com.ib.manager.*;
@@ -18,6 +18,12 @@ import org.apache.commons.io.FileUtils;
 public class demoFrame extends javax.swing.JFrame {
     private LogManager manager = new LogManager();
     private File diagnosticFile;
+    private boolean isExtracted = false;
+    
+    private boolean isTwsLogAdded = false;
+    private boolean isIbgLogAdded = false;
+    private boolean isTwsSettingsAdded = false;
+    private boolean isIbgSettingsAdded = false;
     
     /**
      * Creates new form demoFrame
@@ -25,9 +31,8 @@ public class demoFrame extends javax.swing.JFrame {
     public demoFrame() {
         initComponents();
         //customInitComponents();
-        startManager();
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -38,6 +43,7 @@ public class demoFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         fileChooser = new javax.swing.JFileChooser();
+        group = new javax.swing.ButtonGroup();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         configurePane = new javax.swing.JPanel();
@@ -48,9 +54,9 @@ public class demoFrame extends javax.swing.JFrame {
         extractDirectory = new javax.swing.JTextField();
         extractBtn = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        logComboBox = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        settingsComboBox = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
@@ -60,6 +66,8 @@ public class demoFrame extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         browse1Btn = new javax.swing.JButton();
         browse2Btn = new javax.swing.JButton();
+        twsRadio = new javax.swing.JRadioButton();
+        ibgRadio = new javax.swing.JRadioButton();
         jProgressBar1 = new javax.swing.JProgressBar();
         jLabel10 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -104,11 +112,13 @@ public class demoFrame extends javax.swing.JFrame {
 
         jLabel4.setText("TWS/IB Gateway log:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        logComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logComboBoxActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("Settings File:");
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel6.setText("Or");
 
@@ -143,6 +153,22 @@ public class demoFrame extends javax.swing.JFrame {
             }
         });
 
+        group.add(twsRadio);
+        twsRadio.setText("TWS");
+        twsRadio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                twsRadioActionPerformed(evt);
+            }
+        });
+
+        group.add(ibgRadio);
+        ibgRadio.setText("IB Gateway");
+        ibgRadio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ibgRadioActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout configurePaneLayout = new javax.swing.GroupLayout(configurePane);
         configurePane.setLayout(configurePaneLayout);
         configurePaneLayout.setHorizontalGroup(
@@ -151,28 +177,33 @@ public class demoFrame extends javax.swing.JFrame {
                 .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(configurePaneLayout.createSequentialGroup()
                         .addGap(6, 6, 6)
-                        .addComponent(jLabel6))
-                    .addGroup(configurePaneLayout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(156, 156, 156)
-                        .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5)))
-                    .addGroup(configurePaneLayout.createSequentialGroup()
-                        .addGap(6, 6, 6)
                         .addComponent(jLabel1))
+                    .addGroup(configurePaneLayout.createSequentialGroup()
+                        .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(configurePaneLayout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel6))
+                            .addGroup(configurePaneLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel4))
+                            .addGroup(configurePaneLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(logComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(97, 97, 97)
+                        .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(settingsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(configurePaneLayout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
                             .addComponent(jLabel3)
                             .addComponent(jLabel7)
-                            .addComponent(jLabel8))
+                            .addComponent(jLabel8)
+                            .addComponent(twsRadio))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ibgRadio)
                             .addGroup(configurePaneLayout.createSequentialGroup()
                                 .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -201,25 +232,37 @@ public class demoFrame extends javax.swing.JFrame {
             .addGroup(configurePaneLayout.createSequentialGroup()
                 .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(configurePaneLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(browse1Btn)
+                        .addGap(32, 32, 32)
+                        .addComponent(loadDirectory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(configurePaneLayout.createSequentialGroup()
+                        .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(configurePaneLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(browse1Btn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel3)
+                                    .addComponent(extractDirectory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(extractBtn)
+                                    .addComponent(browse2Btn)))
+                            .addGroup(configurePaneLayout.createSequentialGroup()
+                                .addGap(35, 35, 35)
+                                .addComponent(jLabel2)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(extractDirectory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(extractBtn)
-                            .addComponent(browse2Btn))
+                            .addComponent(twsRadio)
+                            .addComponent(ibgRadio))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
                             .addComponent(jLabel5))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(58, 58, 58)
+                            .addComponent(logComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(settingsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                         .addComponent(jLabel6)
                         .addGap(53, 53, 53)
                         .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -230,13 +273,7 @@ public class demoFrame extends javax.swing.JFrame {
                         .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel8)
                             .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton3)))
-                    .addGroup(configurePaneLayout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addComponent(loadDirectory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(configurePaneLayout.createSequentialGroup()
-                        .addGap(35, 35, 35)
-                        .addComponent(jLabel2)))
+                            .addComponent(jButton3))))
                 .addContainerGap(45, Short.MAX_VALUE))
         );
 
@@ -318,93 +355,206 @@ public class demoFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
     private void customInitComponents(){
         loadDirectory.setText(System.getProperty("user.home").toString());
         extractDirectory.setText(System.getProperty("user.home").toString() + "\\Temp");
     }
     
-    private void startManager(){
-        
-    }
-    
     private void extractDirectoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_extractDirectoryActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_extractDirectoryActionPerformed
-
+    
     private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField3ActionPerformed
-
+    
     private void browse1BtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browse1BtnActionPerformed
         // TODO add your handling code here:
         int returnVal = fileChooser.showOpenDialog(this);
         if (returnVal == javax.swing.JFileChooser.APPROVE_OPTION) {
             diagnosticFile = fileChooser.getSelectedFile();
-            loadDirectory.setText(diagnosticFile.getAbsolutePath().toString());            
+            loadDirectory.setText(diagnosticFile.getAbsolutePath().toString());
             extractDirectory.setText(diagnosticFile.getAbsolutePath().toString() + "_extracted");
-            manager.setReaderLocation(loadDirectory.getText(), extractDirectory.getText());            
+            manager.setReaderLocation(loadDirectory.getText(), extractDirectory.getText());
         } else if (returnVal == javax.swing.JFileChooser.CANCEL_OPTION){
         } else {
             javax.swing.JOptionPane.showMessageDialog(null, "Failed to find file.");
         }
     }//GEN-LAST:event_browse1BtnActionPerformed
-
+    
     private void loadDirectoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadDirectoryActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_loadDirectoryActionPerformed
-
+    
     private void browse2BtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browse2BtnActionPerformed
         // TODO add your handling code here:
         int returnVal = fileChooser.showOpenDialog(this);
         if (returnVal == javax.swing.JFileChooser.APPROVE_OPTION) {
-            File directory = fileChooser.getSelectedFile();            
+            File directory = fileChooser.getSelectedFile();
             extractDirectory.setText(directory.getAbsolutePath().toString());
-            manager.setReaderLocation(null, extractDirectory.getText());            
+            manager.setReaderLocation(null, extractDirectory.getText());
         } else if (returnVal == javax.swing.JFileChooser.CANCEL_OPTION){
         } else {
             javax.swing.JOptionPane.showMessageDialog(null, "Failed to find directory.");
         }
         
     }//GEN-LAST:event_browse2BtnActionPerformed
-
+    
     private void extractBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_extractBtnActionPerformed
         // TODO add your handling code here:
-        boolean isExtracted = false;
-        
         File directory = new File(extractDirectory.getText());
         if(directory.isDirectory()){
-                int reply = javax.swing.JOptionPane.showConfirmDialog(null, "The directory already exists. Do you want to clear the folder first?");
-                if(reply == javax.swing.JOptionPane.YES_OPTION){
-                    extractDirectory.setText(directory.toString());
-                    manager.setReaderLocation(null, extractDirectory.getText());
-                    try{
-                        FileUtils.cleanDirectory(directory);                        
-                        manager.extract();
-                    } catch (IOException ex){
-                        javax.swing.JOptionPane.showMessageDialog(null, "Failed to clear directory");
+            int reply = javax.swing.JOptionPane.showConfirmDialog(null, "The directory already exists. Do you want to clear the " + extractDirectory.getText() + " folder first?");
+            if(reply == javax.swing.JOptionPane.YES_OPTION){
+                try{
+                    FileUtils.cleanDirectory(directory); // Clear extract directory
+                } catch (IOException e){
+                    e.printStackTrace();
+                    javax.swing.JOptionPane.showMessageDialog(null, "Failed to clear directory");
+                }
+            }
+            
+            extractDirectory.setText(directory.toString());
+            manager.setReaderLocation(null, extractDirectory.getText());
+            // Initialize tws/ibg log combo box
+            logComboBox.removeAllItems();
+            isTwsLogAdded = false; 
+            isIbgLogAdded = false;
+                        
+            // Iniatialize settings combo box
+            settingsComboBox.removeAllItems();
+            isTwsSettingsAdded = false;
+            isIbgSettingsAdded = false;
+            
+            manager.extract();
+            isExtracted = true;
+            if(twsRadio.isSelected() || ibgRadio.isSelected()){
+                // Populate and select log file for combo box
+                String[] logList = manager.getLogFileListNames();
+                for(String s: logList){
+                    logComboBox.addItem(s);
+                }
+                logComboBox.setSelectedItem(manager.getTodayLogFileName());
+                
+                // Populate and select settings file for combo box
+                String[] settingsList = manager.getSettingsFileListNames();
+                for(String s: settingsList){
+                    settingsComboBox.addItem(s);
+                }
+                settingsComboBox.setSelectedItem(manager.getTodaySettingsFileName());
+            }
+        }
+        else {
+            int reply = javax.swing.JOptionPane.showConfirmDialog(null, "The directory " + extractDirectory.getText() + " does not exist. Do you want to create it?");
+            if(reply == javax.swing.JOptionPane.YES_OPTION){
+                directory.mkdir();
+                extractDirectory.setText(directory.toString());
+                manager.setReaderLocation(null, extractDirectory.getText());
+                // Initialize tws/ibg log combo box
+                logComboBox.removeAllItems();
+                isTwsLogAdded = false; // initialize
+                isIbgLogAdded = false;
+                
+                // Initialize settings file combo box
+                settingsComboBox.removeAllItems();
+                isTwsSettingsAdded = false;
+                isIbgSettingsAdded = false;
+                
+                manager.extract();
+                isExtracted = true;
+                if(twsRadio.isSelected() || ibgRadio.isSelected()){
+                    // Populate and select log file for combo box
+                    String[] logList = manager.getLogFileListNames();
+                    for(String s: logList){
+                        logComboBox.addItem(s);
                     }
-                } else {
-                    extractDirectory.setText(directory.toString());
-                    manager.setReaderLocation(null, extractDirectory.getText());
-                    manager.extract();
+                    logComboBox.setSelectedItem(manager.getTodayLogFileName());
                     
-                }            
+                    // Populate and select settings file for combo box
+                    String[] settingsList = manager.getSettingsFileListNames();
+                    for(String s: settingsList){
+                        settingsComboBox.addItem(s);
+                    }
+                    settingsComboBox.setSelectedItem(manager.getTodaySettingsFileName());
+                }
             }
             else {
-                int reply = javax.swing.JOptionPane.showConfirmDialog(null, "The directory does not exist. Do you want to create it?");
-                if(reply == javax.swing.JOptionPane.YES_OPTION){
-                    directory.mkdir();
-                    extractDirectory.setText(directory.toString());
-                    manager.setReaderLocation(null, extractDirectory.getText());
-                }
-                else {
-                    javax.swing.JOptionPane.showMessageDialog(null, "Failed to load directory. Please find a different directory.");
-                    extractDirectory.setText(System.getProperty("user.home").toString());
-                }
+                javax.swing.JOptionPane.showMessageDialog(null, "Failed to load directory. Please find a different directory.");
+                extractDirectory.setText(System.getProperty("user.home").toString() + "\\Temp");
             }
+        }
     }//GEN-LAST:event_extractBtnActionPerformed
+    
+    private void twsRadioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_twsRadioActionPerformed
+        
+        manager.setIsTws(true);
+        
+        // Populate and select log file for combo box
+        if(isExtracted == true && isTwsLogAdded == false){
+            String[] list = manager.getLogFileListNames();
+            if(list == null)
+                return;
+            
+            for(String s: list){
+                logComboBox.addItem(s);
+            }
+            isTwsLogAdded = true;
+        }
+        logComboBox.setSelectedItem(manager.getTodayLogFileName());
+        
+        // Populate and select settings file for combo box
+        if(isExtracted == true && isTwsSettingsAdded == false){
+            String[] list = manager.getSettingsFileListNames();
+            if(list == null)
+                return;
+            
+            for(String s: list){
+                settingsComboBox.addItem(s);
+            }
+            isTwsSettingsAdded = true;
+        }
+        settingsComboBox.setSelectedItem(manager.getTodaySettingsFileName());
+    }//GEN-LAST:event_twsRadioActionPerformed
+    
+    private void ibgRadioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ibgRadioActionPerformed
 
+        manager.setIsTws(false);
+        
+        // Populate and select log file for combo box
+        if(isExtracted == true && isIbgLogAdded == false){
+            String[] list = manager.getLogFileListNames();
+            if(list == null)
+                return;
+            
+            for(String s: list){
+                logComboBox.addItem(s);
+            }
+            isIbgLogAdded = true;            
+        }
+        logComboBox.setSelectedItem(manager.getTodayLogFileName());
+        
+        // Populate and select settings file for combo box
+        if(isExtracted == true && isIbgSettingsAdded == false){
+            String[] list = manager.getSettingsFileListNames();
+            if(list == null)
+                return;
+            
+            for(String s: list){
+                settingsComboBox.addItem(s);
+            }
+            isIbgSettingsAdded = true;
+        }
+        settingsComboBox.setSelectedItem(manager.getTodaySettingsFileName());
+    }//GEN-LAST:event_ibgRadioActionPerformed
+    
+    private void logComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logComboBoxActionPerformed
+        // TODO add your handling code here:        
+        if(logComboBox.getSelectedItem().toString() == null)
+            System.out.println("Yes its null");
+        manager.selectLogFile(logComboBox.getSelectedItem().toString());
+    }//GEN-LAST:event_logComboBoxActionPerformed
+    
     /**
      * @param args the command line arguments
      */
@@ -412,8 +562,8 @@ public class demoFrame extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+        * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+        */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -431,7 +581,7 @@ public class demoFrame extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(demoFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -441,7 +591,7 @@ public class demoFrame extends javax.swing.JFrame {
             }
         });
     }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton browse1Btn;
     private javax.swing.JButton browse2Btn;
@@ -449,10 +599,10 @@ public class demoFrame extends javax.swing.JFrame {
     private javax.swing.JButton extractBtn;
     private javax.swing.JTextField extractDirectory;
     private javax.swing.JFileChooser fileChooser;
+    private javax.swing.ButtonGroup group;
+    private javax.swing.JRadioButton ibgRadio;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -470,5 +620,8 @@ public class demoFrame extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField loadDirectory;
+    private javax.swing.JComboBox<String> logComboBox;
+    private javax.swing.JComboBox<String> settingsComboBox;
+    private javax.swing.JRadioButton twsRadio;
     // End of variables declaration//GEN-END:variables
 }
