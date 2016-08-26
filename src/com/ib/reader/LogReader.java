@@ -23,6 +23,9 @@ public class LogReader {
     private String selectedTwsSettingsFile = new String();
     private String selectedIbgSettingsFile = new String();
     
+    private String manualSelectedLogFile = new String();
+    private String manualSelectedSettingsFile = new String();
+    
     private String zipLocation = null;
     private String outputDirectory = null;
     private List<File> twsLogFileList = null;
@@ -51,6 +54,28 @@ public class LogReader {
     public void setZipLocation(String dir){
         if(dir != null){
             zipLocation = dir;
+        }
+    }
+    
+    public void resetLogFileList(){
+        if(twsLogFileList != null){
+            twsLogFileList.clear();
+            twsLogFileList = null;
+        }
+        if(ibgLogFileList != null){
+            ibgLogFileList.clear();
+            ibgLogFileList = null;            
+        }
+    }
+    
+    public void resetSettingsFileList(){
+        if(twsSettingsFileList != null){
+            twsSettingsFileList.clear();
+            twsSettingsFileList = null;
+        }
+        if(ibgSettingsFileList != null){
+            ibgSettingsFileList.clear();
+            ibgSettingsFileList = null;
         }
     }
     
@@ -328,18 +353,26 @@ public class LogReader {
     }
     
     public String getTodayTwsSettingsFileName(){
+        if(todayTwsSettingsFile == null)
+            return null;
         return new String(todayTwsSettingsFile);
     }
     
     public String getTodayIbgSettingsFileName(){
+        if(todayIbgSettingsFile == null)
+            return null;
         return new String(todayIbgSettingsFile);
     }
     
     public String getTodayTwsLogFileName(){
+        if(todayTwsLogFile == null)
+            return null;
         return new String(todayTwsLogFile);
     }
     
     public String getTodayIbgLogFileName(){
+        if(todayIbgLogFile == null)
+            return null;
         return new String(todayIbgLogFile);
     }
     

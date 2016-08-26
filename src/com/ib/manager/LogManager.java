@@ -8,7 +8,8 @@ import com.ib.parser.Choices;
 public class LogManager {
 	private LogReader reader;
 	private boolean isDeepDiagnostic;
-        private boolean isTWS;
+        private boolean isTWS; // If the files being investigated are from TWS (true) or IBG (false)
+        private boolean isManual; // If log and settings are choosed manually
 	
 	public LogManager(){
 		reader = new LogReader();
@@ -24,7 +25,7 @@ public class LogManager {
 	
         public void setIsTws(boolean isTws){
             isTWS = isTws;
-        }
+        }        
         
 	public void setReaderLocation(String zipLocation, String outputDirectory){
 		if(zipLocation != null){
@@ -34,6 +35,11 @@ public class LogManager {
 			reader.setOutputDirectory(outputDirectory);
 		}
 	}
+        
+        public void resetAllFileList(){
+            reader.resetLogFileList();
+            reader.resetSettingsFileList();
+        }
         
         public String[] getLogFileListNames(){
             if(isTWS == true){
