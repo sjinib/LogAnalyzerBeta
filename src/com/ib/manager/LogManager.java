@@ -4,12 +4,12 @@ import com.ib.parser.*;
 import com.ib.reader.*;
 import java.io.File;
 import com.ib.parser.Choices;
+import java.util.HashMap;
 
 public class LogManager {
 	private LogReader reader;
-	private boolean isDeepDiagnostic;
+	private boolean isDeepDiagnostic = true;
         private boolean isTWS; // If the files being investigated are from TWS (true) or IBG (false)
-        private boolean isManual; // If log and settings are choosed manually
 	
 	public LogManager(){
 		reader = new LogReader();
@@ -25,7 +25,11 @@ public class LogManager {
 	
         public void setIsTws(boolean isTws){
             isTWS = isTws;
-        }        
+        }      
+        
+        public void setDeepDiagnostic(boolean isDeepDiag){
+            isDeepDiagnostic = isDeepDiag;
+        }
         
 	public void setReaderLocation(String zipLocation, String outputDirectory){
 		if(zipLocation != null){
@@ -88,7 +92,20 @@ public class LogManager {
                 reader.selectIbgSettingsLogFile(s);
             }
         }
+        
+        public void startParse(int choice, HashMap<String, javax.swing.JTextPane> textPaneList){
+            try {
+                if(isDeepDiagnostic == true){
+                    reader.parseTwsLogFileDeep(choice, isTWS, textPaneList);
+                } else {
+                    reader.parseTwsLogFileShallow(choice, textPaneList);
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
 	
+        /*
 	public void start(){
 		try {
 			reader.loadTwsLogFileList();
@@ -106,4 +123,5 @@ public class LogManager {
 			e.printStackTrace();
 		}
 	}
+        */
 }

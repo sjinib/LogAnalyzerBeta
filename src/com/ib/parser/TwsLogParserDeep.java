@@ -2,33 +2,41 @@ package com.ib.parser;
 
 import java.io.File;
 import java.util.Scanner;
+import javax.swing.text.StyledDocument;
+import com.ib.demoFrame.demoFrame;
 
 public class TwsLogParserDeep {
 	// Choice(3)
-	public static void parseTwsEnvInfo(File twsLogFile) throws Exception {
+	public static void parseTwsEnvInfo(File twsLogFile, javax.swing.JTextPane textPane) throws Exception {
 		Scanner scanner = new Scanner(twsLogFile);
 
 		String[] filter1 = { "partitionList():", "estoring", "PROXY Cleared", "Jts dir is", "Build ", "java version =", "sun.arch.data.model =", "os =", "username =", "set audit xml file:", "Started on", "timezone:", "Locale=", "runtime =", "vendor =", "host =", "remotePort =", "S3: checkbox", "EventQueue-0] - CCP reported time:", "Monitor: Monitor:" };
 
 		String[] filter2 = { "there is no internet connectivity" };	
+                
+                StyledDocument doc = textPane.getStyledDocument();
+                demoFrame.addStylesToDocument(doc);
 		
 		outerLoop: while(scanner.hasNextLine()) {
 			String currentLine = scanner.nextLine();
 			if (currentLine.contains("TWS RESTART")) {
-				System.out.println(currentLine);
+				//System.out.println(currentLine);
+                                doc.insertString(doc.getLength(), currentLine, doc.getStyle("blueBold"));
 				continue outerLoop;
 			}
 			
 			for(String str : filter1){
 				if(currentLine.contains(str)){
-					System.out.println(currentLine);
+					//System.out.println(currentLine);
+                                        doc.insertString(doc.getLength(), currentLine, doc.getStyle("green"));
 					continue outerLoop;
 				}
 			}
 			
 			for(String str : filter2){
 				if(currentLine.contains(str)){
-					System.out.println(currentLine);
+					//System.out.println(currentLine);
+                                        doc.insertString(doc.getLength(), currentLine, doc.getStyle("green"));
 					continue outerLoop;
 				}
 			}			

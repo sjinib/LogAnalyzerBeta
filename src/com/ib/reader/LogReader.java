@@ -11,6 +11,7 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
+import java.util.HashMap;
 
 public class LogReader {
     private String todayTwsLogFile = new String();
@@ -451,19 +452,24 @@ public class LogReader {
         }
     }
     
-    public void parseTwsLogFileDeep(int choice) throws Exception{
-        File twsLogFile = this.getSelectedTwsLogFile();
+    public void parseTwsLogFileDeep(int choice, boolean isTws, HashMap<String, javax.swing.JTextPane> textPaneList) throws Exception{
+        File currentLogFile;
+        if(isTws == true){
+            currentLogFile = this.getSelectedTwsLogFile();
+        } else {
+            currentLogFile = this.getSelectedIbgLogFile();
+        }
         
         switch (choice) {
             case Choices.ENV:
                 parseSettingsFile(choice);
-                TwsLogParserDeep.parseTwsEnvInfo(twsLogFile);
+                TwsLogParserDeep.parseTwsEnvInfo(currentLogFile, textPaneList.get("ENV"));
                 break;
             case Choices.LOGINSEQ:
-                TwsLogParserDeep.parseTwsLoginSeqInfo(twsLogFile);
+                TwsLogParserDeep.parseTwsLoginSeqInfo(currentLogFile);
                 break;
             case Choices.SYSRES:
-                TwsLogParserDeep.parseTwsSysRes(twsLogFile);
+                TwsLogParserDeep.parseTwsSysRes(currentLogFile);
                 break;
             case Choices.MKTDATA:
                 parseSettingsFile(choice);
@@ -474,37 +480,37 @@ public class LogReader {
                 System.out.println(mdSettingsMessage.getCopyEsignalSecSettingsListFut().toString());
                 System.out.println(mdSettingsMessage.getCopyEsignalSecSettingsListInd().toString());
                 System.out.println(mdSettingsMessage.getCopySmartRoutSettingsList().toString());
-                TwsLogParserDeep.parseTwsMktData(twsLogFile);
+                TwsLogParserDeep.parseTwsMktData(currentLogFile);
                 break;
             case Choices.CONN:
-                TwsLogParserDeep.parseTwsConn(twsLogFile);
+                TwsLogParserDeep.parseTwsConn(currentLogFile);
                 break;
             case Choices.HTBP:
-                TwsLogParserDeep.parseTwsHtbp(twsLogFile);
+                TwsLogParserDeep.parseTwsHtbp(currentLogFile);
                 break;
             case Choices.API:
                 parseSettingsFile(choice);
                 System.out.println(apiSettingsMessage.getCopyApiSettingsList().toString());
                 System.out.println(apiSettingsMessage.getCopyApiPrecautionsList().toString());
                 System.out.println(apiSettingsMessage.getCopyTrustedIPs().toString());
-                TwsLogParserDeep.parseTwsApi(twsLogFile);
+                TwsLogParserDeep.parseTwsApi(currentLogFile);
                 break;
             case Choices.ORDERSTRDS:
-                TwsLogParserDeep.parseTwsOrderTrds(twsLogFile);
+                TwsLogParserDeep.parseTwsOrderTrds(currentLogFile);
                 break;
             default:
                 break;
         }
     }
     
-    public void parseTwsLogFileShallow(int choice) throws Exception{
+    public void parseTwsLogFileShallow(int choice, HashMap<String, javax.swing.JTextPane> textPaneList) throws Exception{
         File twsLogFile = this.getSelectedTwsLogFile();
         
         TwsLogParserDeep twsLogParser = new TwsLogParserDeep();
         
         switch (choice) {
             case Choices.ENV:
-                TwsLogParserDeep.parseTwsEnvInfo(twsLogFile);
+                TwsLogParserDeep.parseTwsEnvInfo(twsLogFile, textPaneList.get("ENV"));
                 break;
             case Choices.LOGINSEQ:
                 TwsLogParserDeep.parseTwsLoginSeqInfo(twsLogFile);
