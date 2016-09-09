@@ -14,6 +14,7 @@ import javax.swing.JFileChooser;
 import org.apache.commons.io.FileUtils;
 import java.util.HashMap;
 import com.ib.parser.Choices;
+import javax.swing.GroupLayout;
 import javax.swing.text.*;
 
 /**
@@ -42,7 +43,8 @@ public class demoFrame extends javax.swing.JFrame {
      */
     public demoFrame() {
         initComponents();
-        customInitComponents();       
+        customInitComponents();   
+        //customInitTextPaneComponents();
     }
     
     /**
@@ -108,9 +110,10 @@ public class demoFrame extends javax.swing.JFrame {
         includeTrdFileCheck = new javax.swing.JCheckBox();
         jLabel9 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
-        logDisplayPane1 = new javax.swing.JPanel();
-        logDisplayPane2 = new javax.swing.JPanel();
-        logDisplayPane3 = new javax.swing.JPanel();
+        textMainPane = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Log Analyzer");
@@ -336,7 +339,7 @@ public class demoFrame extends javax.swing.JFrame {
                 .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(settingsDirectoryManual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(browseSettingsManual))
-                .addContainerGap(86, Short.MAX_VALUE))
+                .addContainerGap(94, Short.MAX_VALUE))
         );
 
         statusPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Status"));
@@ -540,45 +543,64 @@ public class demoFrame extends javax.swing.JFrame {
                     .addComponent(includeTrdFileCheck)))
         );
 
-        logDisplayPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        logDisplayPane1.setPreferredSize(new java.awt.Dimension(java.awt.Toolkit.getDefaultToolkit().getScreenSize().width-55, (int)((java.awt.Toolkit.getDefaultToolkit().getScreenSize().height-50)*0.35)));
+        textMainPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        javax.swing.GroupLayout logDisplayPane1Layout = new javax.swing.GroupLayout(logDisplayPane1);
-        logDisplayPane1.setLayout(logDisplayPane1Layout);
-        logDisplayPane1Layout.setHorizontalGroup(
-            logDisplayPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        logDisplayPane1Layout.setVerticalGroup(
-            logDisplayPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 119, Short.MAX_VALUE)
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
         );
 
-        logDisplayPane2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        logDisplayPane2.setPreferredSize(new java.awt.Dimension(java.awt.Toolkit.getDefaultToolkit().getScreenSize().width-55, (int)((java.awt.Toolkit.getDefaultToolkit().getScreenSize().height-50)*0.3)));
+        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        javax.swing.GroupLayout logDisplayPane2Layout = new javax.swing.GroupLayout(logDisplayPane2);
-        logDisplayPane2.setLayout(logDisplayPane2Layout);
-        logDisplayPane2Layout.setHorizontalGroup(
-            logDisplayPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        logDisplayPane2Layout.setVerticalGroup(
-            logDisplayPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 149, Short.MAX_VALUE)
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
         );
 
-        logDisplayPane3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        javax.swing.GroupLayout logDisplayPane3Layout = new javax.swing.GroupLayout(logDisplayPane3);
-        logDisplayPane3.setLayout(logDisplayPane3Layout);
-        logDisplayPane3Layout.setHorizontalGroup(
-            logDisplayPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        logDisplayPane3Layout.setVerticalGroup(
-            logDisplayPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 113, Short.MAX_VALUE)
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout textMainPaneLayout = new javax.swing.GroupLayout(textMainPane);
+        textMainPane.setLayout(textMainPaneLayout);
+        textMainPaneLayout.setHorizontalGroup(
+            textMainPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        textMainPaneLayout.setVerticalGroup(
+            textMainPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(textMainPaneLayout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 87, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout twsLogFilterPanelLayout = new javax.swing.GroupLayout(twsLogFilterPanel);
@@ -586,20 +608,14 @@ public class demoFrame extends javax.swing.JFrame {
         twsLogFilterPanelLayout.setHorizontalGroup(
             twsLogFilterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(logDisplayPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1052, Short.MAX_VALUE)
-            .addComponent(logDisplayPane3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(logDisplayPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1052, Short.MAX_VALUE)
+            .addComponent(textMainPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         twsLogFilterPanelLayout.setVerticalGroup(
             twsLogFilterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(twsLogFilterPanelLayout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(logDisplayPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(logDisplayPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(logDisplayPane3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(textMainPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -618,13 +634,82 @@ public class demoFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(MainPane, javax.swing.GroupLayout.DEFAULT_SIZE, 503, Short.MAX_VALUE)
+                .addComponent(MainPane, javax.swing.GroupLayout.DEFAULT_SIZE, 511, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
+    /*
+    private void customInitTextPaneComponents(){
+        logDisplayPane1 = new javax.swing.JPanel();
+        logDisplayPane2 = new javax.swing.JPanel();
+        logDisplayPane3 = new javax.swing.JPanel();
+        
+        logDisplayPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        logDisplayPane1.setPreferredSize(new java.awt.Dimension(java.awt.Toolkit.getDefaultToolkit().getScreenSize().width-55, (int)((java.awt.Toolkit.getDefaultToolkit().getScreenSize().height-50)*0.3)));
 
+        javax.swing.GroupLayout logDisplayPane1Layout = new javax.swing.GroupLayout(logDisplayPane1);
+        logDisplayPane1.setLayout(logDisplayPane1Layout);
+        logDisplayPane1Layout.setHorizontalGroup(
+            logDisplayPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        logDisplayPane1Layout.setVerticalGroup(
+            logDisplayPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 114, Short.MAX_VALUE)
+        );
+
+        logDisplayPane2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        logDisplayPane2.setPreferredSize(new java.awt.Dimension(java.awt.Toolkit.getDefaultToolkit().getScreenSize().width-55, (int)((java.awt.Toolkit.getDefaultToolkit().getScreenSize().height-50)*0.3)));
+
+        javax.swing.GroupLayout logDisplayPane2Layout = new javax.swing.GroupLayout(logDisplayPane2);
+        logDisplayPane2.setLayout(logDisplayPane2Layout);
+        logDisplayPane2Layout.setHorizontalGroup(
+            logDisplayPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        logDisplayPane2Layout.setVerticalGroup(
+            logDisplayPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 184, Short.MAX_VALUE)
+        );
+
+        logDisplayPane3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        logDisplayPane3.setPreferredSize(new java.awt.Dimension(java.awt.Toolkit.getDefaultToolkit().getScreenSize().width-55, (int)((java.awt.Toolkit.getDefaultToolkit().getScreenSize().height-50)*0.3)));
+
+        javax.swing.GroupLayout logDisplayPane3Layout = new javax.swing.GroupLayout(logDisplayPane3);
+        logDisplayPane3.setLayout(logDisplayPane3Layout);
+        logDisplayPane3Layout.setHorizontalGroup(
+            logDisplayPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        logDisplayPane3Layout.setVerticalGroup(
+            logDisplayPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 92, Short.MAX_VALUE)
+        );
+        
+        textMainPane.removeAll();
+        javax.swing.GroupLayout textMainPaneLayout = new javax.swing.GroupLayout(textMainPane);
+        textMainPane.setLayout(textMainPaneLayout);
+        textMainPaneLayout.setHorizontalGroup(
+            textMainPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(logDisplayPane1, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(logDisplayPane2, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(logDisplayPane3, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        textMainPaneLayout.setVerticalGroup(
+            textMainPaneLayout.createSequentialGroup()
+                .addComponent(logDisplayPane1, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(logDisplayPane2, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(logDisplayPane3, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        System.out.println(logDisplayPane1.getPreferredSize().height + ", " + logDisplayPane2.getPreferredSize().height + ", " + logDisplayPane3.getPreferredSize().height);
+    }
+    */
+    
     private void useExtractFileBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useExtractFileBtnActionPerformed
         // Log section
         if(logComboBox.getSelectedItem() != null){
@@ -1168,22 +1253,26 @@ public class demoFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JTextField loadDirectory;
     private javax.swing.JComboBox<String> logComboBox;
     private javax.swing.JTextField logDirectoryManual;
-    private javax.swing.JPanel logDisplayPane1;
-    private javax.swing.JPanel logDisplayPane2;
-    private javax.swing.JPanel logDisplayPane3;
     private javax.swing.JLabel logFileStatus;
     private javax.swing.JComboBox<String> settingsComboBox;
     private javax.swing.JTextField settingsDirectoryManual;
     private javax.swing.JLabel settingsFileStatus;
     private javax.swing.JLabel statusLabel;
     private javax.swing.JPanel statusPanel;
+    private javax.swing.JPanel textMainPane;
     private javax.swing.ButtonGroup twsIbgGroup;
     private javax.swing.JPanel twsLogFilterPanel;
     private javax.swing.JRadioButton twsRadio;
     private javax.swing.JRadioButton useExtractFileBtn;
     private javax.swing.JRadioButton useManualFileBtn;
     // End of variables declaration//GEN-END:variables
+    //private javax.swing.JPanel logDisplayPane1;
+    //private javax.swing.JPanel logDisplayPane2;
+    //private javax.swing.JPanel logDisplayPane3;
 }
