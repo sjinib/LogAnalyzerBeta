@@ -31,20 +31,18 @@ public class demoFrame extends javax.swing.JFrame {
     private boolean isTwsSettingsAdded = false;
     private boolean isIbgSettingsAdded = false;
     
-    private boolean useExtractedZip = true;
-    
     private boolean logReady = false;
     private boolean settingsReady = false;
     
-    private HashMap<String, javax.swing.JTextPane> textPaneList = new HashMap<String, javax.swing.JTextPane>();
+    private HashMap<Integer, javax.swing.JTextPane> textPaneList = new HashMap<Integer, javax.swing.JTextPane>();
     
     /**
      * Creates new form demoFrame
      */
     public demoFrame() {
         initComponents();
-        customInitComponents();   
-        //customInitTextPaneComponents();
+        customInitTextPaneComponents();
+        customInitComponents();
     }
     
     /**
@@ -111,9 +109,9 @@ public class demoFrame extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         textMainPane = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
+        logDisplayPane1 = new javax.swing.JPanel();
+        logDisplayPane2 = new javax.swing.JPanel();
+        logDisplayPane3 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Log Analyzer");
@@ -238,36 +236,42 @@ public class demoFrame extends javax.swing.JFrame {
         configurePaneLayout.setHorizontalGroup(
             configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(configurePaneLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(10, 10, 10)
+                .addComponent(jLabel6)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(configurePaneLayout.createSequentialGroup()
                 .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(configurePaneLayout.createSequentialGroup()
-                        .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(loadDirectory, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, configurePaneLayout.createSequentialGroup()
-                                .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(extractDirectory, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING))
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(browseZip)
-                            .addGroup(configurePaneLayout.createSequentialGroup()
-                                .addComponent(browseExtract)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(extractBtn)))
-                        .addGap(182, 182, 182))
-                    .addGroup(configurePaneLayout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(configurePaneLayout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(configurePaneLayout.createSequentialGroup()
                                 .addComponent(settingsDirectoryManual, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(browseSettingsManual))
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel10)
-                            .addComponent(extractProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(configurePaneLayout.createSequentialGroup()
+                                .addComponent(extractDirectory, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(browseExtract)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(extractBtn))
+                            .addGroup(configurePaneLayout.createSequentialGroup()
+                                .addComponent(logDirectoryManual, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(browseLogManual))
+                            .addGroup(configurePaneLayout.createSequentialGroup()
+                                .addComponent(loadDirectory, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(browseZip))))
+                    .addGroup(configurePaneLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel7)
+                            .addGroup(configurePaneLayout.createSequentialGroup()
+                                .addComponent(twsRadio)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(ibgRadio))
                             .addGroup(configurePaneLayout.createSequentialGroup()
                                 .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel4)
@@ -276,22 +280,15 @@ public class demoFrame extends javax.swing.JFrame {
                                 .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(settingsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)))
-                            .addGroup(configurePaneLayout.createSequentialGroup()
-                                .addComponent(twsRadio)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(ibgRadio))
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel8)
-                            .addGroup(configurePaneLayout.createSequentialGroup()
-                                .addComponent(logDirectoryManual, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(browseLogManual)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(extractProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel2))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         configurePaneLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {browseExtract, browseSettingsManual});
 
-        configurePaneLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {extractDirectory, logDirectoryManual, settingsDirectoryManual});
+        configurePaneLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {extractDirectory, loadDirectory, logDirectoryManual, settingsDirectoryManual});
 
         configurePaneLayout.setVerticalGroup(
             configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -305,7 +302,7 @@ public class demoFrame extends javax.swing.JFrame {
                 .addGap(6, 6, 6)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(extractDirectory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(browseExtract)
                     .addComponent(extractBtn))
@@ -433,8 +430,16 @@ public class demoFrame extends javax.swing.JFrame {
 
         MainPane.addTab("Configure", null, configurePanel, "Configure log file locations");
 
+        analyzeAllBtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         analyzeAllBtn.setText("All");
+        analyzeAllBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                analyzeAllBtnActionPerformed(evt);
+            }
+        });
 
+        analyzeEnvBtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        analyzeEnvBtn.setForeground(new java.awt.Color(0, 102, 0));
         analyzeEnvBtn.setText("Env");
         analyzeEnvBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -442,21 +447,75 @@ public class demoFrame extends javax.swing.JFrame {
             }
         });
 
+        analyzeLoginSeqBtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        analyzeLoginSeqBtn.setForeground(new java.awt.Color(153, 0, 0));
         analyzeLoginSeqBtn.setText("Login Seq");
+        analyzeLoginSeqBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                analyzeLoginSeqBtnActionPerformed(evt);
+            }
+        });
 
+        analyzeSysResBtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        analyzeSysResBtn.setForeground(new java.awt.Color(51, 102, 255));
         analyzeSysResBtn.setText("SysRes");
+        analyzeSysResBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                analyzeSysResBtnActionPerformed(evt);
+            }
+        });
 
+        analyzeMktDataBtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        analyzeMktDataBtn.setForeground(new java.awt.Color(255, 102, 0));
         analyzeMktDataBtn.setText("Market Data");
+        analyzeMktDataBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                analyzeMktDataBtnActionPerformed(evt);
+            }
+        });
 
+        analyzeConnBtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        analyzeConnBtn.setForeground(new java.awt.Color(255, 0, 0));
         analyzeConnBtn.setText("Conn");
+        analyzeConnBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                analyzeConnBtnActionPerformed(evt);
+            }
+        });
 
+        analyzeHtbpBtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        analyzeHtbpBtn.setForeground(new java.awt.Color(255, 102, 153));
         analyzeHtbpBtn.setText("Htbp");
+        analyzeHtbpBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                analyzeHtbpBtnActionPerformed(evt);
+            }
+        });
 
+        analyzeAPIBtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        analyzeAPIBtn.setForeground(new java.awt.Color(153, 51, 255));
         analyzeAPIBtn.setText("API");
+        analyzeAPIBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                analyzeAPIBtnActionPerformed(evt);
+            }
+        });
 
+        analyzeOrdTrdBtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        analyzeOrdTrdBtn.setForeground(new java.awt.Color(0, 204, 204));
         analyzeOrdTrdBtn.setText("Orders & Trades");
+        analyzeOrdTrdBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                analyzeOrdTrdBtnActionPerformed(evt);
+            }
+        });
 
         jButton1.setText("Cls All");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         autoClsCheck.setText("Auto Cls");
 
@@ -512,7 +571,7 @@ public class demoFrame extends javax.swing.JFrame {
                         .addComponent(analyzeOrdTrdBtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 203, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 145, Short.MAX_VALUE)
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -545,62 +604,62 @@ public class demoFrame extends javax.swing.JFrame {
 
         textMainPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        logDisplayPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout logDisplayPane1Layout = new javax.swing.GroupLayout(logDisplayPane1);
+        logDisplayPane1.setLayout(logDisplayPane1Layout);
+        logDisplayPane1Layout.setHorizontalGroup(
+            logDisplayPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1048, Short.MAX_VALUE)
+        );
+        logDisplayPane1Layout.setVerticalGroup(
+            logDisplayPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 136, Short.MAX_VALUE)
+        );
+
+        logDisplayPane2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        javax.swing.GroupLayout logDisplayPane2Layout = new javax.swing.GroupLayout(logDisplayPane2);
+        logDisplayPane2.setLayout(logDisplayPane2Layout);
+        logDisplayPane2Layout.setHorizontalGroup(
+            logDisplayPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+        logDisplayPane2Layout.setVerticalGroup(
+            logDisplayPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 135, Short.MAX_VALUE)
         );
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        logDisplayPane3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+        javax.swing.GroupLayout logDisplayPane3Layout = new javax.swing.GroupLayout(logDisplayPane3);
+        logDisplayPane3.setLayout(logDisplayPane3Layout);
+        logDisplayPane3Layout.setHorizontalGroup(
+            logDisplayPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1048, Short.MAX_VALUE)
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-
-        jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+        logDisplayPane3Layout.setVerticalGroup(
+            logDisplayPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 105, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout textMainPaneLayout = new javax.swing.GroupLayout(textMainPane);
         textMainPane.setLayout(textMainPaneLayout);
         textMainPaneLayout.setHorizontalGroup(
             textMainPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(logDisplayPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(logDisplayPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(logDisplayPane3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         textMainPaneLayout.setVerticalGroup(
             textMainPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(textMainPaneLayout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(logDisplayPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(logDisplayPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(0, 87, Short.MAX_VALUE))
+                .addComponent(logDisplayPane3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout twsLogFilterPanelLayout = new javax.swing.GroupLayout(twsLogFilterPanel);
@@ -641,104 +700,212 @@ public class demoFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
-    /*
+    
     private void customInitTextPaneComponents(){
+        // Initialize display panels
         logDisplayPane1 = new javax.swing.JPanel();
         logDisplayPane2 = new javax.swing.JPanel();
         logDisplayPane3 = new javax.swing.JPanel();
         
         logDisplayPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        logDisplayPane1.setPreferredSize(new java.awt.Dimension(java.awt.Toolkit.getDefaultToolkit().getScreenSize().width-55, (int)((java.awt.Toolkit.getDefaultToolkit().getScreenSize().height-50)*0.3)));
-
+        logDisplayPane1.setPreferredSize(new java.awt.Dimension(textMainPane.getSize().width, (int)((textMainPane.getSize().height-50)*0.45)));
+        
+        logDisplayPane2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        logDisplayPane2.setPreferredSize(new java.awt.Dimension(textMainPane.getSize().width, (int)((textMainPane.getSize().height-50)*0.3)));
+        
+        logDisplayPane3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        logDisplayPane3.setPreferredSize(new java.awt.Dimension(textMainPane.getSize().width, (int)((textMainPane.getSize().height-50)*0.25)));
+        
+        // ENV, CONN and LOGIN SEQ
+        envTextPane = new javax.swing.JTextPane();
+        envTextPane.setEditable(false);
+        
+        envTextScrollPane = new javax.swing.JScrollPane(envTextPane);
+        envTextScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        envTextScrollPane.setViewportView(envTextPane);
+        envTextScrollPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 102, 0), 2, true));
+        
+        loginSeqTextPane = new javax.swing.JTextPane();        
+        loginSeqTextPane.setEditable(false);
+        
+        loginSeqTextScrollPane = new javax.swing.JScrollPane(loginSeqTextPane);
+        loginSeqTextScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        loginSeqTextScrollPane.setViewportView(loginSeqTextPane);
+        loginSeqTextScrollPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 0, 0), 2, true));
+        
+        connTextPane = new javax.swing.JTextPane();
+        connTextPane.setEditable(false);
+        
+        connTextScrollPane = new javax.swing.JScrollPane(connTextPane);
+        connTextScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        connTextScrollPane.setViewportView(connTextPane);
+        connTextScrollPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 0, 0), 2, true));
+                
+        envTextScrollPane.setPreferredSize(new java.awt.Dimension((int)(logDisplayPane1.getPreferredSize().width*0.5), (int)(logDisplayPane1.getPreferredSize().height*0.45)));
+        loginSeqTextScrollPane.setPreferredSize(new java.awt.Dimension((int)(logDisplayPane1.getPreferredSize().width*0.5), (int)(logDisplayPane1.getPreferredSize().height*0.55)));
+        connTextScrollPane.setPreferredSize(new java.awt.Dimension((int)(logDisplayPane1.getPreferredSize().width*0.5), (int)(logDisplayPane1.getPreferredSize().height)));
+        
         javax.swing.GroupLayout logDisplayPane1Layout = new javax.swing.GroupLayout(logDisplayPane1);
         logDisplayPane1.setLayout(logDisplayPane1Layout);
+        
+        logDisplayPane1Layout.setAutoCreateGaps(true);
+        
         logDisplayPane1Layout.setHorizontalGroup(
-            logDisplayPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        logDisplayPane1Layout.setVerticalGroup(
-            logDisplayPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 114, Short.MAX_VALUE)
-        );
-
-        logDisplayPane2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        logDisplayPane2.setPreferredSize(new java.awt.Dimension(java.awt.Toolkit.getDefaultToolkit().getScreenSize().width-55, (int)((java.awt.Toolkit.getDefaultToolkit().getScreenSize().height-50)*0.3)));
-
-        javax.swing.GroupLayout logDisplayPane2Layout = new javax.swing.GroupLayout(logDisplayPane2);
-        logDisplayPane2.setLayout(logDisplayPane2Layout);
-        logDisplayPane2Layout.setHorizontalGroup(
-            logDisplayPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        logDisplayPane2Layout.setVerticalGroup(
-            logDisplayPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 184, Short.MAX_VALUE)
-        );
-
-        logDisplayPane3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        logDisplayPane3.setPreferredSize(new java.awt.Dimension(java.awt.Toolkit.getDefaultToolkit().getScreenSize().width-55, (int)((java.awt.Toolkit.getDefaultToolkit().getScreenSize().height-50)*0.3)));
-
-        javax.swing.GroupLayout logDisplayPane3Layout = new javax.swing.GroupLayout(logDisplayPane3);
-        logDisplayPane3.setLayout(logDisplayPane3Layout);
-        logDisplayPane3Layout.setHorizontalGroup(
-            logDisplayPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        logDisplayPane3Layout.setVerticalGroup(
-            logDisplayPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 92, Short.MAX_VALUE)
+                logDisplayPane1Layout.createSequentialGroup()
+                        .addGroup(logDisplayPane1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addComponent(envTextScrollPane)
+                                .addComponent(loginSeqTextScrollPane))
+                        .addComponent(connTextScrollPane)
         );
         
+        logDisplayPane1Layout.setVerticalGroup(
+                logDisplayPane1Layout.createParallelGroup()
+                        .addGroup(logDisplayPane1Layout.createSequentialGroup()
+                                .addComponent(envTextScrollPane)
+                                .addComponent(loginSeqTextScrollPane))
+                        .addComponent(connTextScrollPane)
+        );
+        
+        // Sysres, Htbp and API
+        sysResTextPane = new javax.swing.JTextPane();
+        sysResTextPane.setEditable(false);
+        
+        sysResTextScrollPane = new javax.swing.JScrollPane(sysResTextPane);
+        sysResTextScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        sysResTextScrollPane.setViewportView(sysResTextPane);
+        sysResTextScrollPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 102, 255), 2, true));
+        
+        htbpTextPane = new javax.swing.JTextPane();
+        htbpTextPane.setEditable(false);
+        
+        htbpTextScrollPane = new javax.swing.JScrollPane(htbpTextPane);
+        htbpTextScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        htbpTextScrollPane.setViewportView(htbpTextPane);
+        htbpTextScrollPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 102, 153), 2, true));
+        
+        apiTextPane = new javax.swing.JTextPane();
+        apiTextPane.setEditable(false);
+        
+        apiTextScrollPane = new javax.swing.JScrollPane(apiTextPane);
+        apiTextScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        apiTextScrollPane.setViewportView(apiTextPane);
+        apiTextScrollPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 51, 255), 2, true));
+        
+        sysResTextScrollPane.setPreferredSize(new java.awt.Dimension((int)(logDisplayPane2.getPreferredSize().width*0.5), (int)(logDisplayPane2.getPreferredSize().height)));
+        htbpTextScrollPane.setPreferredSize(new java.awt.Dimension((int)(logDisplayPane2.getPreferredSize().width*0.5), (int)(logDisplayPane2.getPreferredSize().height*0.3)));
+        apiTextScrollPane.setPreferredSize(new java.awt.Dimension((int)(logDisplayPane2.getPreferredSize().width*0.5), (int)(logDisplayPane2.getPreferredSize().height*0.7)));
+        
+        javax.swing.GroupLayout logDisplayPane2Layout = new javax.swing.GroupLayout(logDisplayPane2);
+        logDisplayPane2.setLayout(logDisplayPane2Layout);
+        
+        logDisplayPane2Layout.setAutoCreateGaps(true);
+        
+        logDisplayPane2Layout.setHorizontalGroup(
+                logDisplayPane2Layout.createSequentialGroup()
+                        .addComponent(sysResTextScrollPane)
+                        .addGroup(logDisplayPane2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addComponent(htbpTextScrollPane)
+                                .addComponent(apiTextScrollPane))
+        );
+        
+        logDisplayPane2Layout.setVerticalGroup(
+                logDisplayPane2Layout.createParallelGroup()
+                        .addComponent(sysResTextScrollPane)
+                        .addGroup(logDisplayPane2Layout.createSequentialGroup()
+                                .addComponent(htbpTextScrollPane)
+                                .addComponent(apiTextScrollPane))
+        );
+        
+        
+        // Market Data and Orders & Trades
+        mktDataTextPane = new javax.swing.JTextPane();
+        mktDataTextPane.setEditable(false);
+        
+        mktDataTextScrollPane = new javax.swing.JScrollPane(mktDataTextPane);
+        mktDataTextScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        mktDataTextScrollPane.setViewportView(mktDataTextPane);
+        mktDataTextScrollPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 102, 0), 2, true));
+        
+        ordTrdTextPane = new javax.swing.JTextPane();
+        ordTrdTextPane.setEditable(false);
+        
+        ordTrdTextScrollPane = new javax.swing.JScrollPane(ordTrdTextPane);
+        ordTrdTextScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        ordTrdTextScrollPane.setViewportView(ordTrdTextPane);
+        ordTrdTextScrollPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 204, 204), 2, true));
+        
+        mktDataTextScrollPane.setPreferredSize(new java.awt.Dimension((int)(logDisplayPane3.getPreferredSize().width*0.5), (int)(logDisplayPane3.getPreferredSize().height)));
+        ordTrdTextScrollPane.setPreferredSize(new java.awt.Dimension((int)(logDisplayPane3.getPreferredSize().width*0.5), (int)(logDisplayPane3.getPreferredSize().height)));
+        
+        javax.swing.GroupLayout logDisplayPane3Layout = new javax.swing.GroupLayout(logDisplayPane3);
+        logDisplayPane3.setLayout(logDisplayPane3Layout);
+        
+        logDisplayPane3Layout.setAutoCreateGaps(true);
+        
+        logDisplayPane3Layout.setHorizontalGroup(
+                logDisplayPane3Layout.createSequentialGroup()
+                        .addComponent(mktDataTextScrollPane)
+                        .addComponent(ordTrdTextScrollPane)
+        );
+        
+        logDisplayPane3Layout.setVerticalGroup(
+                logDisplayPane3Layout.createParallelGroup()
+                        .addComponent(mktDataTextScrollPane)
+                        .addComponent(ordTrdTextScrollPane)
+        );
+        
+        // Add log display panes to main text pane
         textMainPane.removeAll();
         javax.swing.GroupLayout textMainPaneLayout = new javax.swing.GroupLayout(textMainPane);
         textMainPane.setLayout(textMainPaneLayout);
         textMainPaneLayout.setHorizontalGroup(
-            textMainPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(logDisplayPane1, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(logDisplayPane2, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(logDisplayPane3, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                textMainPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(logDisplayPane1, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(logDisplayPane2, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(logDisplayPane3, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         textMainPaneLayout.setVerticalGroup(
-            textMainPaneLayout.createSequentialGroup()
-                .addComponent(logDisplayPane1, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(logDisplayPane2, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(logDisplayPane3, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                textMainPaneLayout.createSequentialGroup()
+                        .addComponent(logDisplayPane1, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(logDisplayPane2, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(logDisplayPane3, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        System.out.println(logDisplayPane1.getPreferredSize().height + ", " + logDisplayPane2.getPreferredSize().height + ", " + logDisplayPane3.getPreferredSize().height);
     }
-    */
+    
     
     private void useExtractFileBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useExtractFileBtnActionPerformed
         // Log section
         if(logComboBox.getSelectedItem() != null){
-            manager.selectLogFile(logComboBox.getSelectedItem().toString());            
+            manager.selectLogFile(logComboBox.getSelectedItem().toString(), false);
             // Set Status
             logReady = true;
             updateStatus();
         } else {
+            // Set Status
             logReady = false;
             updateStatus();
         }
         
         // Settings section
         if(settingsComboBox.getSelectedItem() != null){
-            manager.selectSettingsFile(settingsComboBox.getSelectedItem().toString());
+            manager.selectSettingsFile(settingsComboBox.getSelectedItem().toString(), false);
             // Set Status
             settingsReady = true;
             updateStatus();
         } else {
+            // Set Status
             settingsReady = false;
             updateStatus();
         }
     }//GEN-LAST:event_useExtractFileBtnActionPerformed
-
+    
     private void useManualFileBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useManualFileBtnActionPerformed
         // TODO add your handling code here:
         // Log section
         if(!logDirectoryManual.getText().isEmpty()){
-            manager.selectLogFile(logDirectoryManual.getText());            
+            manager.selectLogFile(logDirectoryManual.getText(), true);
             // Set Status
             logReady = true;
             updateStatus();
@@ -749,8 +916,7 @@ public class demoFrame extends javax.swing.JFrame {
         
         // Settings section
         if(!settingsDirectoryManual.getText().isEmpty()){
-            System.out.println(settingsDirectoryManual.getText());
-            manager.selectSettingsFile(settingsDirectoryManual.getText());
+            manager.selectSettingsFile(settingsDirectoryManual.getText(), true);
             // Set Status
             settingsReady = true;
             updateStatus();
@@ -759,17 +925,21 @@ public class demoFrame extends javax.swing.JFrame {
             updateStatus();
         }
     }//GEN-LAST:event_useManualFileBtnActionPerformed
-
+    
     private void analyzeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeBtnActionPerformed
         // TODO add your handling code here:
         MainPane.setSelectedComponent(twsLogFilterPanel);
     }//GEN-LAST:event_analyzeBtnActionPerformed
-
+    
     private void analyzeEnvBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeEnvBtnActionPerformed
         // TODO add your handling code here:
-        manager.startParse(Choices.ENV, textPaneList);
+        if(useExtractFileBtn.isSelected()){
+            manager.startParse(Choices.ENV, false, textPaneList);
+        } else if (useManualFileBtn.isSelected()){
+            manager.startParse(Choices.ENV, true, textPaneList);
+        }
     }//GEN-LAST:event_analyzeEnvBtnActionPerformed
-
+    
     private void deepAnalysisCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deepAnalysisCheckActionPerformed
         // TODO add your handling code here:
         if(deepAnalysisCheck.isSelected()){
@@ -778,14 +948,14 @@ public class demoFrame extends javax.swing.JFrame {
             
         }
     }//GEN-LAST:event_deepAnalysisCheckActionPerformed
-
+    
     private void browseLogManualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseLogManualActionPerformed
         // TODO add your handling code here:
         int returnVal = fileChooser.showOpenDialog(this);
         if (returnVal == javax.swing.JFileChooser.APPROVE_OPTION) {
             logDirectoryManual.setText(fileChooser.getSelectedFile().getAbsolutePath());
             if(useManualFileBtn.isSelected()){
-                manager.selectLogFile(logDirectoryManual.getText());
+                manager.selectLogFile(logDirectoryManual.getText(), true);
                 logReady = true;
                 updateStatus();
             }
@@ -794,29 +964,29 @@ public class demoFrame extends javax.swing.JFrame {
             javax.swing.JOptionPane.showMessageDialog(null, "Failed to find file.");
         }
     }//GEN-LAST:event_browseLogManualActionPerformed
-
+    
     private void ibgRadioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ibgRadioActionPerformed
-
+        
         manager.setIsTws(false);
-
+        
         // Populate and select log file for combo box
         handleLogComboBox_ibg();
-
+        
         // Populate and select settings file for combo box
         handleSettingsComboBox_ibg();
     }//GEN-LAST:event_ibgRadioActionPerformed
-
+    
     private void twsRadioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_twsRadioActionPerformed
-
+        
         manager.setIsTws(true);
-
+        
         // Populate and select log file for combo box
         handleLogComboBox_tws();
-
+        
         // Populate and select settings file for combo box
         handleSettingsComboBox_tws();
     }//GEN-LAST:event_twsRadioActionPerformed
-
+    
     private void browseExtractActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseExtractActionPerformed
         // TODO add your handling code here:
         directoryChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -830,7 +1000,7 @@ public class demoFrame extends javax.swing.JFrame {
             javax.swing.JOptionPane.showMessageDialog(null, "Failed to find directory.");
         }
     }//GEN-LAST:event_browseExtractActionPerformed
-
+    
     private void browseZipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseZipActionPerformed
         // TODO add your handling code here:
         int returnVal = fileChooser.showOpenDialog(this);
@@ -844,14 +1014,14 @@ public class demoFrame extends javax.swing.JFrame {
             javax.swing.JOptionPane.showMessageDialog(null, "Failed to find file.");
         }
     }//GEN-LAST:event_browseZipActionPerformed
-
+    
     private void browseSettingsManualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseSettingsManualActionPerformed
         // TODO add your handling code here:
         int returnVal = fileChooser.showOpenDialog(this);
         if (returnVal == javax.swing.JFileChooser.APPROVE_OPTION) {
             settingsDirectoryManual.setText(fileChooser.getSelectedFile().getAbsolutePath());
             if(useManualFileBtn.isSelected()){
-                manager.selectSettingsFile(settingsDirectoryManual.getText());
+                manager.selectSettingsFile(settingsDirectoryManual.getText(), true);
                 settingsReady = true;
                 updateStatus();
             }
@@ -860,37 +1030,37 @@ public class demoFrame extends javax.swing.JFrame {
             javax.swing.JOptionPane.showMessageDialog(null, "Failed to find file.");
         }
     }//GEN-LAST:event_browseSettingsManualActionPerformed
-
+    
     private void logDirectoryManualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logDirectoryManualActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_logDirectoryManualActionPerformed
-
+    
     private void settingsComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsComboBoxActionPerformed
         // TODO add your handling code here:
         if(settingsComboBox.getSelectedItem() != null){
-            manager.selectSettingsFile(settingsComboBox.getSelectedItem().toString());
-
+            manager.selectSettingsFile(settingsComboBox.getSelectedItem().toString(), false);
+            
             // Set Status
-            if(useExtractedZip == true){
+            if(useExtractFileBtn.isSelected()){
                 settingsReady = true;
                 updateStatus();
             }
         }
     }//GEN-LAST:event_settingsComboBoxActionPerformed
-
+    
     private void logComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logComboBoxActionPerformed
         // TODO add your handling code here:
         if(logComboBox.getSelectedItem() != null){
-            manager.selectLogFile(logComboBox.getSelectedItem().toString());
-
+            manager.selectLogFile(logComboBox.getSelectedItem().toString(), false);
+            
             // Set Status
-            if(useExtractedZip == true){
+            if(useExtractFileBtn.isSelected()){
                 logReady = true;
                 updateStatus();
             }
         }
     }//GEN-LAST:event_logComboBoxActionPerformed
-
+    
     private void extractBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_extractBtnActionPerformed
         // TODO add your handling code here:
         File directory = new File(extractDirectory.getText());
@@ -906,7 +1076,7 @@ public class demoFrame extends javax.swing.JFrame {
                     extractProgressBar.setValue(0); /*Progress bar setting*/
                 }
             }
-
+            
             extractDirectory.setText(directory.toString());
             manager.setReaderLocation(null, extractDirectory.getText());
             // Initialize tws/ibg log combo box
@@ -914,30 +1084,30 @@ public class demoFrame extends javax.swing.JFrame {
             logComboBox.removeAllItems();
             isTwsLogAdded = false;
             isIbgLogAdded = false;
-
+            
             // Iniatialize settings combo box
             settingsComboBox.setSelectedItem(null);
             settingsComboBox.removeAllItems();
             isTwsSettingsAdded = false;
             isIbgSettingsAdded = false;
-
+            
             manager.resetAllFileList();
             extractProgressBar.setValue(30); /*Progress bar setting*/
-
+            
             manager.extract();
             isExtracted = true;
             extractProgressBar.setValue(80); /*Progress bar setting*/
-
+            
             if(twsRadio.isSelected()){
                 // Populate and select log file for combo box
                 handleLogComboBox_tws();
-
+                
                 // Populate and select settings file for combo box
                 handleSettingsComboBox_tws();
             } else if(ibgRadio.isSelected()){
                 // Populate and select log file for combo box
                 handleLogComboBox_ibg();
-
+                
                 // Populate and select settings file for combo box
                 handleSettingsComboBox_ibg();
             }
@@ -955,30 +1125,30 @@ public class demoFrame extends javax.swing.JFrame {
                 logComboBox.removeAllItems();
                 isTwsLogAdded = false; // initialize
                 isIbgLogAdded = false;
-
+                
                 // Initialize settings file combo box
                 settingsComboBox.setSelectedItem(null);
                 settingsComboBox.removeAllItems();
                 isTwsSettingsAdded = false;
                 isIbgSettingsAdded = false;
-
+                
                 manager.resetAllFileList();
                 extractProgressBar.setValue(30); /*Progress bar setting*/
-
+                
                 manager.extract();
                 isExtracted = true;
                 extractProgressBar.setValue(80); /*Progress bar setting*/
-
+                
                 if(twsRadio.isSelected()){
                     // Populate and select log file for combo box
                     handleLogComboBox_tws();
-
+                    
                     // Populate and select settings file for combo box
                     handleSettingsComboBox_tws();
                 } else if(ibgRadio.isSelected()){
                     // Populate and select log file for combo box
                     handleLogComboBox_ibg();
-
+                    
                     // Populate and select settings file for combo box
                     handleSettingsComboBox_ibg();
                 }
@@ -991,30 +1161,136 @@ public class demoFrame extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_extractBtnActionPerformed
-
+    
     private void extractDirectoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_extractDirectoryActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_extractDirectoryActionPerformed
-
+    
     private void loadDirectoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadDirectoryActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_loadDirectoryActionPerformed
     
+    private void analyzeLoginSeqBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeLoginSeqBtnActionPerformed
+        // TODO add your handling code here:
+        if(useExtractFileBtn.isSelected()){
+            manager.startParse(Choices.LOGINSEQ, false, textPaneList);
+        } else if (useManualFileBtn.isSelected()){
+            manager.startParse(Choices.LOGINSEQ, true, textPaneList);
+        }
+    }//GEN-LAST:event_analyzeLoginSeqBtnActionPerformed
+    
+    private void analyzeConnBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeConnBtnActionPerformed
+        // TODO add your handling code here:
+        if(useExtractFileBtn.isSelected()){
+            manager.startParse(Choices.CONN, false, textPaneList);
+        } else if (useManualFileBtn.isSelected()){
+            manager.startParse(Choices.CONN, true, textPaneList);
+        }
+    }//GEN-LAST:event_analyzeConnBtnActionPerformed
+    
+    private void analyzeSysResBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeSysResBtnActionPerformed
+        // TODO add your handling code here:
+        if(useExtractFileBtn.isSelected()){
+            manager.startParse(Choices.SYSRES, false, textPaneList);
+        } else if (useManualFileBtn.isSelected()){
+            manager.startParse(Choices.SYSRES, true, textPaneList);
+        }
+    }//GEN-LAST:event_analyzeSysResBtnActionPerformed
+    
+    private void analyzeMktDataBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeMktDataBtnActionPerformed
+        // TODO add your handling code here:
+        if(useExtractFileBtn.isSelected()){
+            manager.startParse(Choices.MKTDATA, false, textPaneList);
+        } else if (useManualFileBtn.isSelected()){
+            manager.startParse(Choices.MKTDATA, true, textPaneList);
+        }
+    }//GEN-LAST:event_analyzeMktDataBtnActionPerformed
+    
+    private void analyzeHtbpBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeHtbpBtnActionPerformed
+        // TODO add your handling code here:
+        if(useExtractFileBtn.isSelected()){
+            manager.startParse(Choices.HTBP, false, textPaneList);
+        } else if (useManualFileBtn.isSelected()){
+            manager.startParse(Choices.HTBP, true, textPaneList);
+        }
+    }//GEN-LAST:event_analyzeHtbpBtnActionPerformed
+    
+    private void analyzeAPIBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeAPIBtnActionPerformed
+        // TODO add your handling code here:
+        if(useExtractFileBtn.isSelected()){
+            manager.startParse(Choices.API, false, textPaneList);
+        } else if (useManualFileBtn.isSelected()){
+            manager.startParse(Choices.API, true, textPaneList);
+        }
+    }//GEN-LAST:event_analyzeAPIBtnActionPerformed
+    
+    private void analyzeOrdTrdBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeOrdTrdBtnActionPerformed
+        // TODO add your handling code here:
+        if(useExtractFileBtn.isSelected()){
+            manager.startParse(Choices.ORDERSTRDS, false, textPaneList);
+        } else if (useManualFileBtn.isSelected()){
+            manager.startParse(Choices.ORDERSTRDS, true, textPaneList);
+        }
+    }//GEN-LAST:event_analyzeOrdTrdBtnActionPerformed
+
+    private void analyzeAllBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeAllBtnActionPerformed
+        // TODO add your handling code here:        
+        if(useExtractFileBtn.isSelected()){
+            manager.startParse(Choices.ENV, false, textPaneList);
+            manager.startParse(Choices.LOGINSEQ, false, textPaneList);
+            manager.startParse(Choices.CONN, false, textPaneList);
+            manager.startParse(Choices.SYSRES, false, textPaneList);
+            manager.startParse(Choices.HTBP, false, textPaneList);
+            manager.startParse(Choices.API, false, textPaneList);
+            manager.startParse(Choices.MKTDATA, false, textPaneList);
+            manager.startParse(Choices.ORDERSTRDS, false, textPaneList);
+        } else if (useManualFileBtn.isSelected()){
+            manager.startParse(Choices.ENV, true, textPaneList);
+            manager.startParse(Choices.LOGINSEQ, true, textPaneList);
+            manager.startParse(Choices.CONN, true, textPaneList);
+            manager.startParse(Choices.SYSRES, true, textPaneList);
+            manager.startParse(Choices.HTBP, true, textPaneList);
+            manager.startParse(Choices.API, true, textPaneList);
+            manager.startParse(Choices.MKTDATA, true, textPaneList);
+            manager.startParse(Choices.ORDERSTRDS, true, textPaneList);
+        }
+    }//GEN-LAST:event_analyzeAllBtnActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        textPaneList.get(Choices.ENV).setText(null);
+        textPaneList.get(Choices.LOGINSEQ).setText(null);
+        textPaneList.get(Choices.CONN).setText(null);
+        textPaneList.get(Choices.SYSRES).setText(null);
+        textPaneList.get(Choices.HTBP).setText(null);
+        textPaneList.get(Choices.API).setText(null);
+        textPaneList.get(Choices.MKTDATA).setText(null);
+        textPaneList.get(Choices.ORDERSTRDS).setText(null);
+    }//GEN-LAST:event_jButton1ActionPerformed
+    
     private void customInitComponents(){
         // Put Window location at center
         java.awt.Dimension dim = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);       
+        this.setLocation(dim.width/2-this.getSize().width/2, 0);
         
+        textPaneList.put(Choices.ENV, envTextPane);
+        textPaneList.put(Choices.CONN, connTextPane);
+        textPaneList.put(Choices.LOGINSEQ, loginSeqTextPane);
+        textPaneList.put(Choices.SYSRES, sysResTextPane);
+        textPaneList.put(Choices.HTBP, htbpTextPane);
+        textPaneList.put(Choices.API, apiTextPane);
+        textPaneList.put(Choices.MKTDATA, mktDataTextPane);
+        textPaneList.put(Choices.ORDERSTRDS, ordTrdTextPane);
     }
-                                
+    
     private void handleLogComboBox_tws(){
         if(isExtracted == true && isTwsLogAdded == false){
             String[] list = manager.getLogFileListNames();
             if(list == null){
-                logComboBox.setSelectedItem(null);                
+                logComboBox.setSelectedItem(null);
                 isTwsLogAdded = true;
                 if(useExtractFileBtn.isSelected()){
-                    manager.selectLogFile(null);
+                    manager.selectLogFile(null, false);
                     logReady = false;
                     updateStatus();
                 }
@@ -1028,7 +1304,7 @@ public class demoFrame extends javax.swing.JFrame {
         }
         logComboBox.setSelectedItem(manager.getTodayLogFileName());
         if(logComboBox.getSelectedItem() != null && useExtractFileBtn.isSelected()){
-            manager.selectLogFile(logComboBox.getSelectedItem().toString());
+            manager.selectLogFile(logComboBox.getSelectedItem().toString(), false);
             logReady = true;
             updateStatus();
         } else {
@@ -1041,10 +1317,10 @@ public class demoFrame extends javax.swing.JFrame {
         if(isExtracted == true && isTwsSettingsAdded == false){
             String[] list = manager.getSettingsFileListNames();
             if(list == null){
-                settingsComboBox.setSelectedItem(null);                
+                settingsComboBox.setSelectedItem(null);
                 isTwsSettingsAdded = true;
                 if(useExtractFileBtn.isSelected()){
-                    manager.selectSettingsFile(null);
+                    manager.selectSettingsFile(null, false);
                     settingsReady = false;
                     updateStatus();
                 }
@@ -1055,10 +1331,10 @@ public class demoFrame extends javax.swing.JFrame {
                 settingsComboBox.addItem(s);
             }
             isTwsSettingsAdded = true;
-        }        
-        settingsComboBox.setSelectedItem(manager.getTodaySettingsFileName()); 
+        }
+        settingsComboBox.setSelectedItem(manager.getTodaySettingsFileName());
         if(settingsComboBox.getSelectedItem() != null && useExtractFileBtn.isSelected()){
-            manager.selectSettingsFile(settingsComboBox.getSelectedItem().toString());
+            manager.selectSettingsFile(settingsComboBox.getSelectedItem().toString(), false);
             settingsReady = true;
             updateStatus();
         } else {
@@ -1066,15 +1342,15 @@ public class demoFrame extends javax.swing.JFrame {
             updateStatus();
         }
     }
-        
+    
     private void handleLogComboBox_ibg(){
         if(isExtracted == true && isIbgLogAdded == false){
             String[] list = manager.getLogFileListNames();
             if(list == null){
-                logComboBox.setSelectedItem(null);                
-                isIbgLogAdded = true; 
+                logComboBox.setSelectedItem(null);
+                isIbgLogAdded = true;
                 if(useExtractFileBtn.isSelected()){
-                    manager.selectLogFile(null);
+                    manager.selectLogFile(null, false);
                     logReady = false;
                     updateStatus();
                 }
@@ -1084,11 +1360,11 @@ public class demoFrame extends javax.swing.JFrame {
             for(String s: list){
                 logComboBox.addItem(s);
             }
-            isIbgLogAdded = true;            
+            isIbgLogAdded = true;
         }
         logComboBox.setSelectedItem(manager.getTodayLogFileName());
         if(logComboBox.getSelectedItem() != null && useExtractFileBtn.isSelected()){
-            manager.selectLogFile(logComboBox.getSelectedItem().toString());
+            manager.selectLogFile(logComboBox.getSelectedItem().toString(), false);
             logReady = true;
             updateStatus();
         } else {
@@ -1101,10 +1377,10 @@ public class demoFrame extends javax.swing.JFrame {
         if(isExtracted == true && isIbgSettingsAdded == false){
             String[] list = manager.getSettingsFileListNames();
             if(list == null){
-                settingsComboBox.setSelectedItem(null);                
+                settingsComboBox.setSelectedItem(null);
                 isIbgSettingsAdded = true;
                 if(useExtractFileBtn.isSelected()){
-                    manager.selectSettingsFile(null);
+                    manager.selectSettingsFile(null, false);
                     settingsReady = false;
                     updateStatus();
                 }
@@ -1118,7 +1394,7 @@ public class demoFrame extends javax.swing.JFrame {
         }
         settingsComboBox.setSelectedItem(manager.getTodaySettingsFileName());
         if(settingsComboBox.getSelectedItem() != null && useExtractFileBtn.isSelected()){
-            manager.selectSettingsFile(settingsComboBox.getSelectedItem().toString());
+            manager.selectSettingsFile(settingsComboBox.getSelectedItem().toString(), false);
             settingsReady = true;
             updateStatus();
         } else {
@@ -1146,7 +1422,7 @@ public class demoFrame extends javax.swing.JFrame {
         } else {
             settingsFileStatus.setText("Settings File - Not Selected");
             settingsFileStatus.setForeground(Color.RED);
-        }        
+        }
     }
     
     public static void addStylesToDocument(StyledDocument doc){
@@ -1161,12 +1437,22 @@ public class demoFrame extends javax.swing.JFrame {
         s = doc.addStyle("blackBold", regular);
         StyleConstants.setBold(s, true);
         
-        s = doc.addStyle("blueBold", regular);
-        StyleConstants.setForeground(s, Color.blue);
+        s = doc.addStyle("blackBoldCentered", regular);
         StyleConstants.setBold(s, true);
+        StyleConstants.setAlignment(s, StyleConstants.ALIGN_CENTER);
+        
+        s = doc.addStyle("purpleBold", regular);
+        StyleConstants.setForeground(s, new Color(255,0,255).darker().darker());
+        StyleConstants.setBold(s, true);
+        
+        s = doc.addStyle("blue", regular);
+        StyleConstants.setForeground(s, Color.blue);
         
         s = doc.addStyle("green", regular);
         StyleConstants.setForeground(s, Color.green.darker());
+        
+        s = doc.addStyle("darkGreen", regular);
+        StyleConstants.setForeground(s, Color.green.darker().darker());
         
         s = doc.addStyle("orange", regular);
         StyleConstants.setForeground(s, Color.orange);
@@ -1174,7 +1460,7 @@ public class demoFrame extends javax.swing.JFrame {
         s = doc.addStyle("red", regular);
         StyleConstants.setForeground(s, Color.red);
     }
-        
+    
     /**
      * @param args the command line arguments
      */
@@ -1253,12 +1539,12 @@ public class demoFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JTextField loadDirectory;
     private javax.swing.JComboBox<String> logComboBox;
     private javax.swing.JTextField logDirectoryManual;
+    private javax.swing.JPanel logDisplayPane1;
+    private javax.swing.JPanel logDisplayPane2;
+    private javax.swing.JPanel logDisplayPane3;
     private javax.swing.JLabel logFileStatus;
     private javax.swing.JComboBox<String> settingsComboBox;
     private javax.swing.JTextField settingsDirectoryManual;
@@ -1275,4 +1561,21 @@ public class demoFrame extends javax.swing.JFrame {
     //private javax.swing.JPanel logDisplayPane1;
     //private javax.swing.JPanel logDisplayPane2;
     //private javax.swing.JPanel logDisplayPane3;
+    private javax.swing.JTextPane envTextPane;
+    private javax.swing.JTextPane loginSeqTextPane;
+    private javax.swing.JTextPane connTextPane;
+    private javax.swing.JTextPane sysResTextPane;
+    private javax.swing.JTextPane htbpTextPane;
+    private javax.swing.JTextPane apiTextPane;
+    private javax.swing.JTextPane mktDataTextPane;
+    private javax.swing.JTextPane ordTrdTextPane;
+    
+    private javax.swing.JScrollPane envTextScrollPane;
+    private javax.swing.JScrollPane loginSeqTextScrollPane;
+    private javax.swing.JScrollPane connTextScrollPane;
+    private javax.swing.JScrollPane sysResTextScrollPane;
+    private javax.swing.JScrollPane htbpTextScrollPane;
+    private javax.swing.JScrollPane apiTextScrollPane;
+    private javax.swing.JScrollPane mktDataTextScrollPane;
+    private javax.swing.JScrollPane ordTrdTextScrollPane;
 }
