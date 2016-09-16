@@ -28,6 +28,10 @@ public class LogManager {
         isDeepDiagnostic = isDeepDiag;
     }
     
+    public void setIncludeXml(boolean includeXml){
+        reader.setIncludeXml(includeXml);
+    }
+    
     public void setReaderLocation(String zipLocation, String outputDirectory){
         if(zipLocation != null){
             reader.setZipLocation(zipLocation);
@@ -40,6 +44,7 @@ public class LogManager {
     public void resetAllFileList(){
         reader.resetLogFileList();
         reader.resetSettingsFileList();
+        reader.resetTradeFileList();
     }
     
     public String[] getLogFileListNames(){
@@ -58,6 +63,14 @@ public class LogManager {
         }
     }
     
+    public String[] getTradeFileListNames(){
+        if(isTWS == true){
+            return reader.getTradeFileListNames();
+        } else {
+            return null;
+        }
+    }
+    
     public String getTodayLogFileName(){
         if(isTWS == true){
             return reader.getTodayTwsLogFileName();
@@ -71,6 +84,14 @@ public class LogManager {
             return reader.getTodayTwsSettingsFileName();
         } else {
             return reader.getTodayIbgSettingsFileName();
+        }
+    }
+    
+    public String getTodayTradeFileName(){
+        if(isTWS == true){
+            return reader.getTodayTradeFileName();
+        } else {
+            return null;
         }
     }
     
@@ -98,6 +119,12 @@ public class LogManager {
         }
     }
     
+    public void selectTradeFile(String s){
+        if(isTWS == true){
+            reader.selectTradeFile(s);
+        }
+    }
+    
     public void startParse(int choice, boolean useManual, HashMap<Integer, javax.swing.JTextPane> textPaneList){
         try {
             if(isDeepDiagnostic == true){
@@ -105,7 +132,7 @@ public class LogManager {
                 reader.parseTwsLogFileDeep(choice, isTWS, useManual, textPaneList);
             } else {
                 //reader.parseSettingsFile(choice, isTWS, useManual, textPaneList);
-                //reader.parseTwsLogFileShallow(choice, useManual, textPaneList);
+                reader.parseTwsLogFileShallow(choice, isTWS, useManual, textPaneList);
             }
         } catch (Exception e){
             e.printStackTrace();

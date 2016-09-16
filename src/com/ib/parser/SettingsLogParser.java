@@ -1,17 +1,27 @@
 package com.ib.parser;
 
 import java.util.HashMap;
+import java.io.File;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
+import javax.swing.text.StyledDocument;
+import com.ib.demoFrame.demoFrame;
+
 import com.ib.message.*;
 
 public class SettingsLogParser {
     
-    public static void parseAPISettingsFile(Document doc, SettingsMessage settingsMessage) {
+    public static void parseAPISettingsFile(File settingsFile, SettingsMessage settingsMessage, javax.swing.JTextPane textPane) throws Exception{
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        Document doc = dBuilder.parse(settingsFile);
+        doc.getDocumentElement().normalize();
         
         ApiSettingsMessage apiSettingsMessage = null;
         
@@ -41,9 +51,47 @@ public class SettingsLogParser {
                 apiSettingsMessage.addTrustedIPs(listOfStrings.item(i).getTextContent());
             }
         }
+        
+        // Display on text pane
+        StyledDocument styledDoc = textPane.getStyledDocument();
+        demoFrame.addStylesToDocument(styledDoc);
+        
+        styledDoc.insertString(styledDoc.getLength(), "================= Begin of transcript from file " + settingsFile.getName() + "=================\n\n", styledDoc.getStyle("blackBold"));
+        styledDoc.insertString(styledDoc.getLength(), "API Settings: \n", styledDoc.getStyle("italic"));
+        
+        for(int i = 0; i < ApiSettingsMessage.APISETTINGSTAGS.length; i++){
+            if (ApiSettingsMessage.APISETTINGSTAGS[i].equals("slowBufferTimeout")){
+                styledDoc.insertString(styledDoc.getLength(), ApiSettingsMessage.APISETTINGSTEXT[i], styledDoc.getStyle("regular"));
+                styledDoc.insertString(styledDoc.getLength(), apiSettingsMessage.getCopyApiSettingsList().get(ApiSettingsMessage.APISETTINGSTAGS[i]) + " seconds\n", styledDoc.getStyle("blackBold"));
+            } else {
+                styledDoc.insertString(styledDoc.getLength(), ApiSettingsMessage.APISETTINGSTEXT[i], styledDoc.getStyle("regular"));
+                styledDoc.insertString(styledDoc.getLength(), apiSettingsMessage.getCopyApiSettingsList().get(ApiSettingsMessage.APISETTINGSTAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+            }
+        }
+        
+        styledDoc.insertString(styledDoc.getLength(), "\nAPI Precautions: \n", styledDoc.getStyle("italic"));
+        
+        for(int i = 0; i < ApiSettingsMessage.APIPRECAUTIONSTAGS.length; i++){
+            styledDoc.insertString(styledDoc.getLength(), ApiSettingsMessage.APIPRECAUTIONSTEXT[i], styledDoc.getStyle("regular"));
+            styledDoc.insertString(styledDoc.getLength(), apiSettingsMessage.getCopyApiPrecautionsList().get(ApiSettingsMessage.APIPRECAUTIONSTAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+        }
+        
+        styledDoc.insertString(styledDoc.getLength(), "\nTrusted IP Addresses: \n", styledDoc.getStyle("italic"));
+               
+        if(apiSettingsMessage.getCopyTrustedIPs() != null){
+            for(int i = 0; i < apiSettingsMessage.getCopyTrustedIPs().size(); i++){
+                styledDoc.insertString(styledDoc.getLength(), apiSettingsMessage.getCopyTrustedIPs().get(i) + "\n", styledDoc.getStyle("blackBold"));
+            }
+        }
+                
+        styledDoc.insertString(styledDoc.getLength(), "\n================= End of transcript from file " + settingsFile.getName() + "=================\n\n", styledDoc.getStyle("blackBold"));
     }
     
-    public static void parseMDSettingsFile(Document doc, SettingsMessage settingsMessage) {
+    public static void parseMDSettingsFile(File settingsFile, SettingsMessage settingsMessage, javax.swing.JTextPane textPane) throws Exception{
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        Document doc = dBuilder.parse(settingsFile);
+        doc.getDocumentElement().normalize();
         
         MarketDataSettingsMessage mdSettingsMessage = null;
         
@@ -143,9 +191,51 @@ public class SettingsLogParser {
             }
         }
         
+        // Display on text pane
+        StyledDocument styledDoc = textPane.getStyledDocument();
+        demoFrame.addStylesToDocument(styledDoc);
+        
+        styledDoc.insertString(styledDoc.getLength(), "================= Begin of transcript from file " + settingsFile.getName() + "=================\n\n", styledDoc.getStyle("blackBold"));
+        styledDoc.insertString(styledDoc.getLength(), "Market Data Settings: \n", styledDoc.getStyle("italic"));
+        
+        for(int i = 0; i < MarketDataSettingsMessage.MARKETDATASETTINGSTAGS.length; i++){
+            styledDoc.insertString(styledDoc.getLength(), MarketDataSettingsMessage.MARKETDATASETTINGSTEXT[i], styledDoc.getStyle("regular"));
+            styledDoc.insertString(styledDoc.getLength(), mdSettingsMessage.getCopyMdSettingsList().get(MarketDataSettingsMessage.MARKETDATASETTINGSTAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+        }
+        
+        styledDoc.insertString(styledDoc.getLength(), "\nESignal Settings: \n", styledDoc.getStyle("italic"));
+        
+        for(int i = 0; i < MarketDataSettingsMessage.ESIGNALSETTINGSTAGS.length; i++){
+            styledDoc.insertString(styledDoc.getLength(), MarketDataSettingsMessage.ESIGNALSETTINGSTEXT[i], styledDoc.getStyle("regular"));
+            styledDoc.insertString(styledDoc.getLength(), mdSettingsMessage.getCopyEsignalSettingsList().get(MarketDataSettingsMessage.ESIGNALSETTINGSTAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+        }
+        styledDoc.insertString(styledDoc.getLength(), "\nESignal Products Settings: \n", styledDoc.getStyle("italic"));
+        
+        styledDoc.insertString(styledDoc.getLength(), "STK (US): " + mdSettingsMessage.getCopyEsignalSecSettingsListStk().get("usa").toString() + "\n", styledDoc.getStyle("blackBold"));
+        styledDoc.insertString(styledDoc.getLength(), "STK (INTL): " + mdSettingsMessage.getCopyEsignalSecSettingsListStk().get("intl").toString() + "\n", styledDoc.getStyle("blackBold"));
+        styledDoc.insertString(styledDoc.getLength(), "OPT (US): " + mdSettingsMessage.getCopyEsignalSecSettingsListOpt().get("usa").toString() + "\n", styledDoc.getStyle("blackBold"));
+        styledDoc.insertString(styledDoc.getLength(), "OPT (INTL): " + mdSettingsMessage.getCopyEsignalSecSettingsListOpt().get("intl").toString() + "\n", styledDoc.getStyle("blackBold"));
+        styledDoc.insertString(styledDoc.getLength(), "FUT (US): " + mdSettingsMessage.getCopyEsignalSecSettingsListFut().get("usa").toString() + "\n", styledDoc.getStyle("blackBold"));
+        styledDoc.insertString(styledDoc.getLength(), "FUT (INTL): " + mdSettingsMessage.getCopyEsignalSecSettingsListFut().get("intl").toString() + "\n", styledDoc.getStyle("blackBold"));
+        styledDoc.insertString(styledDoc.getLength(), "IND (US): " + mdSettingsMessage.getCopyEsignalSecSettingsListInd().get("usa").toString() + "\n", styledDoc.getStyle("blackBold"));
+        styledDoc.insertString(styledDoc.getLength(), "IND (INTL): " + mdSettingsMessage.getCopyEsignalSecSettingsListInd().get("intl").toString() + "\n", styledDoc.getStyle("blackBold"));
+        
+        styledDoc.insertString(styledDoc.getLength(), "\nSmart Routing Settings: \n", styledDoc.getStyle("italic"));
+        
+        for(int i = 0; i < MarketDataSettingsMessage.SMARTROUTINGSETTINGSTAGS.length; i++){
+            styledDoc.insertString(styledDoc.getLength(), MarketDataSettingsMessage.SMARTROUTINGSETTINGSTEXT[i], styledDoc.getStyle("regular"));
+            styledDoc.insertString(styledDoc.getLength(), mdSettingsMessage.getCopySmartRoutSettingsList().get(MarketDataSettingsMessage.SMARTROUTINGSETTINGSTAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+        }
+        
+        styledDoc.insertString(styledDoc.getLength(), "\n================= End of transcript from file " + settingsFile.getName() + "=================\n\n", styledDoc.getStyle("blackBold"));
     }
     
-    public static void parseEnvSettingsFile(Document doc, SettingsMessage settingsMessage){
+    public static void parseEnvSettingsFile(File settingsFile, SettingsMessage settingsMessage, javax.swing.JTextPane textPane) throws Exception{
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        Document doc = dBuilder.parse(settingsFile);
+        doc.getDocumentElement().normalize();
+        
         EnvSettingsMessage envSettingsMessage = null;
         
         if (settingsMessage instanceof EnvSettingsMessage) {
@@ -153,19 +243,17 @@ public class SettingsLogParser {
         }
         
         NodeList envNList = doc.getElementsByTagName("WorkspaceCollection");
-        System.out.println("Workspaces:");
         
         for (int i = 0; i < envNList.getLength(); i++){
             Node keyNode = envNList.item(i);
             if (keyNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element keyElement = (Element) keyNode;
                 String key = keyElement.getAttribute("currentWorkspaceKey");
-                System.out.println("Workspace key currently in use: " + key);
+                envSettingsMessage.setCurrentWorkSpaceKey(key);
             }
         }
         
         envNList = doc.getElementsByTagName("Workspace");
-        System.out.println("");
         
         for (int i = 0; i < envNList.getLength(); i++){
             Node keyNode = envNList.item(i);
@@ -173,17 +261,12 @@ public class SettingsLogParser {
                 Element keyElement = (Element) keyNode;
                 for(String attr : EnvSettingsMessage.WORKSPACETAGS){
                     String attrValue = keyElement.getAttribute(attr);
-                    if(!attrValue.isEmpty()){
-                        System.out.println(attrValue);
-                    } else {
-                        System.out.println("Not present");
-                    }
+                    envSettingsMessage.addWorkSpaceKey(attr, attrValue);
                 }
             }
         }
         
         envNList = doc.getElementsByTagName("TickerPageSetting");
-        System.out.println("TWS Tabs:");
         
         for (int i = 0; i < envNList.getLength(); i++){
             Node keyNode = envNList.item(i);
@@ -191,17 +274,12 @@ public class SettingsLogParser {
                 Element keyElement = (Element) keyNode;
                 for(String attr : EnvSettingsMessage.TICKERPAGESETTINGSTAGS){
                     String attrValue = keyElement.getAttribute(attr);
-                    if(!attrValue.isEmpty()){
-                        System.out.println(attrValue);
-                    } else {
-                        System.out.println("Not present");
-                    }
+                    envSettingsMessage.addTickerPageSettings(attr, attrValue);
                 }
             }
         }
         
         envNList = doc.getElementsByTagName("SystemSettings");
-        System.out.println("TWS System settings:");
         
         for (int i = 0; i < envNList.getLength(); i++){
             Node keyNode = envNList.item(i);
@@ -209,47 +287,78 @@ public class SettingsLogParser {
                 Element keyElement = (Element) keyNode;
                 for(String attr : EnvSettingsMessage.SYSTEMSETTINGSTAGS){
                     String attrValue = keyElement.getAttribute(attr);
-                    if(!attrValue.isEmpty()){
-                        System.out.println(attrValue);
-                    } else {
-                        System.out.println("Not present");
-                    }
+                    envSettingsMessage.addSystemSettings(attr, attrValue);
                 }
             }
         }
         
         envNList = doc.getElementsByTagName("AccountSettings");
-        System.out.println("Show positions in base currency (In Account,Portfolio and Quote monitor pages): ");
         
         for (int i = 0; i < envNList.getLength(); i++){
             Node keyNode = envNList.item(i);
             if (keyNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element keyElement = (Element) keyNode;
                 String attrValue = keyElement.getAttribute("showAllInBaseCurrency");
-                if(!attrValue.isEmpty()){
-                    System.out.println(attrValue);
-                } else {
-                    System.out.println("Not present");
-                }
+                envSettingsMessage.setShowAllInBaseCurrency(attrValue);
             }
         }
         
         envNList = doc.getElementsByTagName("UISettings");
-        System.out.println("User Interface Settings: ");
         
         for (int i = 0; i < envNList.getLength(); i++){
             Node keyNode = envNList.item(i);
             if (keyNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element keyElement = (Element) keyNode;
-                for(String attr : EnvSettingsMessage.UISETTINGS){
+                for(String attr : EnvSettingsMessage.UISETTINGSTAGS){
                     String attrValue = keyElement.getAttribute(attr);
-                    if(!attrValue.isEmpty()){
-                        System.out.println(attrValue);
-                    } else {
-                        System.out.println("Not present");
-                    }
+                    envSettingsMessage.addUISettings(attr, attrValue);
                 }
             }
         }
-    }    
+        
+        envNList = doc.getElementsByTagName("OrderWizardDisplayMode");
+        
+        for (int i = 0; i < envNList.getLength(); i++){
+            Node keyNode = envNList.item(i);
+            if (keyNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element keyElement = (Element) keyNode;
+                String key = keyElement.getAttribute("value");
+                envSettingsMessage.setOrderWizardDisplayMode(key);
+            }
+        }
+        
+        envNList = doc.getElementsByTagName("OrderSettings");
+        
+        for (int i = 0; i < envNList.getLength(); i++){
+            Node keyNode = envNList.item(i);
+            if (keyNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element keyElement = (Element) keyNode;
+                for(String attr : EnvSettingsMessage.ORDERSETTINGSTAGS){
+                    String attrValue = keyElement.getAttribute(attr);
+                    envSettingsMessage.addOrderSettings(attr, attrValue);
+                }
+            }
+        }
+        
+        // Display on text pane
+        StyledDocument styledDoc = textPane.getStyledDocument();
+        demoFrame.addStylesToDocument(styledDoc);
+        
+        styledDoc.insertString(styledDoc.getLength(), "================= Begin of transcript from file " + settingsFile.getName() + "=================\n\n", styledDoc.getStyle("blackBold"));
+        styledDoc.insertString(styledDoc.getLength(), "Workspaces: \n", styledDoc.getStyle("italic"));
+        styledDoc.insertString(styledDoc.getLength(), "Workspace key currently in use: \n", styledDoc.getStyle("italic"));
+        
+        styledDoc.insertString(styledDoc.getLength(), envSettingsMessage.getCurrentWorkSpaceKey(), styledDoc.getStyle("blackBold"));
+        
+        for(int i = 0; i < EnvSettingsMessage.WORKSPACETAGS.length; i++){
+            styledDoc.insertString(styledDoc.getLength(), EnvSettingsMessage.WORKSPACETEXT[i], styledDoc.getStyle("regular"));
+            styledDoc.insertString(styledDoc.getLength(), envSettingsMessage.getCopyWorkSpaceKey().get(EnvSettingsMessage.WORKSPACETAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+        }
+        
+        styledDoc.insertString(styledDoc.getLength(), "\nESignal Settings: \n", styledDoc.getStyle("italic"));
+        
+        
+        
+        styledDoc.insertString(styledDoc.getLength(), "\n================= End of transcript from file " + settingsFile.getName() + "=================\n\n", styledDoc.getStyle("blackBold"));
+    }
 }

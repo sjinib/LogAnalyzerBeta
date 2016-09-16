@@ -18,11 +18,13 @@ public class LogReader {
     private String todayIbgLogFile = new String();
     private String todayTwsSettingsFile = new String();
     private String todayIbgSettingsFile = new String();
+    private String todayTradeFile = new String();
     
     private String selectedTwsLogFile = new String();
     private String selectedIbgLogFile = new String();
     private String selectedTwsSettingsFile = new String();
     private String selectedIbgSettingsFile = new String();
+    private String selectedTradeFile = new String();
     
     private String manualSelectedLogFile = new String();
     private String manualSelectedSettingsFile = new String();
@@ -33,17 +35,18 @@ public class LogReader {
     private List<File> ibgLogFileList = null;
     private List<File> twsSettingsFileList = null;
     private List<File> ibgSettingsFileList = null;
+    private List<File> tradeFileList = null;
     
-    private MarketDataSettingsMessage mdSettingsMessage;
-    private ApiSettingsMessage apiSettingsMessage;
-    private EnvSettingsMessage envSettingsMessage;
+    private final MarketDataSettingsMessage mdSettingsMessage;
+    private final ApiSettingsMessage apiSettingsMessage;
+    private final EnvSettingsMessage envSettingsMessage;
+    
+    private boolean includeXml = true;
     
     public LogReader(){
         mdSettingsMessage = new MarketDataSettingsMessage();
         apiSettingsMessage = new ApiSettingsMessage();
         envSettingsMessage = new EnvSettingsMessage();
-        //outputDirectory = "/Users/sitengjin/Documents/Github/LogAnalyzer/Temp";
-        this.outputDirectory = new String("C:/Users/Siteng Jin/Documents/GitHub/LogAnalyzer/Temp");
     }
     
     public void setOutputDirectory(String dir){
@@ -56,6 +59,10 @@ public class LogReader {
         if(dir != null){
             zipLocation = dir;
         }
+    }
+    
+    public void setIncludeXml(boolean includeXml){
+        this.includeXml = includeXml;
     }
     
     public void resetLogFileList(){
@@ -78,6 +85,13 @@ public class LogReader {
             ibgSettingsFileList.clear();
             ibgSettingsFileList = null;
         }
+    }
+    
+    public void resetTradeFileList(){
+        if(tradeFileList != null){
+            tradeFileList.clear();
+            tradeFileList = null;
+        }        
     }
     
     public void extractZip() throws Exception{
@@ -183,6 +197,30 @@ public class LogReader {
         }
     }
     
+    public String [] getTradeFileListNames() {
+        if(tradeFileList == null){
+            try {
+                if(loadTradeFileList()){
+                    String[] list = new String[tradeFileList.size()];
+                    for(int i = 0; i < tradeFileList.size(); i++){
+                        list[i] = tradeFileList.get(i).getName();
+                    }
+                    return list;
+                } else
+                    return null;
+            } catch (Exception e){
+                e.printStackTrace();
+                return null;
+            }
+        } else {
+            String[] list = new String[tradeFileList.size()];
+            for(int i = 0; i < tradeFileList.size(); i++){
+                list[i] = tradeFileList.get(i).getName();
+            }
+            return list;
+        }
+    }
+    
     public boolean loadTwsLogFileList() throws Exception{
         if(outputDirectory == null){
             throw new Exception("Invalid Directory");
@@ -198,7 +236,6 @@ public class LogReader {
         twsLogFileList = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
         
         if(twsLogFileList == null || twsLogFileList.isEmpty()){
-            //System.out.println("Cannot find file.");
             javax.swing.JOptionPane.showMessageDialog(null, "No TWS log file is found.");
             todayTwsLogFile = null;
             return false;
@@ -295,7 +332,6 @@ public class LogReader {
         twsSettingsFileList = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
         
         if(twsSettingsFileList == null || twsSettingsFileList.isEmpty()){
-            //System.out.println("Cannot find file.");
             javax.swing.JOptionPane.showMessageDialog(null, "No TWS settings file is found.");
             todayTwsSettingsFile = null;
             return false;
@@ -332,7 +368,6 @@ public class LogReader {
         ibgSettingsFileList = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
         
         if(ibgSettingsFileList == null || ibgSettingsFileList.isEmpty()){
-            //System.out.println("Cannot find file.");
             javax.swing.JOptionPane.showMessageDialog(null, "No IB Gateway settings file is found.");
             todayIbgSettingsFile = null;
             return false;
@@ -351,6 +386,45 @@ public class LogReader {
             todayIbgSettingsFile = ibgSettingsFileList.get(0).getName();
             return true;
         }        
+    }
+    
+    public boolean loadTradeFileList() throws Exception{
+        if(outputDirectory == null){
+            throw new Exception("Invalid Directory");
+        }
+        
+        if(tradeFileList != null && !tradeFileList.isEmpty()){
+            tradeFileList.clear();
+        }
+        
+        File dir = new File(outputDirectory);
+        //fileList = (List<File>) FileUtils.listFiles(dir, new String[] {"log", "xml"}, true);
+        IOFileFilter fileFilter = new WildcardFileFilter(Arrays.asList("*.trd"));
+        tradeFileList = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
+        
+        if(tradeFileList == null || tradeFileList.isEmpty()){
+            //javax.swing.JOptionPane.showMessageDialog(null, "No .trd file is found.");
+            todayTradeFile = null;
+            return false;
+        }
+        
+        boolean hasToday = false;
+        String dayLogName = new String(CurrentDay.findCurrentDay() + ".trd");
+        
+        for(File file : tradeFileList){
+            if(file.getName().equals(dayLogName)){
+                todayTradeFile = dayLogName;
+                hasToday = true;
+                break;
+            }
+        }
+        if(hasToday == true){
+            return true;
+        } else {
+            todayTwsLogFile = twsLogFileList.get(0).getName();
+            return true;
+        }
+        
     }
     
     public String getTodayTwsSettingsFileName(){
@@ -377,6 +451,12 @@ public class LogReader {
         return new String(todayIbgLogFile);
     }
     
+    public String getTodayTradeFileName(){
+        if(todayTradeFile == null)
+            return null;
+        return new String(todayTradeFile);
+    }
+    
     public void selectTwsLogFile(String s){
         selectedTwsLogFile = s;
     }
@@ -391,6 +471,10 @@ public class LogReader {
     
     public void selectIbgSettingsLogFile(String s){
         selectedIbgSettingsFile = s;
+    }
+    
+    public void selectTradeFile(String s){
+        selectedTradeFile = s;
     }
     
     public void selectLogFileManual(String s){
@@ -437,44 +521,73 @@ public class LogReader {
         return null;
     }
     
+    private File getSelectedTradeFile() throws Exception{
+        for(File file: tradeFileList){
+            if(file.getName().equals(this.selectedTradeFile)){
+                return new File(file.getPath());
+            }
+        }
+        return null;
+    }
+    
     private File getSelectedLogFileManual() throws Exception{
+        if(manualSelectedLogFile == null){
+            return null;
+        }
         return new File(manualSelectedLogFile);
     }
     
     private File getSelectedSettingsFileManual() throws Exception{
+        if(manualSelectedSettingsFile == null){
+            return null;
+        }
         return new File(manualSelectedSettingsFile);
     }
     
-    public void parseSettingsFile(int choice, boolean isTws, boolean useManual) throws Exception{
-        File currentSettingsFile;
-        if(useManual){
-            currentSettingsFile = this.getSelectedSettingsFileManual();
-        } else {
-            if(isTws == true){
-                currentSettingsFile = this.getSelectedTwsSettingsFile();
+    public void parseSettingsFile(int choice, boolean isTws, boolean useManual, HashMap<Integer, javax.swing.JTextPane> textPaneList) throws Exception{
+        if(includeXml == true){
+            
+            File currentSettingsFile;
+            if(useManual){
+                currentSettingsFile = this.getSelectedSettingsFileManual();
             } else {
-                currentSettingsFile = this.getSelectedIbgSettingsFile();
+                if(isTws == true){
+                    currentSettingsFile = this.getSelectedTwsSettingsFile();
+                } else {
+                    currentSettingsFile = this.getSelectedIbgSettingsFile();
+                }
             }
+            
+            if(currentSettingsFile == null){
+                return;
+            }
+            
+            switch (choice) {
+                case Choices.API:
+                    SettingsLogParser.parseAPISettingsFile(currentSettingsFile, apiSettingsMessage, textPaneList.get(choice));
+                    break;
+                case Choices.MKTDATA:
+                    SettingsLogParser.parseMDSettingsFile(currentSettingsFile, mdSettingsMessage, textPaneList.get(choice));
+                    break;
+                case Choices.ENV:
+                    SettingsLogParser.parseEnvSettingsFile(currentSettingsFile, envSettingsMessage, textPaneList.get(choice));
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            return;
+        }
+    }
+    
+    public void parseTradeFile(int choice, HashMap<Integer, javax.swing.JTextPane> textPaneList) throws Exception{
+        File currentTradeFile = this.getSelectedTradeFile();
+        
+        if(currentTradeFile == null){
+            return;
         }
         
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-        Document doc = dBuilder.parse(currentSettingsFile);
-        doc.getDocumentElement().normalize();
-        
-        switch (choice) {
-            case Choices.API:
-                SettingsLogParser.parseAPISettingsFile(doc, apiSettingsMessage);
-                break;
-            case Choices.MKTDATA:
-                SettingsLogParser.parseMDSettingsFile(doc, mdSettingsMessage);
-                break;
-            case Choices.ENV:
-                SettingsLogParser.parseEnvSettingsFile(doc, envSettingsMessage);
-                break;
-            default:
-                break;
-        }
+        TradeFileParser.parseTradeFile(currentTradeFile, textPaneList.get(choice));
     }
     
     public void parseTwsLogFileDeep(int choice, boolean isTws, boolean useManual, HashMap<Integer, javax.swing.JTextPane> textPaneList) throws Exception{
@@ -491,7 +604,7 @@ public class LogReader {
         
         switch (choice) {
             case Choices.ENV:
-                parseSettingsFile(choice, isTws, useManual);
+                parseSettingsFile(choice, isTws, useManual, textPaneList);
                 TwsLogParserDeep.parseTwsEnvInfo(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.LOGINSEQ:
@@ -501,14 +614,7 @@ public class LogReader {
                 TwsLogParserDeep.parseTwsSysRes(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.MKTDATA:
-                //System.out.println(mdSettingsMessage.getCopyMdSettingsList().toString());
-                //System.out.println(mdSettingsMessage.getCopyEsignalSettingsList().toString());
-                //System.out.println(mdSettingsMessage.getCopyEsignalSecSettingsListOpt().toString());
-                //System.out.println(mdSettingsMessage.getCopyEsignalSecSettingsListStk().toString());
-                //System.out.println(mdSettingsMessage.getCopyEsignalSecSettingsListFut().toString());
-                //System.out.println(mdSettingsMessage.getCopyEsignalSecSettingsListInd().toString());
-                //System.out.println(mdSettingsMessage.getCopySmartRoutSettingsList().toString());
-                parseSettingsFile(choice, isTws, useManual);
+                parseSettingsFile(choice, isTws, useManual, textPaneList);
                 TwsLogParserDeep.parseTwsMktData(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.CONN:
@@ -518,13 +624,11 @@ public class LogReader {
                 TwsLogParserDeep.parseTwsHtbp(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.API:
-                //System.out.println(apiSettingsMessage.getCopyApiSettingsList().toString());
-                //System.out.println(apiSettingsMessage.getCopyApiPrecautionsList().toString());
-                //System.out.println(apiSettingsMessage.getCopyTrustedIPs().toString());
-                parseSettingsFile(choice, isTws, useManual);
+                parseSettingsFile(choice, isTws, useManual, textPaneList);
                 TwsLogParserDeep.parseTwsApi(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.ORDERSTRDS:
+                parseTradeFile(choice, textPaneList);
                 TwsLogParserDeep.parseTwsOrderTrds(currentLogFile, textPaneList.get(choice));
                 break;
             default:
@@ -546,38 +650,28 @@ public class LogReader {
         
         switch (choice) {
             case Choices.ENV:
-                //TwsLogParserDeep.parseTwsEnvInfo(twsLogFile, textPaneList.get("ENV"));
+                TwsLogParserShallow.parseTwsEnvInfo(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.LOGINSEQ:
-                //TwsLogParserDeep.parseTwsLoginSeqInfo(twsLogFile);
+                TwsLogParserShallow.parseTwsLoginSeqInfo(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.SYSRES:
-                //TwsLogParserDeep.parseTwsSysRes(twsLogFile);
+                TwsLogParserShallow.parseTwsSysRes(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.MKTDATA:
-                System.out.println(mdSettingsMessage.getCopyMdSettingsList().toString());
-                System.out.println(mdSettingsMessage.getCopyEsignalSettingsList().toString());
-                System.out.println(mdSettingsMessage.getCopyEsignalSecSettingsListOpt().toString());
-                System.out.println(mdSettingsMessage.getCopyEsignalSecSettingsListStk().toString());
-                System.out.println(mdSettingsMessage.getCopyEsignalSecSettingsListFut().toString());
-                System.out.println(mdSettingsMessage.getCopyEsignalSecSettingsListInd().toString());
-                System.out.println(mdSettingsMessage.getCopySmartRoutSettingsList().toString());
-                //TwsLogParserDeep.parseTwsMktData(twsLogFile);
+                TwsLogParserShallow.parseTwsMktData(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.CONN:
-                //TwsLogParserDeep.parseTwsConn(twsLogFile);
+                TwsLogParserShallow.parseTwsConn(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.HTBP:
-                //TwsLogParserDeep.parseTwsHtbp(twsLogFile);
+                TwsLogParserShallow.parseTwsHtbp(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.API:
-                System.out.println(apiSettingsMessage.getCopyApiSettingsList().toString());
-                System.out.println(apiSettingsMessage.getCopyApiPrecautionsList().toString());
-                System.out.println(apiSettingsMessage.getCopyTrustedIPs().toString());
-                //TwsLogParserDeep.parseTwsApi(twsLogFile);
+                TwsLogParserShallow.parseTwsApi(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.ORDERSTRDS:
-                //TwsLogParserDeep.parseTwsOrderTrds(twsLogFile);
+                TwsLogParserShallow.parseTwsOrderTrds(currentLogFile, textPaneList.get(choice));
                 break;
             default:
                 break;

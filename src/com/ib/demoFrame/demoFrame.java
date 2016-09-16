@@ -30,9 +30,11 @@ public class demoFrame extends javax.swing.JFrame {
     private boolean isIbgLogAdded = false;
     private boolean isTwsSettingsAdded = false;
     private boolean isIbgSettingsAdded = false;
+    private boolean isTradeFileAdded = false;
     
     private boolean logReady = false;
     private boolean settingsReady = false;
+    private boolean trdReady = false;
     
     private HashMap<Integer, javax.swing.JTextPane> textPaneList = new HashMap<Integer, javax.swing.JTextPane>();
     
@@ -83,6 +85,8 @@ public class demoFrame extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         browseLogManual = new javax.swing.JButton();
         settingsDirectoryManual = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        tradeComboBox = new javax.swing.JComboBox<>();
         statusPanel = new javax.swing.JPanel();
         useExtractFileBtn = new javax.swing.JRadioButton();
         useManualFileBtn = new javax.swing.JRadioButton();
@@ -90,6 +94,7 @@ public class demoFrame extends javax.swing.JFrame {
         logFileStatus = new javax.swing.JLabel();
         settingsFileStatus = new javax.swing.JLabel();
         analyzeBtn = new javax.swing.JButton();
+        tradeFileStatus = new javax.swing.JLabel();
         twsLogFilterPanel = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         analyzeAllBtn = new javax.swing.JButton();
@@ -231,6 +236,8 @@ public class demoFrame extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setText("Trade File:");
+
         javax.swing.GroupLayout configurePaneLayout = new javax.swing.GroupLayout(configurePane);
         configurePane.setLayout(configurePaneLayout);
         configurePaneLayout.setHorizontalGroup(
@@ -276,10 +283,14 @@ public class demoFrame extends javax.swing.JFrame {
                                 .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel4)
                                     .addComponent(logComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(97, 97, 97)
+                                .addGap(100, 100, 100)
                                 .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(settingsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)))
+                                    .addComponent(jLabel5)
+                                    .addComponent(settingsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(100, 100, 100)
+                                .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(tradeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(extractProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel10)
                             .addComponent(jLabel2))))
@@ -317,11 +328,13 @@ public class demoFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jLabel5))
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(logComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(settingsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(settingsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tradeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel6)
                 .addGap(18, 18, 18)
@@ -374,10 +387,15 @@ public class demoFrame extends javax.swing.JFrame {
             }
         });
 
+        tradeFileStatus.setText("Trade File");
+
         javax.swing.GroupLayout statusPanelLayout = new javax.swing.GroupLayout(statusPanel);
         statusPanel.setLayout(statusPanelLayout);
         statusPanelLayout.setHorizontalGroup(
             statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(statusPanelLayout.createSequentialGroup()
+                .addComponent(analyzeBtn)
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(statusPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -385,11 +403,9 @@ public class demoFrame extends javax.swing.JFrame {
                     .addComponent(useManualFileBtn)
                     .addComponent(statusLabel)
                     .addComponent(logFileStatus)
-                    .addComponent(settingsFileStatus))
+                    .addComponent(settingsFileStatus)
+                    .addComponent(tradeFileStatus))
                 .addContainerGap(89, Short.MAX_VALUE))
-            .addGroup(statusPanelLayout.createSequentialGroup()
-                .addComponent(analyzeBtn)
-                .addGap(0, 0, Short.MAX_VALUE))
         );
         statusPanelLayout.setVerticalGroup(
             statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -404,7 +420,9 @@ public class demoFrame extends javax.swing.JFrame {
                 .addComponent(logFileStatus)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(settingsFileStatus)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tradeFileStatus)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(analyzeBtn)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -432,6 +450,7 @@ public class demoFrame extends javax.swing.JFrame {
 
         analyzeAllBtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         analyzeAllBtn.setText("All");
+        analyzeAllBtn.setToolTipText("Analyze all topics");
         analyzeAllBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 analyzeAllBtnActionPerformed(evt);
@@ -441,6 +460,7 @@ public class demoFrame extends javax.swing.JFrame {
         analyzeEnvBtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         analyzeEnvBtn.setForeground(new java.awt.Color(0, 102, 0));
         analyzeEnvBtn.setText("Env");
+        analyzeEnvBtn.setToolTipText("Environmental elements");
         analyzeEnvBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 analyzeEnvBtnActionPerformed(evt);
@@ -450,6 +470,7 @@ public class demoFrame extends javax.swing.JFrame {
         analyzeLoginSeqBtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         analyzeLoginSeqBtn.setForeground(new java.awt.Color(153, 0, 0));
         analyzeLoginSeqBtn.setText("Login Seq");
+        analyzeLoginSeqBtn.setToolTipText("Login sequence");
         analyzeLoginSeqBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 analyzeLoginSeqBtnActionPerformed(evt);
@@ -459,6 +480,7 @@ public class demoFrame extends javax.swing.JFrame {
         analyzeSysResBtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         analyzeSysResBtn.setForeground(new java.awt.Color(51, 102, 255));
         analyzeSysResBtn.setText("SysRes");
+        analyzeSysResBtn.setToolTipText("System restart");
         analyzeSysResBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 analyzeSysResBtnActionPerformed(evt);
@@ -468,6 +490,7 @@ public class demoFrame extends javax.swing.JFrame {
         analyzeMktDataBtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         analyzeMktDataBtn.setForeground(new java.awt.Color(255, 102, 0));
         analyzeMktDataBtn.setText("Market Data");
+        analyzeMktDataBtn.setToolTipText("Market Data");
         analyzeMktDataBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 analyzeMktDataBtnActionPerformed(evt);
@@ -477,6 +500,7 @@ public class demoFrame extends javax.swing.JFrame {
         analyzeConnBtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         analyzeConnBtn.setForeground(new java.awt.Color(255, 0, 0));
         analyzeConnBtn.setText("Conn");
+        analyzeConnBtn.setToolTipText("Connectivity");
         analyzeConnBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 analyzeConnBtnActionPerformed(evt);
@@ -486,6 +510,7 @@ public class demoFrame extends javax.swing.JFrame {
         analyzeHtbpBtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         analyzeHtbpBtn.setForeground(new java.awt.Color(255, 102, 153));
         analyzeHtbpBtn.setText("Htbp");
+        analyzeHtbpBtn.setToolTipText("Hot Backup Lines");
         analyzeHtbpBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 analyzeHtbpBtnActionPerformed(evt);
@@ -495,6 +520,7 @@ public class demoFrame extends javax.swing.JFrame {
         analyzeAPIBtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         analyzeAPIBtn.setForeground(new java.awt.Color(153, 51, 255));
         analyzeAPIBtn.setText("API");
+        analyzeAPIBtn.setToolTipText("API (Detailed logging)");
         analyzeAPIBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 analyzeAPIBtnActionPerformed(evt);
@@ -504,6 +530,7 @@ public class demoFrame extends javax.swing.JFrame {
         analyzeOrdTrdBtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         analyzeOrdTrdBtn.setForeground(new java.awt.Color(0, 204, 204));
         analyzeOrdTrdBtn.setText("Orders & Trades");
+        analyzeOrdTrdBtn.setToolTipText("Orders & Trades");
         analyzeOrdTrdBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 analyzeOrdTrdBtnActionPerformed(evt);
@@ -511,23 +538,34 @@ public class demoFrame extends javax.swing.JFrame {
         });
 
         jButton1.setText("Cls All");
+        jButton1.setToolTipText("Clear all display pane");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
+        autoClsCheck.setSelected(true);
         autoClsCheck.setText("Auto Cls");
+        autoClsCheck.setToolTipText("Automatic clear all display panes after extraction of diagnostic file");
 
         deepAnalysisCheck.setSelected(true);
         deepAnalysisCheck.setText("Deep Analysis");
+        deepAnalysisCheck.setToolTipText("Select to run a deep analysis of the log file");
         deepAnalysisCheck.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deepAnalysisCheckActionPerformed(evt);
             }
         });
 
+        includeXmlCheck.setSelected(true);
         includeXmlCheck.setText("Include Tws.xml in analysis");
+        includeXmlCheck.setToolTipText("Select to include settings xml file analysis");
+        includeXmlCheck.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                includeXmlCheckActionPerformed(evt);
+            }
+        });
 
         includeTrdFileCheck.setText("Include .Trd files in analysis");
 
@@ -725,7 +763,7 @@ public class demoFrame extends javax.swing.JFrame {
         envTextScrollPane.setViewportView(envTextPane);
         envTextScrollPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 102, 0), 2, true));
         
-        loginSeqTextPane = new javax.swing.JTextPane();        
+        loginSeqTextPane = new javax.swing.JTextPane();
         loginSeqTextPane.setEditable(false);
         
         loginSeqTextScrollPane = new javax.swing.JScrollPane(loginSeqTextPane);
@@ -740,7 +778,7 @@ public class demoFrame extends javax.swing.JFrame {
         connTextScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         connTextScrollPane.setViewportView(connTextPane);
         connTextScrollPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 0, 0), 2, true));
-                
+        
         envTextScrollPane.setPreferredSize(new java.awt.Dimension((int)(logDisplayPane1.getPreferredSize().width*0.5), (int)(logDisplayPane1.getPreferredSize().height*0.45)));
         loginSeqTextScrollPane.setPreferredSize(new java.awt.Dimension((int)(logDisplayPane1.getPreferredSize().width*0.5), (int)(logDisplayPane1.getPreferredSize().height*0.55)));
         connTextScrollPane.setPreferredSize(new java.awt.Dimension((int)(logDisplayPane1.getPreferredSize().width*0.5), (int)(logDisplayPane1.getPreferredSize().height)));
@@ -792,8 +830,8 @@ public class demoFrame extends javax.swing.JFrame {
         apiTextScrollPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 51, 255), 2, true));
         
         sysResTextScrollPane.setPreferredSize(new java.awt.Dimension((int)(logDisplayPane2.getPreferredSize().width*0.5), (int)(logDisplayPane2.getPreferredSize().height)));
-        htbpTextScrollPane.setPreferredSize(new java.awt.Dimension((int)(logDisplayPane2.getPreferredSize().width*0.5), (int)(logDisplayPane2.getPreferredSize().height*0.3)));
-        apiTextScrollPane.setPreferredSize(new java.awt.Dimension((int)(logDisplayPane2.getPreferredSize().width*0.5), (int)(logDisplayPane2.getPreferredSize().height*0.7)));
+        htbpTextScrollPane.setPreferredSize(new java.awt.Dimension((int)(logDisplayPane2.getPreferredSize().width*0.5), (int)(logDisplayPane2.getPreferredSize().height*0.4)));
+        apiTextScrollPane.setPreferredSize(new java.awt.Dimension((int)(logDisplayPane2.getPreferredSize().width*0.5), (int)(logDisplayPane2.getPreferredSize().height*0.6)));
         
         javax.swing.GroupLayout logDisplayPane2Layout = new javax.swing.GroupLayout(logDisplayPane2);
         logDisplayPane2.setLayout(logDisplayPane2Layout);
@@ -883,6 +921,7 @@ public class demoFrame extends javax.swing.JFrame {
             logReady = true;
             updateStatus();
         } else {
+            manager.selectLogFile(null, false);
             // Set Status
             logReady = false;
             updateStatus();
@@ -895,6 +934,7 @@ public class demoFrame extends javax.swing.JFrame {
             settingsReady = true;
             updateStatus();
         } else {
+            manager.selectSettingsFile(null, false);
             // Set Status
             settingsReady = false;
             updateStatus();
@@ -910,6 +950,7 @@ public class demoFrame extends javax.swing.JFrame {
             logReady = true;
             updateStatus();
         } else {
+            manager.selectLogFile(null, true);
             logReady = false;
             updateStatus();
         }
@@ -921,6 +962,7 @@ public class demoFrame extends javax.swing.JFrame {
             settingsReady = true;
             updateStatus();
         } else {
+            manager.selectSettingsFile(null, true);
             settingsReady = false;
             updateStatus();
         }
@@ -943,9 +985,9 @@ public class demoFrame extends javax.swing.JFrame {
     private void deepAnalysisCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deepAnalysisCheckActionPerformed
         // TODO add your handling code here:
         if(deepAnalysisCheck.isSelected()){
-            
+            manager.setDeepDiagnostic(true);
         } else {
-            
+            manager.setDeepDiagnostic(false);
         }
     }//GEN-LAST:event_deepAnalysisCheckActionPerformed
     
@@ -985,6 +1027,9 @@ public class demoFrame extends javax.swing.JFrame {
         
         // Populate and select settings file for combo box
         handleSettingsComboBox_tws();
+        
+        // Populate and select trade file for combo box
+        handleTradeComboBox();
     }//GEN-LAST:event_twsRadioActionPerformed
     
     private void browseExtractActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseExtractActionPerformed
@@ -1075,43 +1120,67 @@ public class demoFrame extends javax.swing.JFrame {
                     javax.swing.JOptionPane.showMessageDialog(null, "Failed to clear directory");
                     extractProgressBar.setValue(0); /*Progress bar setting*/
                 }
-            }
-            
-            extractDirectory.setText(directory.toString());
-            manager.setReaderLocation(null, extractDirectory.getText());
-            // Initialize tws/ibg log combo box
-            logComboBox.setSelectedItem(null);
-            logComboBox.removeAllItems();
-            isTwsLogAdded = false;
-            isIbgLogAdded = false;
-            
-            // Iniatialize settings combo box
-            settingsComboBox.setSelectedItem(null);
-            settingsComboBox.removeAllItems();
-            isTwsSettingsAdded = false;
-            isIbgSettingsAdded = false;
-            
-            manager.resetAllFileList();
-            extractProgressBar.setValue(30); /*Progress bar setting*/
-            
-            manager.extract();
-            isExtracted = true;
-            extractProgressBar.setValue(80); /*Progress bar setting*/
-            
-            if(twsRadio.isSelected()){
-                // Populate and select log file for combo box
-                handleLogComboBox_tws();
                 
-                // Populate and select settings file for combo box
-                handleSettingsComboBox_tws();
-            } else if(ibgRadio.isSelected()){
-                // Populate and select log file for combo box
-                handleLogComboBox_ibg();
+                extractDirectory.setText(directory.toString());
+                manager.setReaderLocation(null, extractDirectory.getText());
+                // Initialize tws/ibg log combo box
+                logComboBox.setSelectedItem(null);
+                logComboBox.removeAllItems();
+                isTwsLogAdded = false;
+                isIbgLogAdded = false;
                 
-                // Populate and select settings file for combo box
-                handleSettingsComboBox_ibg();
+                // Iniatialize settings combo box
+                settingsComboBox.setSelectedItem(null);
+                settingsComboBox.removeAllItems();
+                isTwsSettingsAdded = false;
+                isIbgSettingsAdded = false;
+                
+                // Initialize trade combo box
+                tradeComboBox.setSelectedItem(null);
+                tradeComboBox.removeAllItems();
+                isTradeFileAdded = false;
+                
+                manager.resetAllFileList();
+                extractProgressBar.setValue(30); /*Progress bar setting*/
+                
+                manager.extract();
+                isExtracted = true;
+                extractProgressBar.setValue(70); /*Progress bar setting*/
+                
+                if(twsRadio.isSelected()){
+                    // Populate and select log file for combo box
+                    handleLogComboBox_tws();
+                    
+                    // Populate and select settings file for combo box
+                    handleSettingsComboBox_tws();
+                    
+                    // Populate and select trade file for combo box
+                    handleTradeComboBox();
+                } else if(ibgRadio.isSelected()){
+                    // Populate and select log file for combo box
+                    handleLogComboBox_ibg();
+                    
+                    // Populate and select settings file for combo box
+                    handleSettingsComboBox_ibg();
+                }
+                extractProgressBar.setValue(90); /*Progress bar setting*/
+                
+                if(autoClsCheck.isSelected()){
+                    textPaneList.get(Choices.ENV).setText(null);
+                    textPaneList.get(Choices.LOGINSEQ).setText(null);
+                    textPaneList.get(Choices.CONN).setText(null);
+                    textPaneList.get(Choices.SYSRES).setText(null);
+                    textPaneList.get(Choices.HTBP).setText(null);
+                    textPaneList.get(Choices.API).setText(null);
+                    textPaneList.get(Choices.MKTDATA).setText(null);
+                    textPaneList.get(Choices.ORDERSTRDS).setText(null);
+                }
+                extractProgressBar.setValue(100); /*Progress bar setting*/
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(null, "Please choose a valid directory");
+                extractDirectory.setText(System.getProperty("user.home").toString() + "\\Temp");
+                extractProgressBar.setValue(0); /*Progress bar setting*/
             }
-            extractProgressBar.setValue(100); /*Progress bar setting*/
         }
         else {
             int reply = javax.swing.JOptionPane.showConfirmDialog(null, "The directory " + extractDirectory.getText() + " does not exist. Do you want to create it?");
@@ -1132,12 +1201,16 @@ public class demoFrame extends javax.swing.JFrame {
                 isTwsSettingsAdded = false;
                 isIbgSettingsAdded = false;
                 
+                // Initialize trade combo box
+                tradeComboBox.setSelectedItem(null);
+                isTradeFileAdded = false;
+                
                 manager.resetAllFileList();
                 extractProgressBar.setValue(30); /*Progress bar setting*/
                 
                 manager.extract();
                 isExtracted = true;
-                extractProgressBar.setValue(80); /*Progress bar setting*/
+                extractProgressBar.setValue(70); /*Progress bar setting*/
                 
                 if(twsRadio.isSelected()){
                     // Populate and select log file for combo box
@@ -1145,12 +1218,27 @@ public class demoFrame extends javax.swing.JFrame {
                     
                     // Populate and select settings file for combo box
                     handleSettingsComboBox_tws();
+                    
+                    // Populate and select trade file for combo box
+                    handleTradeComboBox();
                 } else if(ibgRadio.isSelected()){
                     // Populate and select log file for combo box
                     handleLogComboBox_ibg();
                     
                     // Populate and select settings file for combo box
                     handleSettingsComboBox_ibg();
+                }
+                extractProgressBar.setValue(90); /*Progress bar setting*/
+                
+                if(autoClsCheck.isSelected()){
+                    textPaneList.get(Choices.ENV).setText(null);
+                    textPaneList.get(Choices.LOGINSEQ).setText(null);
+                    textPaneList.get(Choices.CONN).setText(null);
+                    textPaneList.get(Choices.SYSRES).setText(null);
+                    textPaneList.get(Choices.HTBP).setText(null);
+                    textPaneList.get(Choices.API).setText(null);
+                    textPaneList.get(Choices.MKTDATA).setText(null);
+                    textPaneList.get(Choices.ORDERSTRDS).setText(null);
                 }
                 extractProgressBar.setValue(100); /*Progress bar setting*/
             }
@@ -1232,9 +1320,9 @@ public class demoFrame extends javax.swing.JFrame {
             manager.startParse(Choices.ORDERSTRDS, true, textPaneList);
         }
     }//GEN-LAST:event_analyzeOrdTrdBtnActionPerformed
-
+    
     private void analyzeAllBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeAllBtnActionPerformed
-        // TODO add your handling code here:        
+        // TODO add your handling code here:
         if(useExtractFileBtn.isSelected()){
             manager.startParse(Choices.ENV, false, textPaneList);
             manager.startParse(Choices.LOGINSEQ, false, textPaneList);
@@ -1255,7 +1343,7 @@ public class demoFrame extends javax.swing.JFrame {
             manager.startParse(Choices.ORDERSTRDS, true, textPaneList);
         }
     }//GEN-LAST:event_analyzeAllBtnActionPerformed
-
+    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         textPaneList.get(Choices.ENV).setText(null);
@@ -1267,6 +1355,15 @@ public class demoFrame extends javax.swing.JFrame {
         textPaneList.get(Choices.MKTDATA).setText(null);
         textPaneList.get(Choices.ORDERSTRDS).setText(null);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void includeXmlCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_includeXmlCheckActionPerformed
+        // TODO add your handling code here:
+        if(includeXmlCheck.isSelected()){
+            manager.setIncludeXml(true);
+        } else {
+            manager.setIncludeXml(false);
+        }
+    }//GEN-LAST:event_includeXmlCheckActionPerformed
     
     private void customInitComponents(){
         // Put Window location at center
@@ -1403,6 +1500,36 @@ public class demoFrame extends javax.swing.JFrame {
         }
     }
     
+    private void handleTradeComboBox(){
+        if(isExtracted == true && isTradeFileAdded == false){
+            String[] list = manager.getTradeFileListNames();
+            if(list == null){
+                tradeComboBox.setSelectedItem(null);
+                isTradeFileAdded = true;
+                if(useExtractFileBtn.isSelected()){
+                    manager.selectTradeFile(null);
+                    trdReady = true;
+                    updateStatus();
+                }
+                return;
+            }
+            
+            for(String s: list){
+                tradeComboBox.addItem(s);
+            }
+            isTradeFileAdded = true;
+        }
+        tradeComboBox.setSelectedItem(manager.getTodayTradeFileName());
+        if(tradeComboBox.getSelectedItem() != null && useExtractFileBtn.isSelected()){
+            manager.selectTradeFile(tradeComboBox.getSelectedItem().toString());
+            trdReady = true;
+            updateStatus();
+        } else {
+            trdReady = false;
+            updateStatus();
+        }
+    }
+    
     private void updateStatus(){
         // Update Log File status
         if(logReady == true){
@@ -1422,6 +1549,15 @@ public class demoFrame extends javax.swing.JFrame {
         } else {
             settingsFileStatus.setText("Settings File - Not Selected");
             settingsFileStatus.setForeground(Color.RED);
+        }
+        
+        //Update Trade File Status
+        if(trdReady == true){
+            tradeFileStatus.setText("Trade File - Ready");
+            tradeFileStatus.setForeground(Color.GREEN);
+        } else {
+            tradeFileStatus.setText("Trade File - Not Selected");
+            tradeFileStatus.setForeground(Color.RED);
         }
     }
     
@@ -1446,7 +1582,10 @@ public class demoFrame extends javax.swing.JFrame {
         StyleConstants.setBold(s, true);
         
         s = doc.addStyle("blue", regular);
-        StyleConstants.setForeground(s, Color.blue);
+        StyleConstants.setForeground(s, Color.blue.brighter().brighter());
+        
+        s = doc.addStyle("gray", regular);
+        StyleConstants.setForeground(s, Color.gray);
         
         s = doc.addStyle("green", regular);
         StyleConstants.setForeground(s, Color.green.darker());
@@ -1455,7 +1594,7 @@ public class demoFrame extends javax.swing.JFrame {
         StyleConstants.setForeground(s, Color.green.darker().darker());
         
         s = doc.addStyle("orange", regular);
-        StyleConstants.setForeground(s, Color.orange);
+        StyleConstants.setForeground(s, Color.orange.darker());
         
         s = doc.addStyle("red", regular);
         StyleConstants.setForeground(s, Color.red);
@@ -1529,6 +1668,7 @@ public class demoFrame extends javax.swing.JFrame {
     private javax.swing.JCheckBox includeXmlCheck;
     private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -1552,6 +1692,8 @@ public class demoFrame extends javax.swing.JFrame {
     private javax.swing.JLabel statusLabel;
     private javax.swing.JPanel statusPanel;
     private javax.swing.JPanel textMainPane;
+    private javax.swing.JComboBox<String> tradeComboBox;
+    private javax.swing.JLabel tradeFileStatus;
     private javax.swing.ButtonGroup twsIbgGroup;
     private javax.swing.JPanel twsLogFilterPanel;
     private javax.swing.JRadioButton twsRadio;

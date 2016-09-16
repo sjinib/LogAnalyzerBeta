@@ -168,10 +168,15 @@
                                               <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
                                               <Component id="logComboBox" alignment="0" min="-2" max="-2" attributes="0"/>
                                           </Group>
-                                          <EmptySpace min="-2" pref="97" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="settingsComboBox" min="-2" max="-2" attributes="0"/>
-                                              <Component id="jLabel5" alignment="1" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="settingsComboBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                                              <Component id="tradeComboBox" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                       <Component id="extractProgressBar" min="-2" pref="213" max="-2" attributes="0"/>
@@ -215,11 +220,13 @@
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="logComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="settingsComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="tradeComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
@@ -413,6 +420,21 @@
                 </Component>
                 <Component class="javax.swing.JTextField" name="settingsDirectoryManual">
                 </Component>
+                <Component class="javax.swing.JLabel" name="jLabel1">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Trade File:"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JComboBox" name="tradeComboBox">
+                  <Properties>
+                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                      <StringArray count="0"/>
+                    </Property>
+                  </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                  </AuxValues>
+                </Component>
               </SubComponents>
             </Container>
             <Container class="javax.swing.JPanel" name="statusPanel">
@@ -427,6 +449,10 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="analyzeBtn" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      </Group>
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -435,12 +461,9 @@
                               <Component id="statusLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="logFileStatus" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="settingsFileStatus" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="tradeFileStatus" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace pref="89" max="32767" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="analyzeBtn" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -457,7 +480,9 @@
                           <Component id="logFileStatus" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="settingsFileStatus" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="tradeFileStatus" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="analyzeBtn" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
@@ -513,6 +538,11 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="analyzeBtnActionPerformed"/>
                   </Events>
+                </Component>
+                <Component class="javax.swing.JLabel" name="tradeFileStatus">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Trade File"/>
+                  </Properties>
                 </Component>
               </SubComponents>
             </Container>
@@ -630,6 +660,7 @@
                       <Font name="Tahoma" size="11" style="1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="All"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Analyze all topics"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="analyzeAllBtnActionPerformed"/>
@@ -644,6 +675,7 @@
                       <Color blue="0" green="66" red="0" type="rgb"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Env"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Environmental elements"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="analyzeEnvBtnActionPerformed"/>
@@ -658,6 +690,7 @@
                       <Color blue="0" green="0" red="99" type="rgb"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Login Seq"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Login sequence"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="analyzeLoginSeqBtnActionPerformed"/>
@@ -672,6 +705,7 @@
                       <Color blue="ff" green="66" red="33" type="rgb"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="SysRes"/>
+                    <Property name="toolTipText" type="java.lang.String" value="System restart"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="analyzeSysResBtnActionPerformed"/>
@@ -686,6 +720,7 @@
                       <Color blue="0" green="66" red="ff" type="rgb"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Market Data"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Market Data"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="analyzeMktDataBtnActionPerformed"/>
@@ -700,6 +735,7 @@
                       <Color blue="0" green="0" red="ff" type="rgb"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Conn"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Connectivity"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="analyzeConnBtnActionPerformed"/>
@@ -714,6 +750,7 @@
                       <Color blue="99" green="66" red="ff" type="rgb"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Htbp"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Hot Backup Lines"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="analyzeHtbpBtnActionPerformed"/>
@@ -728,6 +765,7 @@
                       <Color blue="ff" green="33" red="99" type="rgb"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="API"/>
+                    <Property name="toolTipText" type="java.lang.String" value="API (Detailed logging)"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="analyzeAPIBtnActionPerformed"/>
@@ -742,6 +780,7 @@
                       <Color blue="cc" green="cc" red="0" type="rgb"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Orders &amp; Trades"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Orders &amp; Trades"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="analyzeOrdTrdBtnActionPerformed"/>
@@ -750,6 +789,7 @@
                 <Component class="javax.swing.JButton" name="jButton1">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Cls All"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Clear all display pane"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
@@ -757,13 +797,16 @@
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="autoClsCheck">
                   <Properties>
+                    <Property name="selected" type="boolean" value="true"/>
                     <Property name="text" type="java.lang.String" value="Auto Cls"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Automatic clear all display panes after extraction of diagnostic file"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="deepAnalysisCheck">
                   <Properties>
                     <Property name="selected" type="boolean" value="true"/>
                     <Property name="text" type="java.lang.String" value="Deep Analysis"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Select to run a deep analysis of the log file"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deepAnalysisCheckActionPerformed"/>
@@ -771,8 +814,13 @@
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="includeXmlCheck">
                   <Properties>
+                    <Property name="selected" type="boolean" value="true"/>
                     <Property name="text" type="java.lang.String" value="Include Tws.xml in analysis"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Select to include settings xml file analysis"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="includeXmlCheckActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="includeTrdFileCheck">
                   <Properties>
