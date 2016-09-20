@@ -10,6 +10,7 @@ public class EnvSettingsMessage extends SettingsMessage {
         private HashMap<String, String> systemSettings;
         private String showAllInBaseCurrency;
         private HashMap<String, String> uiSettings;
+        private HashMap<String, String> uiOrdsSettings;
         private String orderWizardDisplayMode;
         private HashMap<String, String> orderSettings;
 
@@ -19,7 +20,9 @@ public class EnvSettingsMessage extends SettingsMessage {
         
         public static final String[] SYSTEMSETTINGSTEXT = { "Auto logoff time: ", "Auto save settings: ", "Save watchlist to cloud: ", "Store GTC and DAY orders on separate pending pages: " };
         
-        public static final String[] UISETTINGSTEXT = { "Browser: ", "Create audit file: ", "FUT Auto rollover: ", "Display tick-dots instead of colored prices: ", "Rapid STK entry: ", "Round values to the nearest whole number: ", "Round values to the nearest whole numbers in Account window: ", "Do not prompt for MD subscription: ", "Prefer Calculated Volume: ", "Volume - Abbreviated display shows K for thousands or M for millions: ", "Display FX Positions in portfolio (Virtual FX portfolio expanded): ", "Include Today's Opening Position in PnL: ", "Include Away positions to Portfolio and PnL: ", "Auto sort submitted orders: ", "Auto remove completed orders: ", "Leave filled order on the screen for (s): ", "Leave canceled order on the screen for (s): ", "Big scale sizes: ", "Big scale prices: " };
+        public static final String[] UISETTINGSTEXT = { "Browser: ", "Create audit file: ", "FUT Auto rollover: ", "Display tick-dots instead of colored prices: ", "Rapid STK entry: ", "Round values to the nearest whole number: ", "Round values to the nearest whole numbers in Account window: ", "Do not prompt for MD subscription: ", "Prefer Calculated Volume: ", "Volume - Abbreviated display shows K for thousands or M for millions: ", "Display FX Positions in portfolio (Virtual FX portfolio expanded): ", "Include Today's Opening Position in PnL: ", "Include away positions to Portfolio and PnL: " };
+        
+        public static final String[] UIORDERSSETTINGSTEXT = { "Auto sort submitted orders: ", "Auto remove completed orders: ", "Leave filled order on the screen for (s): ", "Leave canceled order on the screen for (s): ", "Big scale sizes: ", "Big scale prices: " };
         
         public static final String[] ORDERSETTINGSTEXT = { "Reuse rejected orders: ", "Auto adjust limit price for STP LMT and LIT orders: ", "Use auto-logoff time instead of midnight when downloading completed orders: ", "Auto save default size: " };
         
@@ -33,7 +36,9 @@ public class EnvSettingsMessage extends SettingsMessage {
 	public static final String[] SYSTEMSETTINGSTAGS = { "autoLogoffTime",
 			"autoSaveSettings", "saveWatchlistsToCloud", "twoPendingPages" };
 	
-	public static final String[] UISETTINGSTAGS = { "browser", "audit", "autoRollover", "rapidStkEntry", "roundValues", "roundValuesOnAccountWindow", "doNotPromptForMdSubscr", "displayTrueTickVolume", "displayAbbreviatedVolume", "includeFxPositions", "includeOpeningPositionInPnL", "showAwayZeroPosition", "useTickDots", "enableOrderSort", "autoRemoveFinishedOrder", "delayForFilled", "delayForCanceled", "bigScaleSizes", "bigScalePrices" };
+	public static final String[] UISETTINGSTAGS = { "browser", "audit", "autoRollover", "useTickDots", "rapidStkEntry", "roundValues", "roundValuesOnAccountWindow", "doNotPromptForMdSubscr", "displayTrueTickVolume", "displayAbbreviatedVolume", "includeFxPositions", "includeOpeningPositionInPnL", "showAwayZeroPosition" };
+        
+        public static final String[] UIORDERSSETTINGSTAGS = { "enableOrderSort", "autoRemoveFinishedOrder", "delayForFilled", "delayForCanceled", "bigScaleSizes", "bigScalePrices" };
         
         public static final String[] ORDERSETTINGSTAGS = { "reuseRejectedOrd", "autoAdjustStopLimit", "useAutoLogoffAsMidnight", "saveAsDefaultSize" };
         
@@ -105,9 +110,22 @@ public class EnvSettingsMessage extends SettingsMessage {
 		uiSettings.put(key, value);
 	}
 
-	public HashMap<String, String> getUISettings() {
+	public HashMap<String, String> getCopyUISettings() {
             if(uiSettings != null)
 		return new HashMap<String, String>(uiSettings);
+            return null;
+	}
+        
+        public void addUIOrdsSettings(String key, String value) {
+		if (uiOrdsSettings == null) {
+			uiOrdsSettings = new HashMap<String, String>();
+		}
+		uiOrdsSettings.put(key, value);
+	}
+
+	public HashMap<String, String> getCopyUIOrdsSettings() {
+            if(uiOrdsSettings != null)
+		return new HashMap<String, String>(uiOrdsSettings);
             return null;
 	}
         
@@ -118,7 +136,7 @@ public class EnvSettingsMessage extends SettingsMessage {
             orderWizardDisplayMode = s;
         }
         
-        public String getOrderWizardDisplayMode(){
+        public String getCopyOrderWizardDisplayMode(){
             return new String(orderWizardDisplayMode);
         }
         
@@ -129,7 +147,7 @@ public class EnvSettingsMessage extends SettingsMessage {
 		orderSettings.put(key, value);
 	}
 
-	public HashMap<String, String> getOrderSettings() {
+	public HashMap<String, String> getCopyOrderSettings() {
             if(orderSettings != null)
 		return new HashMap<String, String>(orderSettings);
             return null;

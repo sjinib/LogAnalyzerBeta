@@ -41,7 +41,9 @@ public class LogReader {
     private final ApiSettingsMessage apiSettingsMessage;
     private final EnvSettingsMessage envSettingsMessage;
     
+    private boolean autoCls = true;
     private boolean includeXml = true;
+    private boolean includeTrd = false;
     
     public LogReader(){
         mdSettingsMessage = new MarketDataSettingsMessage();
@@ -61,8 +63,16 @@ public class LogReader {
         }
     }
     
+    public void setAutoCls(boolean autoCls){
+        this.autoCls = autoCls;
+    }
+    
     public void setIncludeXml(boolean includeXml){
         this.includeXml = includeXml;
+    }
+    
+    public void setIncludeTrd(boolean includeTrd){
+        this.includeTrd = includeTrd;
     }
     
     public void resetLogFileList(){
@@ -581,13 +591,17 @@ public class LogReader {
     }
     
     public void parseTradeFile(int choice, HashMap<Integer, javax.swing.JTextPane> textPaneList) throws Exception{
-        File currentTradeFile = this.getSelectedTradeFile();
-        
-        if(currentTradeFile == null){
+        if(includeTrd == true){
+            File currentTradeFile = this.getSelectedTradeFile();
+            
+            if(currentTradeFile == null){
+                return;
+            }
+            
+            TradeFileParser.parseTradeFile(currentTradeFile, textPaneList.get(choice));
+        } else {
             return;
         }
-        
-        TradeFileParser.parseTradeFile(currentTradeFile, textPaneList.get(choice));
     }
     
     public void parseTwsLogFileDeep(int choice, boolean isTws, boolean useManual, HashMap<Integer, javax.swing.JTextPane> textPaneList) throws Exception{
@@ -604,30 +618,54 @@ public class LogReader {
         
         switch (choice) {
             case Choices.ENV:
+                if(autoCls == true){
+                    clearTextPane(textPaneList.get(choice));
+                }
                 parseSettingsFile(choice, isTws, useManual, textPaneList);
                 TwsLogParserDeep.parseTwsEnvInfo(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.LOGINSEQ:
+                if(autoCls == true){
+                    clearTextPane(textPaneList.get(choice));
+                }
                 TwsLogParserDeep.parseTwsLoginSeqInfo(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.SYSRES:
+                if(autoCls == true){
+                    clearTextPane(textPaneList.get(choice));
+                }
                 TwsLogParserDeep.parseTwsSysRes(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.MKTDATA:
+                if(autoCls == true){
+                    clearTextPane(textPaneList.get(choice));
+                }
                 parseSettingsFile(choice, isTws, useManual, textPaneList);
                 TwsLogParserDeep.parseTwsMktData(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.CONN:
+                if(autoCls == true){
+                    clearTextPane(textPaneList.get(choice));
+                }
                 TwsLogParserDeep.parseTwsConn(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.HTBP:
+                if(autoCls == true){
+                    clearTextPane(textPaneList.get(choice));
+                }
                 TwsLogParserDeep.parseTwsHtbp(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.API:
+                if(autoCls == true){
+                    clearTextPane(textPaneList.get(choice));
+                }
                 parseSettingsFile(choice, isTws, useManual, textPaneList);
                 TwsLogParserDeep.parseTwsApi(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.ORDERSTRDS:
+                if(autoCls == true){
+                    clearTextPane(textPaneList.get(choice));
+                }
                 parseTradeFile(choice, textPaneList);
                 TwsLogParserDeep.parseTwsOrderTrds(currentLogFile, textPaneList.get(choice));
                 break;
@@ -650,27 +688,55 @@ public class LogReader {
         
         switch (choice) {
             case Choices.ENV:
+                if(autoCls == true){
+                    clearTextPane(textPaneList.get(choice));
+                }
+                parseSettingsFile(choice, isTws, useManual, textPaneList);
                 TwsLogParserShallow.parseTwsEnvInfo(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.LOGINSEQ:
+                if(autoCls == true){
+                    clearTextPane(textPaneList.get(choice));
+                }
                 TwsLogParserShallow.parseTwsLoginSeqInfo(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.SYSRES:
+                if(autoCls == true){
+                    clearTextPane(textPaneList.get(choice));
+                }
                 TwsLogParserShallow.parseTwsSysRes(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.MKTDATA:
+                if(autoCls == true){
+                    clearTextPane(textPaneList.get(choice));
+                }
+                parseSettingsFile(choice, isTws, useManual, textPaneList);
                 TwsLogParserShallow.parseTwsMktData(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.CONN:
+                if(autoCls == true){
+                    clearTextPane(textPaneList.get(choice));
+                }
                 TwsLogParserShallow.parseTwsConn(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.HTBP:
+                if(autoCls == true){
+                    clearTextPane(textPaneList.get(choice));
+                }
                 TwsLogParserShallow.parseTwsHtbp(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.API:
+                if(autoCls == true){
+                    clearTextPane(textPaneList.get(choice));
+                }
+                parseSettingsFile(choice, isTws, useManual, textPaneList);
                 TwsLogParserShallow.parseTwsApi(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.ORDERSTRDS:
+                if(autoCls == true){
+                    clearTextPane(textPaneList.get(choice));
+                }
+                parseTradeFile(choice, textPaneList);
                 TwsLogParserShallow.parseTwsOrderTrds(currentLogFile, textPaneList.get(choice));
                 break;
             default:
@@ -678,17 +744,7 @@ public class LogReader {
         }
     }
     
-    public void testPrint(){
-        System.out.println(apiSettingsMessage.getCopyApiSettingsList().toString());
-        System.out.println(apiSettingsMessage.getCopyApiPrecautionsList().toString());
-        System.out.println(apiSettingsMessage.getCopyTrustedIPs().toString());
-        System.out.println(mdSettingsMessage.getCopyMdSettingsList().toString());
-        System.out.println(mdSettingsMessage.getCopyEsignalSettingsList().toString());
-        System.out.println(mdSettingsMessage.getCopyEsignalSecSettingsListOpt().toString());
-        System.out.println(mdSettingsMessage.getCopyEsignalSecSettingsListStk().toString());
-        System.out.println(mdSettingsMessage.getCopyEsignalSecSettingsListFut().toString());
-        System.out.println(mdSettingsMessage.getCopyEsignalSecSettingsListInd().toString());
-        System.out.println(mdSettingsMessage.getCopySmartRoutSettingsList().toString());
+    private void clearTextPane(javax.swing.JTextPane textPane){
+        textPane.setText(null);
     }
-    
 }

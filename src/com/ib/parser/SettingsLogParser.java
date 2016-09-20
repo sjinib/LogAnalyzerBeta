@@ -316,6 +316,17 @@ public class SettingsLogParser {
             }
         }
         
+        for (int i = 0; i < envNList.getLength(); i++){
+            Node keyNode = envNList.item(i);
+            if (keyNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element keyElement = (Element) keyNode;
+                for(String attr : EnvSettingsMessage.UIORDERSSETTINGSTAGS){
+                    String attrValue = keyElement.getAttribute(attr);
+                    envSettingsMessage.addUIOrdsSettings(attr, attrValue);
+                }
+            }
+        }
+        
         envNList = doc.getElementsByTagName("OrderWizardDisplayMode");
         
         for (int i = 0; i < envNList.getLength(); i++){
@@ -345,19 +356,58 @@ public class SettingsLogParser {
         demoFrame.addStylesToDocument(styledDoc);
         
         styledDoc.insertString(styledDoc.getLength(), "================= Begin of transcript from file " + settingsFile.getName() + "=================\n\n", styledDoc.getStyle("blackBold"));
-        styledDoc.insertString(styledDoc.getLength(), "Workspaces: \n", styledDoc.getStyle("italic"));
-        styledDoc.insertString(styledDoc.getLength(), "Workspace key currently in use: \n", styledDoc.getStyle("italic"));
+        styledDoc.insertString(styledDoc.getLength(), "Workspaces: \n", styledDoc.getStyle("italicBold"));
+        styledDoc.insertString(styledDoc.getLength(), "Workspace key currently in use: ", styledDoc.getStyle("italic"));
         
-        styledDoc.insertString(styledDoc.getLength(), envSettingsMessage.getCurrentWorkSpaceKey(), styledDoc.getStyle("blackBold"));
+        styledDoc.insertString(styledDoc.getLength(), envSettingsMessage.getCurrentWorkSpaceKey() + "\n", styledDoc.getStyle("blackBold"));
         
         for(int i = 0; i < EnvSettingsMessage.WORKSPACETAGS.length; i++){
             styledDoc.insertString(styledDoc.getLength(), EnvSettingsMessage.WORKSPACETEXT[i], styledDoc.getStyle("regular"));
             styledDoc.insertString(styledDoc.getLength(), envSettingsMessage.getCopyWorkSpaceKey().get(EnvSettingsMessage.WORKSPACETAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
         }
         
-        styledDoc.insertString(styledDoc.getLength(), "\nESignal Settings: \n", styledDoc.getStyle("italic"));
+        styledDoc.insertString(styledDoc.getLength(), "\nTWS Tabs: (Origin:6 = Created by the user - Origin:0 = Created by the system)\n", styledDoc.getStyle("italic"));
         
+        for(int i = 0; i < EnvSettingsMessage.TICKERPAGESETTINGSTAGS.length; i++){
+            styledDoc.insertString(styledDoc.getLength(), EnvSettingsMessage.TICKERPAGESETTINGSTEXT[i], styledDoc.getStyle("regular"));
+            styledDoc.insertString(styledDoc.getLength(), envSettingsMessage.getCopyTickerPageSettings().get(EnvSettingsMessage.TICKERPAGESETTINGSTAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+        }
         
+        styledDoc.insertString(styledDoc.getLength(), "\nTWS System settings:\n", styledDoc.getStyle("italic"));
+        
+        for(int i = 0; i < EnvSettingsMessage.SYSTEMSETTINGSTAGS.length; i++){
+            styledDoc.insertString(styledDoc.getLength(), EnvSettingsMessage.SYSTEMSETTINGSTEXT[i], styledDoc.getStyle("regular"));
+            styledDoc.insertString(styledDoc.getLength(), envSettingsMessage.getCopySystemSettings().get(EnvSettingsMessage.SYSTEMSETTINGSTAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+        }
+        
+        styledDoc.insertString(styledDoc.getLength(), "\nShow positions in base currency (In Account,Portfolio and Quote monitor pages): ", styledDoc.getStyle("italic"));
+        
+        styledDoc.insertString(styledDoc.getLength(), envSettingsMessage.getShowAllInBaseCurrency() + "\n", styledDoc.getStyle("blackBold"));
+        
+        styledDoc.insertString(styledDoc.getLength(), "\nUser Interface Settings: \n", styledDoc.getStyle("italicBold"));
+        
+        for(int i = 0; i < EnvSettingsMessage.UISETTINGSTAGS.length; i++){
+            styledDoc.insertString(styledDoc.getLength(), EnvSettingsMessage.UISETTINGSTEXT[i], styledDoc.getStyle("regular"));
+            styledDoc.insertString(styledDoc.getLength(), envSettingsMessage.getCopyUISettings().get(EnvSettingsMessage.UISETTINGSTAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+        }
+        
+        styledDoc.insertString(styledDoc.getLength(), "\nUser Interface Settings Orders Settings: \n", styledDoc.getStyle("italicBold"));
+        
+        for(int i = 0; i < EnvSettingsMessage.UIORDERSSETTINGSTAGS.length; i++){
+            styledDoc.insertString(styledDoc.getLength(), EnvSettingsMessage.UIORDERSSETTINGSTEXT[i], styledDoc.getStyle("regular"));
+            styledDoc.insertString(styledDoc.getLength(), envSettingsMessage.getCopyUIOrdsSettings().get(EnvSettingsMessage.UIORDERSSETTINGSTAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+        }
+        
+        styledDoc.insertString(styledDoc.getLength(), "\nOrder Wizard Display Mode (1=Show/Hide Manually 2=Show when an order is created): ", styledDoc.getStyle("italic"));
+        
+        styledDoc.insertString(styledDoc.getLength(), envSettingsMessage.getCopyOrderWizardDisplayMode() + "\n", styledDoc.getStyle("blackBold"));
+        
+        styledDoc.insertString(styledDoc.getLength(), "\nOrders Settings: \n", styledDoc.getStyle("italicBold"));
+        
+        for(int i = 0; i < EnvSettingsMessage.ORDERSETTINGSTAGS.length; i++){
+            styledDoc.insertString(styledDoc.getLength(), EnvSettingsMessage.ORDERSETTINGSTEXT[i], styledDoc.getStyle("regular"));
+            styledDoc.insertString(styledDoc.getLength(), envSettingsMessage.getCopyOrderSettings().get(EnvSettingsMessage.ORDERSETTINGSTAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+        }
         
         styledDoc.insertString(styledDoc.getLength(), "\n================= End of transcript from file " + settingsFile.getName() + "=================\n\n", styledDoc.getStyle("blackBold"));
     }

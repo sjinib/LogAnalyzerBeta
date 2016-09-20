@@ -28,8 +28,16 @@ public class LogManager {
         isDeepDiagnostic = isDeepDiag;
     }
     
+    public void setAutoCls(boolean autoCls){
+        reader.setAutoCls(autoCls);
+    }
+    
     public void setIncludeXml(boolean includeXml){
         reader.setIncludeXml(includeXml);
+    }
+    
+    public void setIncludeTrd(boolean includeTrd){
+        reader.setIncludeTrd(includeTrd);
     }
     
     public void setReaderLocation(String zipLocation, String outputDirectory){

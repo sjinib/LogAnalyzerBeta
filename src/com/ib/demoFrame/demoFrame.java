@@ -15,6 +15,8 @@ import org.apache.commons.io.FileUtils;
 import java.util.HashMap;
 import com.ib.parser.Choices;
 import javax.swing.GroupLayout;
+import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
 import javax.swing.text.*;
 
 /**
@@ -111,12 +113,7 @@ public class demoFrame extends javax.swing.JFrame {
         deepAnalysisCheck = new javax.swing.JCheckBox();
         includeXmlCheck = new javax.swing.JCheckBox();
         includeTrdFileCheck = new javax.swing.JCheckBox();
-        jLabel9 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
         textMainPane = new javax.swing.JPanel();
-        logDisplayPane1 = new javax.swing.JPanel();
-        logDisplayPane2 = new javax.swing.JPanel();
-        logDisplayPane3 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Log Analyzer");
@@ -548,6 +545,11 @@ public class demoFrame extends javax.swing.JFrame {
         autoClsCheck.setSelected(true);
         autoClsCheck.setText("Auto Cls");
         autoClsCheck.setToolTipText("Automatic clear all display panes after extraction of diagnostic file");
+        autoClsCheck.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                autoClsCheckActionPerformed(evt);
+            }
+        });
 
         deepAnalysisCheck.setSelected(true);
         deepAnalysisCheck.setText("Deep Analysis");
@@ -568,10 +570,11 @@ public class demoFrame extends javax.swing.JFrame {
         });
 
         includeTrdFileCheck.setText("Include .Trd files in analysis");
-
-        jLabel9.setText("Font Size: ");
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        includeTrdFileCheck.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                includeTrdFileCheckActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -588,7 +591,7 @@ public class demoFrame extends javax.swing.JFrame {
                         .addComponent(includeXmlCheck)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(includeTrdFileCheck)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(analyzeAllBtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -609,11 +612,7 @@ public class demoFrame extends javax.swing.JFrame {
                         .addComponent(analyzeOrdTrdBtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 145, Short.MAX_VALUE)
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -629,9 +628,7 @@ public class demoFrame extends javax.swing.JFrame {
                     .addComponent(analyzeHtbpBtn)
                     .addComponent(analyzeAPIBtn)
                     .addComponent(analyzeOrdTrdBtn)
-                    .addComponent(jButton1)
-                    .addComponent(jLabel9)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(autoClsCheck)
@@ -640,64 +637,15 @@ public class demoFrame extends javax.swing.JFrame {
                     .addComponent(includeTrdFileCheck)))
         );
 
-        textMainPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        logDisplayPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        javax.swing.GroupLayout logDisplayPane1Layout = new javax.swing.GroupLayout(logDisplayPane1);
-        logDisplayPane1.setLayout(logDisplayPane1Layout);
-        logDisplayPane1Layout.setHorizontalGroup(
-            logDisplayPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1048, Short.MAX_VALUE)
-        );
-        logDisplayPane1Layout.setVerticalGroup(
-            logDisplayPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 136, Short.MAX_VALUE)
-        );
-
-        logDisplayPane2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        javax.swing.GroupLayout logDisplayPane2Layout = new javax.swing.GroupLayout(logDisplayPane2);
-        logDisplayPane2.setLayout(logDisplayPane2Layout);
-        logDisplayPane2Layout.setHorizontalGroup(
-            logDisplayPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        logDisplayPane2Layout.setVerticalGroup(
-            logDisplayPane2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 135, Short.MAX_VALUE)
-        );
-
-        logDisplayPane3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        javax.swing.GroupLayout logDisplayPane3Layout = new javax.swing.GroupLayout(logDisplayPane3);
-        logDisplayPane3.setLayout(logDisplayPane3Layout);
-        logDisplayPane3Layout.setHorizontalGroup(
-            logDisplayPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1048, Short.MAX_VALUE)
-        );
-        logDisplayPane3Layout.setVerticalGroup(
-            logDisplayPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 105, Short.MAX_VALUE)
-        );
-
         javax.swing.GroupLayout textMainPaneLayout = new javax.swing.GroupLayout(textMainPane);
         textMainPane.setLayout(textMainPaneLayout);
         textMainPaneLayout.setHorizontalGroup(
             textMainPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(logDisplayPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(logDisplayPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(logDisplayPane3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGap(0, 1052, Short.MAX_VALUE)
         );
         textMainPaneLayout.setVerticalGroup(
             textMainPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(textMainPaneLayout.createSequentialGroup()
-                .addComponent(logDisplayPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(logDisplayPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(logDisplayPane3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGap(0, 407, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout twsLogFilterPanelLayout = new javax.swing.GroupLayout(twsLogFilterPanel);
@@ -745,43 +693,86 @@ public class demoFrame extends javax.swing.JFrame {
         logDisplayPane2 = new javax.swing.JPanel();
         logDisplayPane3 = new javax.swing.JPanel();
         
-        logDisplayPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        logDisplayPane1.setPreferredSize(new java.awt.Dimension(textMainPane.getSize().width, (int)((textMainPane.getSize().height-50)*0.45)));
+        //logDisplayPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        logDisplayPane1.setPreferredSize(new java.awt.Dimension(textMainPane.getSize().width, (int)((textMainPane.getSize().height-50)*0.4)));
         
-        logDisplayPane2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        logDisplayPane2.setPreferredSize(new java.awt.Dimension(textMainPane.getSize().width, (int)((textMainPane.getSize().height-50)*0.3)));
+        //logDisplayPane2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        logDisplayPane2.setPreferredSize(new java.awt.Dimension(textMainPane.getSize().width, (int)((textMainPane.getSize().height-50)*0.35)));
         
-        logDisplayPane3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        //logDisplayPane3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         logDisplayPane3.setPreferredSize(new java.awt.Dimension(textMainPane.getSize().width, (int)((textMainPane.getSize().height-50)*0.25)));
         
         // ENV, CONN and LOGIN SEQ
         envTextPane = new javax.swing.JTextPane();
+        envTextPane.setName("Environmental");
         envTextPane.setEditable(false);
         
         envTextScrollPane = new javax.swing.JScrollPane(envTextPane);
         envTextScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         envTextScrollPane.setViewportView(envTextPane);
-        envTextScrollPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 102, 0), 2, true));
+        envTextScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 102, 0), 2, true), "Environmental", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 102, 0)));
         
         loginSeqTextPane = new javax.swing.JTextPane();
+        loginSeqTextPane.setName("Login Sequence");
         loginSeqTextPane.setEditable(false);
         
         loginSeqTextScrollPane = new javax.swing.JScrollPane(loginSeqTextPane);
         loginSeqTextScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         loginSeqTextScrollPane.setViewportView(loginSeqTextPane);
-        loginSeqTextScrollPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 0, 0), 2, true));
+        loginSeqTextScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 0, 0), 2, true), "Login Sequence", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(153, 0, 0)));
+        
         
         connTextPane = new javax.swing.JTextPane();
+        connTextPane.setName("Connectivity");
         connTextPane.setEditable(false);
         
         connTextScrollPane = new javax.swing.JScrollPane(connTextPane);
         connTextScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         connTextScrollPane.setViewportView(connTextPane);
-        connTextScrollPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 0, 0), 2, true));
+        connTextScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 0, 0), 2, true), "Connectivity", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(255, 0, 0)));
         
         envTextScrollPane.setPreferredSize(new java.awt.Dimension((int)(logDisplayPane1.getPreferredSize().width*0.5), (int)(logDisplayPane1.getPreferredSize().height*0.45)));
         loginSeqTextScrollPane.setPreferredSize(new java.awt.Dimension((int)(logDisplayPane1.getPreferredSize().width*0.5), (int)(logDisplayPane1.getPreferredSize().height*0.55)));
         connTextScrollPane.setPreferredSize(new java.awt.Dimension((int)(logDisplayPane1.getPreferredSize().width*0.5), (int)(logDisplayPane1.getPreferredSize().height)));
+        
+        envTextPane.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt){
+                if(evt.getClickCount() == 2){
+                    java.awt.EventQueue.invokeLater(new Runnable() {
+                        public void run() {
+                            javax.swing.JFrame magnifiedDisplayPane = new MagnifiedDisplayPane(envTextPane, envTextScrollPane);
+                            magnifiedDisplayPane.setVisible(true);
+                        }
+                    });
+                }
+            }
+        });
+        
+        loginSeqTextPane.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt){
+                if(evt.getClickCount() == 2){
+                    java.awt.EventQueue.invokeLater(new Runnable() {
+                        public void run() {
+                            javax.swing.JFrame magnifiedDisplayPane = new MagnifiedDisplayPane(loginSeqTextPane, loginSeqTextScrollPane);
+                            magnifiedDisplayPane.setVisible(true);
+                        }
+                    });
+                }
+            }
+        });
+        
+        connTextPane.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt){
+                if(evt.getClickCount() == 2){
+                    java.awt.EventQueue.invokeLater(new Runnable() {
+                        public void run() {
+                            javax.swing.JFrame magnifiedDisplayPane = new MagnifiedDisplayPane(connTextPane, connTextScrollPane);
+                            magnifiedDisplayPane.setVisible(true);
+                        }
+                    });
+                }
+            }
+        });
         
         javax.swing.GroupLayout logDisplayPane1Layout = new javax.swing.GroupLayout(logDisplayPane1);
         logDisplayPane1.setLayout(logDisplayPane1Layout);
@@ -806,32 +797,74 @@ public class demoFrame extends javax.swing.JFrame {
         
         // Sysres, Htbp and API
         sysResTextPane = new javax.swing.JTextPane();
+        sysResTextPane.setName("System Reset");
         sysResTextPane.setEditable(false);
         
         sysResTextScrollPane = new javax.swing.JScrollPane(sysResTextPane);
         sysResTextScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         sysResTextScrollPane.setViewportView(sysResTextPane);
-        sysResTextScrollPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 102, 255), 2, true));
+        sysResTextScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(51, 102, 255), 2, true), "System Reset", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(51, 102, 255)));
         
         htbpTextPane = new javax.swing.JTextPane();
+        htbpTextPane.setName("Hot Backup Lines");
         htbpTextPane.setEditable(false);
         
         htbpTextScrollPane = new javax.swing.JScrollPane(htbpTextPane);
         htbpTextScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         htbpTextScrollPane.setViewportView(htbpTextPane);
-        htbpTextScrollPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 102, 153), 2, true));
+        htbpTextScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 102, 153), 2, true), "Hot Backup Lines", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(255, 102, 153)));
         
         apiTextPane = new javax.swing.JTextPane();
+        apiTextPane.setName("API");
         apiTextPane.setEditable(false);
         
         apiTextScrollPane = new javax.swing.JScrollPane(apiTextPane);
         apiTextScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         apiTextScrollPane.setViewportView(apiTextPane);
-        apiTextScrollPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 51, 255), 2, true));
+        apiTextScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 51, 255), 2, true), "API", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(153, 51, 255)));
         
         sysResTextScrollPane.setPreferredSize(new java.awt.Dimension((int)(logDisplayPane2.getPreferredSize().width*0.5), (int)(logDisplayPane2.getPreferredSize().height)));
         htbpTextScrollPane.setPreferredSize(new java.awt.Dimension((int)(logDisplayPane2.getPreferredSize().width*0.5), (int)(logDisplayPane2.getPreferredSize().height*0.4)));
         apiTextScrollPane.setPreferredSize(new java.awt.Dimension((int)(logDisplayPane2.getPreferredSize().width*0.5), (int)(logDisplayPane2.getPreferredSize().height*0.6)));
+        
+        sysResTextPane.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt){
+                if(evt.getClickCount() == 2){
+                    java.awt.EventQueue.invokeLater(new Runnable() {
+                        public void run() {
+                            javax.swing.JFrame magnifiedDisplayPane = new MagnifiedDisplayPane(sysResTextPane, sysResTextScrollPane);
+                            magnifiedDisplayPane.setVisible(true);
+                        }
+                    });
+                }
+            }
+        });
+        
+        htbpTextPane.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt){
+                if(evt.getClickCount() == 2){
+                    java.awt.EventQueue.invokeLater(new Runnable() {
+                        public void run() {
+                            javax.swing.JFrame magnifiedDisplayPane = new MagnifiedDisplayPane(htbpTextPane, htbpTextScrollPane);
+                            magnifiedDisplayPane.setVisible(true);
+                        }
+                    });
+                }
+            }
+        });
+        
+        apiTextPane.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt){
+                if(evt.getClickCount() == 2){
+                    java.awt.EventQueue.invokeLater(new Runnable() {
+                        public void run() {
+                            javax.swing.JFrame magnifiedDisplayPane = new MagnifiedDisplayPane(apiTextPane, apiTextScrollPane);
+                            magnifiedDisplayPane.setVisible(true);
+                        }
+                    });
+                }
+            }
+        });
         
         javax.swing.GroupLayout logDisplayPane2Layout = new javax.swing.GroupLayout(logDisplayPane2);
         logDisplayPane2.setLayout(logDisplayPane2Layout);
@@ -857,23 +890,53 @@ public class demoFrame extends javax.swing.JFrame {
         
         // Market Data and Orders & Trades
         mktDataTextPane = new javax.swing.JTextPane();
+        mktDataTextPane.setName("Market Data");
         mktDataTextPane.setEditable(false);
         
         mktDataTextScrollPane = new javax.swing.JScrollPane(mktDataTextPane);
         mktDataTextScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         mktDataTextScrollPane.setViewportView(mktDataTextPane);
-        mktDataTextScrollPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 102, 0), 2, true));
+        mktDataTextScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 102, 0), 2, true), "Market Data", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(255, 102, 0)));
+        
         
         ordTrdTextPane = new javax.swing.JTextPane();
+        ordTrdTextPane.setName("Orders & Trades");
         ordTrdTextPane.setEditable(false);
         
         ordTrdTextScrollPane = new javax.swing.JScrollPane(ordTrdTextPane);
         ordTrdTextScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         ordTrdTextScrollPane.setViewportView(ordTrdTextPane);
-        ordTrdTextScrollPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 204, 204), 2, true));
+        ordTrdTextScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 204, 204), 2, true), "Orders & Trades", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 204, 204)));
+        
         
         mktDataTextScrollPane.setPreferredSize(new java.awt.Dimension((int)(logDisplayPane3.getPreferredSize().width*0.5), (int)(logDisplayPane3.getPreferredSize().height)));
         ordTrdTextScrollPane.setPreferredSize(new java.awt.Dimension((int)(logDisplayPane3.getPreferredSize().width*0.5), (int)(logDisplayPane3.getPreferredSize().height)));
+        
+        mktDataTextPane.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt){
+                if(evt.getClickCount() == 2){
+                    java.awt.EventQueue.invokeLater(new Runnable() {
+                        public void run() {
+                            javax.swing.JFrame magnifiedDisplayPane = new MagnifiedDisplayPane(mktDataTextPane, mktDataTextScrollPane);
+                            magnifiedDisplayPane.setVisible(true);
+                        }
+                    });
+                }
+            }
+        });
+        
+        ordTrdTextPane.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt){
+                if(evt.getClickCount() == 2){
+                    java.awt.EventQueue.invokeLater(new Runnable() {
+                        public void run() {
+                            javax.swing.JFrame magnifiedDisplayPane = new MagnifiedDisplayPane(ordTrdTextPane, ordTrdTextScrollPane);
+                            magnifiedDisplayPane.setVisible(true);
+                        }
+                    });
+                }
+            }
+        });
         
         javax.swing.GroupLayout logDisplayPane3Layout = new javax.swing.GroupLayout(logDisplayPane3);
         logDisplayPane3.setLayout(logDisplayPane3Layout);
@@ -911,7 +974,6 @@ public class demoFrame extends javax.swing.JFrame {
                         .addComponent(logDisplayPane3, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }
-    
     
     private void useExtractFileBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useExtractFileBtnActionPerformed
         // Log section
@@ -1364,6 +1426,24 @@ public class demoFrame extends javax.swing.JFrame {
             manager.setIncludeXml(false);
         }
     }//GEN-LAST:event_includeXmlCheckActionPerformed
+
+    private void includeTrdFileCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_includeTrdFileCheckActionPerformed
+        // TODO add your handling code here:
+        if(includeTrdFileCheck.isSelected()){
+            manager.setIncludeTrd(true);
+        } else {
+            manager.setIncludeTrd(false);
+        }
+    }//GEN-LAST:event_includeTrdFileCheckActionPerformed
+
+    private void autoClsCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_autoClsCheckActionPerformed
+        // TODO add your handling code here:
+        if(autoClsCheck.isSelected()){
+            manager.setAutoCls(true);
+        } else {
+            manager.setAutoCls(false);
+        }
+    }//GEN-LAST:event_autoClsCheckActionPerformed
     
     private void customInitComponents(){
         // Put Window location at center
@@ -1508,7 +1588,7 @@ public class demoFrame extends javax.swing.JFrame {
                 isTradeFileAdded = true;
                 if(useExtractFileBtn.isSelected()){
                     manager.selectTradeFile(null);
-                    trdReady = true;
+                    trdReady = false;
                     updateStatus();
                 }
                 return;
@@ -1546,18 +1626,26 @@ public class demoFrame extends javax.swing.JFrame {
         if(settingsReady == true){
             settingsFileStatus.setText("Settings File - Ready");
             settingsFileStatus.setForeground(Color.GREEN);
+            manager.setIncludeXml(true);
+            includeXmlCheck.setSelected(true);
+            includeXmlCheck.setEnabled(true);
         } else {
             settingsFileStatus.setText("Settings File - Not Selected");
             settingsFileStatus.setForeground(Color.RED);
+            manager.setIncludeXml(false);
+            includeXmlCheck.setSelected(false);
+            includeXmlCheck.setEnabled(false);
         }
         
         //Update Trade File Status
         if(trdReady == true){
             tradeFileStatus.setText("Trade File - Ready");
             tradeFileStatus.setForeground(Color.GREEN);
+            includeTrdFileCheck.setEnabled(true);
         } else {
             tradeFileStatus.setText("Trade File - Not Selected");
             tradeFileStatus.setForeground(Color.RED);
+            includeTrdFileCheck.setEnabled(false);
         }
     }
     
@@ -1569,6 +1657,10 @@ public class demoFrame extends javax.swing.JFrame {
         
         Style s = doc.addStyle("italic", regular);
         StyleConstants.setItalic(s, true);
+        
+        s = doc.addStyle("italicBold", regular);
+        StyleConstants.setItalic(s, true);
+        StyleConstants.setBold(s, true);
         
         s = doc.addStyle("blackBold", regular);
         StyleConstants.setBold(s, true);
@@ -1667,7 +1759,6 @@ public class demoFrame extends javax.swing.JFrame {
     private javax.swing.JCheckBox includeTrdFileCheck;
     private javax.swing.JCheckBox includeXmlCheck;
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -1677,14 +1768,10 @@ public class demoFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField loadDirectory;
     private javax.swing.JComboBox<String> logComboBox;
     private javax.swing.JTextField logDirectoryManual;
-    private javax.swing.JPanel logDisplayPane1;
-    private javax.swing.JPanel logDisplayPane2;
-    private javax.swing.JPanel logDisplayPane3;
     private javax.swing.JLabel logFileStatus;
     private javax.swing.JComboBox<String> settingsComboBox;
     private javax.swing.JTextField settingsDirectoryManual;
@@ -1700,9 +1787,9 @@ public class demoFrame extends javax.swing.JFrame {
     private javax.swing.JRadioButton useExtractFileBtn;
     private javax.swing.JRadioButton useManualFileBtn;
     // End of variables declaration//GEN-END:variables
-    //private javax.swing.JPanel logDisplayPane1;
-    //private javax.swing.JPanel logDisplayPane2;
-    //private javax.swing.JPanel logDisplayPane3;
+    private javax.swing.JPanel logDisplayPane1;
+    private javax.swing.JPanel logDisplayPane2;
+    private javax.swing.JPanel logDisplayPane3;
     private javax.swing.JTextPane envTextPane;
     private javax.swing.JTextPane loginSeqTextPane;
     private javax.swing.JTextPane connTextPane;

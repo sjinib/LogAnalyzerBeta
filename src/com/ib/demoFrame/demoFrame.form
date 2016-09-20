@@ -592,7 +592,7 @@
                                   <Component id="includeXmlCheck" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="includeTrdFileCheck" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="analyzeAllBtn" min="-2" max="-2" attributes="0"/>
@@ -614,13 +614,9 @@
                                   <Component id="analyzeOrdTrdBtn" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jButton1" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="145" max="32767" attributes="0"/>
-                                  <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jComboBox1" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -639,8 +635,6 @@
                               <Component id="analyzeAPIBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="analyzeOrdTrdBtn" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel9" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jComboBox1" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -801,6 +795,9 @@
                     <Property name="text" type="java.lang.String" value="Auto Cls"/>
                     <Property name="toolTipText" type="java.lang.String" value="Automatic clear all display panes after extraction of diagnostic file"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="autoClsCheckActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="deepAnalysisCheck">
                   <Properties>
@@ -826,130 +823,26 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Include .Trd files in analysis"/>
                   </Properties>
-                </Component>
-                <Component class="javax.swing.JLabel" name="jLabel9">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Font Size: "/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JComboBox" name="jComboBox1">
-                  <Properties>
-                    <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                      <StringArray count="4">
-                        <StringItem index="0" value="Item 1"/>
-                        <StringItem index="1" value="Item 2"/>
-                        <StringItem index="2" value="Item 3"/>
-                        <StringItem index="3" value="Item 4"/>
-                      </StringArray>
-                    </Property>
-                  </Properties>
-                  <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-                  </AuxValues>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="includeTrdFileCheckActionPerformed"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>
             <Container class="javax.swing.JPanel" name="textMainPane">
-              <Properties>
-                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                  <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                    <LineBorder/>
-                  </Border>
-                </Property>
-              </Properties>
 
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="logDisplayPane1" max="32767" attributes="0"/>
-                      <Component id="logDisplayPane2" alignment="1" max="32767" attributes="0"/>
-                      <Component id="logDisplayPane3" alignment="0" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="1052" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="logDisplayPane1" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="logDisplayPane2" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="logDisplayPane3" max="32767" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                      </Group>
+                      <EmptySpace min="0" pref="407" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
-              <SubComponents>
-                <Container class="javax.swing.JPanel" name="logDisplayPane1">
-                  <Properties>
-                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                      <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                        <LineBorder/>
-                      </Border>
-                    </Property>
-                  </Properties>
-
-                  <Layout>
-                    <DimensionLayout dim="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="1048" max="32767" attributes="0"/>
-                      </Group>
-                    </DimensionLayout>
-                    <DimensionLayout dim="1">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="136" max="32767" attributes="0"/>
-                      </Group>
-                    </DimensionLayout>
-                  </Layout>
-                </Container>
-                <Container class="javax.swing.JPanel" name="logDisplayPane2">
-                  <Properties>
-                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                      <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                        <LineBorder/>
-                      </Border>
-                    </Property>
-                  </Properties>
-
-                  <Layout>
-                    <DimensionLayout dim="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      </Group>
-                    </DimensionLayout>
-                    <DimensionLayout dim="1">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="135" max="32767" attributes="0"/>
-                      </Group>
-                    </DimensionLayout>
-                  </Layout>
-                </Container>
-                <Container class="javax.swing.JPanel" name="logDisplayPane3">
-                  <Properties>
-                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                      <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                        <LineBorder/>
-                      </Border>
-                    </Property>
-                  </Properties>
-                  <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="demoFrame_jPanel4"/>
-                  </AuxValues>
-
-                  <Layout>
-                    <DimensionLayout dim="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="1048" max="32767" attributes="0"/>
-                      </Group>
-                    </DimensionLayout>
-                    <DimensionLayout dim="1">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="105" max="32767" attributes="0"/>
-                      </Group>
-                    </DimensionLayout>
-                  </Layout>
-                </Container>
-              </SubComponents>
             </Container>
           </SubComponents>
         </Container>
