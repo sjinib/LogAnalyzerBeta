@@ -4,14 +4,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import javax.swing.text.StyledDocument;
-import com.ib.demoFrame.demoFrame;
+import com.ib.demoFrame.AnalyzerGUI;
 
 public class TradeFileParser {
     public static void parseTradeFile(File tradeFile, javax.swing.JTextPane textPane) throws Exception {
         BufferedReader br = new BufferedReader(new FileReader(tradeFile));
         
         StyledDocument doc = textPane.getStyledDocument();
-        demoFrame.addStylesToDocument(doc);
+        AnalyzerGUI.addStylesToDocument(doc);
         
         doc.insertString(doc.getLength(), "================= Begin of transcript from file " + tradeFile.getName() + "=================\n\n", doc.getStyle("blackBold"));
         

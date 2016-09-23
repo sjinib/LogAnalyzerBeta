@@ -3,18 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/message/EnvSettingsMessage.java</file>
-            <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/TestPack/MessageManager.java</file>
-            <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/parser/TwsLogParserShallow.java</file>
-            <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/parser/Choices.java</file>
             <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/parser/TwsLogParserDeep.java</file>
-            <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/message/ApiSettingsMessage.java</file>
-            <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/TestPack/demoMain.java</file>
-            <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/message/MarketDataSettingsMessage.java</file>
+            <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/parser/RegExSearch.java</file>
             <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/manager/LogManager.java</file>
             <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/parser/TradeFileParser.java</file>
+            <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/demoFrame/AnalyzerGUI.java</file>
             <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/reader/LogReader.java</file>
-            <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/demoFrame/demoFrame.java</file>
+            <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/demoFrame/MagnifiedDisplayPane.java</file>
             <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/parser/SettingsLogParser.java</file>
         </group>
     </open-files>

@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import javax.swing.text.StyledDocument;
-import com.ib.demoFrame.demoFrame;
+import com.ib.demoFrame.AnalyzerGUI;
 
 public class TwsLogParserDeep {
     // Choice(3)
@@ -16,7 +16,7 @@ public class TwsLogParserDeep {
         String[] filter2 = { "there is no internet connectivity" };
         
         StyledDocument doc = textPane.getStyledDocument();
-        demoFrame.addStylesToDocument(doc);
+        AnalyzerGUI.addStylesToDocument(doc);
         
         doc.insertString(doc.getLength(), "================= Begin of transcript from file " + twsLogFile.getName() + "=================\n\n", doc.getStyle("blackBold"));
         
@@ -62,7 +62,7 @@ public class TwsLogParserDeep {
         String[] filter3 = { "Trading Login Handoff class", "SPLASH Close pressed", "Started auto log off", "Application exit", "Competition", "competition", "Competing", "User initiated exit session", "Crossing day in suspended state", "Day cross detected", "SYSTEM CLOCK HAS BEEN CHANGED BY USER" };
         
         StyledDocument doc = textPane.getStyledDocument();
-        demoFrame.addStylesToDocument(doc);
+        AnalyzerGUI.addStylesToDocument(doc);
         
         doc.insertString(doc.getLength(), "================= Begin of transcript from file " + twsLogFile.getName() + "=================\n\n", doc.getStyle("blackBold"));
         
@@ -115,7 +115,7 @@ public class TwsLogParserDeep {
         String[] filter3 = { "has not responded", "OutOfMemoryError:" };
         
         StyledDocument doc = textPane.getStyledDocument();
-        demoFrame.addStylesToDocument(doc);
+        AnalyzerGUI.addStylesToDocument(doc);
         
         doc.insertString(doc.getLength(), "================= Begin of transcript from file " + twsLogFile.getName() + "=================\n\n", doc.getStyle("blackBold"));
         
@@ -168,7 +168,7 @@ public class TwsLogParserDeep {
         String[] filter3 = { "No historical market data available","Requesting delayed data for q(ChartPanel", "Reset market data subscription", "Reset deep data subscription", "Delayed HMDS queries on config" };
         
         StyledDocument doc = textPane.getStyledDocument();
-        demoFrame.addStylesToDocument(doc);
+        AnalyzerGUI.addStylesToDocument(doc);
         
         doc.insertString(doc.getLength(), "================= Begin of transcript from file " + twsLogFile.getName() + "=================\n\n", doc.getStyle("blackBold"));
         
@@ -221,7 +221,7 @@ public class TwsLogParserDeep {
         String[] filter3 = { "creating socket failed", "java.net.SocketException:", ": Error connecting", "connection error,", "DISCONNECT_ON_BROKEN_SOCKET", "DISCONNECT_ON_CONNECTION_FAILURE", "DISCONNECT_AUTHORIZATION_FILED", "NO_PING_RESPONSE", "NO_AUTH_RESPONSE", "connection to ccp" };
         
         StyledDocument doc = textPane.getStyledDocument();
-        demoFrame.addStylesToDocument(doc);
+        AnalyzerGUI.addStylesToDocument(doc);
         
         doc.insertString(doc.getLength(), "================= Begin of transcript from file " + twsLogFile.getName() + "=================\n\n", doc.getStyle("blackBold"));
         
@@ -274,7 +274,7 @@ public class TwsLogParserDeep {
         String[] filter3 = { "HotBackupStatusManager: Status sent" };
         
         StyledDocument doc = textPane.getStyledDocument();
-        demoFrame.addStylesToDocument(doc);
+        AnalyzerGUI.addStylesToDocument(doc);
         
         doc.insertString(doc.getLength(), "================= Begin of transcript from file " + twsLogFile.getName() + "=================\n\n", doc.getStyle("blackBold"));
         
@@ -327,7 +327,7 @@ public class TwsLogParserDeep {
         String[] filter3 = { "has not responded", "OutOfMemoryError:" };
         
         StyledDocument doc = textPane.getStyledDocument();
-        demoFrame.addStylesToDocument(doc);
+        AnalyzerGUI.addStylesToDocument(doc);
         
         doc.insertString(doc.getLength(), "================= Begin of transcript from file " + twsLogFile.getName() + "=================\n\n", doc.getStyle("blackBold"));
         
@@ -380,7 +380,7 @@ public class TwsLogParserDeep {
         String[] filter3 = { "Order value is too large", "WARNING: Please note that the qualifying equity within your account", "ALERT: Your account,", "URGENT: one or more futures", "URGENT: Please note", "ORDER IS NOT ACCEPTED", "Order would cross related resting order", "Invalid effective time", "The time or time-zone entered is invalid", "You must enter a valid price", "Limit price too far outside of NBBO", "does not comply", "does not conform", "Order size is not within the limits", "order rejected:", "The contract is not available for short sale", "Some positions could not be closed", "The price cannot be empty", "COULD NOT VALUE THIS CONTRACT AT THIS TIME" };
         
         StyledDocument doc = textPane.getStyledDocument();
-        demoFrame.addStylesToDocument(doc);
+        AnalyzerGUI.addStylesToDocument(doc);
         
         doc.insertString(doc.getLength(), "================= Begin of transcript from file " + twsLogFile.getName() + "=================\n\n", doc.getStyle("blackBold"));
         

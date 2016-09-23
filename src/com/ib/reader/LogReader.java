@@ -744,7 +744,37 @@ public class LogReader {
         }
     }
     
+    public void regExSearch(boolean isTws, boolean useManual, String regEx, boolean isCaseSensitive, javax.swing.JTextPane textPane) throws Exception{
+        File currentLogFile;
+        if(useManual){
+            currentLogFile = this.getSelectedLogFileManual();
+        } else {
+            if(isTws == true){
+                currentLogFile = this.getSelectedTwsLogFile();
+            } else {
+                currentLogFile = this.getSelectedIbgLogFile();
+            }
+        }
+        
+        RegExSearch.search(regEx, isCaseSensitive, currentLogFile, textPane);
+    }
+    
     private void clearTextPane(javax.swing.JTextPane textPane){
         textPane.setText(null);
+    }
+    
+    public void openLogFileInNotePad(boolean isTws, boolean useManual) throws Exception{
+        File currentLogFile;
+        if(useManual){
+            currentLogFile = this.getSelectedLogFileManual();
+        } else {
+            if(isTws == true){
+                currentLogFile = this.getSelectedTwsLogFile();
+            } else {
+                currentLogFile = this.getSelectedIbgLogFile();
+            }
+        }
+        
+        java.awt.Desktop.getDesktop().open(currentLogFile);
     }
 }

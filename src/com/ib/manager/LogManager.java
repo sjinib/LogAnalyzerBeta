@@ -133,6 +133,22 @@ public class LogManager {
         }
     }
     
+    public void openLogFileInNotePad(boolean useManual){
+        try {
+            reader.openLogFileInNotePad(isTWS, useManual);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    
+    public void regExSearch(boolean useManual, String regEx, boolean isCaseSensitive, javax.swing.JTextPane textPane){
+        try {
+            reader.regExSearch(isTWS, useManual, regEx, isCaseSensitive, textPane);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    
     public void startParse(int choice, boolean useManual, HashMap<Integer, javax.swing.JTextPane> textPaneList){
         try {
             if(isDeepDiagnostic == true){

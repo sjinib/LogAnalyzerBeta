@@ -11,7 +11,7 @@ import org.w3c.dom.Element;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 import javax.swing.text.StyledDocument;
-import com.ib.demoFrame.demoFrame;
+import com.ib.demoFrame.AnalyzerGUI;
 
 import com.ib.message.*;
 
@@ -54,7 +54,7 @@ public class SettingsLogParser {
         
         // Display on text pane
         StyledDocument styledDoc = textPane.getStyledDocument();
-        demoFrame.addStylesToDocument(styledDoc);
+        AnalyzerGUI.addStylesToDocument(styledDoc);
         
         styledDoc.insertString(styledDoc.getLength(), "================= Begin of transcript from file " + settingsFile.getName() + "=================\n\n", styledDoc.getStyle("blackBold"));
         styledDoc.insertString(styledDoc.getLength(), "API Settings: \n", styledDoc.getStyle("italic"));
@@ -193,7 +193,7 @@ public class SettingsLogParser {
         
         // Display on text pane
         StyledDocument styledDoc = textPane.getStyledDocument();
-        demoFrame.addStylesToDocument(styledDoc);
+        AnalyzerGUI.addStylesToDocument(styledDoc);
         
         styledDoc.insertString(styledDoc.getLength(), "================= Begin of transcript from file " + settingsFile.getName() + "=================\n\n", styledDoc.getStyle("blackBold"));
         styledDoc.insertString(styledDoc.getLength(), "Market Data Settings: \n", styledDoc.getStyle("italic"));
@@ -353,7 +353,7 @@ public class SettingsLogParser {
         
         // Display on text pane
         StyledDocument styledDoc = textPane.getStyledDocument();
-        demoFrame.addStylesToDocument(styledDoc);
+        AnalyzerGUI.addStylesToDocument(styledDoc);
         
         styledDoc.insertString(styledDoc.getLength(), "================= Begin of transcript from file " + settingsFile.getName() + "=================\n\n", styledDoc.getStyle("blackBold"));
         styledDoc.insertString(styledDoc.getLength(), "Workspaces: \n", styledDoc.getStyle("italicBold"));
