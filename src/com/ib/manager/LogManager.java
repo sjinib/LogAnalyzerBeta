@@ -79,6 +79,14 @@ public class LogManager {
         }
     }
     
+    public String[] getScreenshotListNames(){
+        if(isTWS == true){
+            return reader.getScreenshotListNames();
+        } else {
+            return null;
+        }
+    }
+    
     public String getTodayLogFileName(){
         if(isTWS == true){
             return reader.getTodayTwsLogFileName();
@@ -98,6 +106,14 @@ public class LogManager {
     public String getTodayTradeFileName(){
         if(isTWS == true){
             return reader.getTodayTradeFileName();
+        } else {
+            return null;
+        }
+    }
+    
+    public String getFirstScreenshotName(){
+        if(isTWS == true){
+            return reader.getFirstScreenshotName();
         } else {
             return null;
         }
@@ -133,11 +149,27 @@ public class LogManager {
         }
     }
     
+    public void selectScreenshot(String s){
+        if(isTWS == true){
+            reader.selectScreenshot(s);
+        }
+    }
+    
     public void openLogFileInNotePad(boolean useManual){
         try {
             reader.openLogFileInNotePad(isTWS, useManual);
         } catch (Exception e){
             e.printStackTrace();
+        }
+    }
+    
+    public void openScreenshot(){
+        if(isTWS){
+            try {
+                reader.openScreenshots();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
     

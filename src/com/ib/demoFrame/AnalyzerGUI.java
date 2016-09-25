@@ -33,6 +33,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
     private boolean isTwsSettingsAdded = false;
     private boolean isIbgSettingsAdded = false;
     private boolean isTradeFileAdded = false;
+    private boolean isScreenshotAdded = false;
     
     private boolean logReady = false;
     private boolean settingsReady = false;
@@ -117,8 +118,8 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         regExText = new javax.swing.JTextField();
         matchCaseCheck = new javax.swing.JCheckBox();
         regExSearchBtn = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
+        screenshotComboBox = new javax.swing.JComboBox<>();
+        openScreenshotBtn = new javax.swing.JButton();
         textMainPane = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -608,9 +609,12 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jButton1.setText("Open Screenshot");
+        openScreenshotBtn.setText("Open Screenshot");
+        openScreenshotBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openScreenshotBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -651,8 +655,8 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                         .addComponent(clearAllBtn)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(screenshotComboBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(openScreenshotBtn, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(30, 30, 30)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -678,7 +682,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                     .addComponent(analyzeOrdTrdBtn)
                     .addComponent(clearAllBtn)
                     .addComponent(regExText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(screenshotComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(autoClsCheck)
@@ -688,14 +692,14 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                     .addComponent(openLogFileBtn)
                     .addComponent(matchCaseCheck)
                     .addComponent(regExSearchBtn)
-                    .addComponent(jButton1)))
+                    .addComponent(openScreenshotBtn)))
         );
 
         javax.swing.GroupLayout textMainPaneLayout = new javax.swing.GroupLayout(textMainPane);
         textMainPane.setLayout(textMainPaneLayout);
         textMainPaneLayout.setHorizontalGroup(
             textMainPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1170, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         textMainPaneLayout.setVerticalGroup(
             textMainPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -726,7 +730,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(MainPane, javax.swing.GroupLayout.DEFAULT_SIZE, 1175, Short.MAX_VALUE)
+                .addComponent(MainPane, javax.swing.GroupLayout.PREFERRED_SIZE, 1175, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -1146,6 +1150,9 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         
         // Populate and select trade file for combo box
         handleTradeComboBox();
+        
+        // Populate and select screenshot for combo box
+        handleScreenshotComboBox();
     }//GEN-LAST:event_twsRadioActionPerformed
     
     private void browseExtractActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseExtractActionPerformed
@@ -1272,6 +1279,9 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                     
                     // Populate and select trade file for combo box
                     handleTradeComboBox();
+                    
+                    // Populate and select screenshot for combo box
+                    handleScreenshotComboBox();
                 } else if(ibgRadio.isSelected()){
                     // Populate and select log file for combo box
                     handleLogComboBox_ibg();
@@ -1337,6 +1347,9 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                     
                     // Populate and select trade file for combo box
                     handleTradeComboBox();
+                    
+                    // Populate and select screenshot for combo box
+                    handleScreenshotComboBox();
                 } else if(ibgRadio.isSelected()){
                     // Populate and select log file for combo box
                     handleLogComboBox_ibg();
@@ -1528,6 +1541,11 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             javax.swing.JOptionPane.showMessageDialog(null, "No log file selected");
         }
     }//GEN-LAST:event_regExSearchBtnActionPerformed
+
+    private void openScreenshotBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openScreenshotBtnActionPerformed
+        // TODO add your handling code here:
+        manager.openScreenshot();
+    }//GEN-LAST:event_openScreenshotBtnActionPerformed
     
     private void customInitComponents(){
         // Put Window location at center
@@ -1694,6 +1712,29 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         }
     }
     
+    private void handleScreenshotComboBox(){
+        if(isExtracted == true && isScreenshotAdded == false){
+            String[] list = manager.getScreenshotListNames();
+            if(list == null){
+                screenshotComboBox.setSelectedItem(null);
+                isScreenshotAdded = true;
+                if(useExtractFileBtn.isSelected()){
+                    manager.selectScreenshot(null);
+                }
+                return;
+            }
+            
+            for(String s: list){
+                screenshotComboBox.addItem(s);
+            }
+            isScreenshotAdded = true;
+        }
+        screenshotComboBox.setSelectedItem(manager.getFirstScreenshotName());
+        if(screenshotComboBox.getSelectedItem() != null && useExtractFileBtn.isSelected()){
+            manager.selectScreenshot(screenshotComboBox.getSelectedItem().toString());
+        } else { }
+    }
+    
     private void updateStatus(){
         // Update Log File status
         if(logReady == true){
@@ -1844,8 +1885,6 @@ public class AnalyzerGUI extends javax.swing.JFrame {
     private javax.swing.JRadioButton ibgRadio;
     private javax.swing.JCheckBox includeTrdFileCheck;
     private javax.swing.JCheckBox includeXmlCheck;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -1862,8 +1901,10 @@ public class AnalyzerGUI extends javax.swing.JFrame {
     private javax.swing.JLabel logFileStatus;
     private javax.swing.JCheckBox matchCaseCheck;
     private javax.swing.JButton openLogFileBtn;
+    private javax.swing.JButton openScreenshotBtn;
     private javax.swing.JButton regExSearchBtn;
     private javax.swing.JTextField regExText;
+    private javax.swing.JComboBox<String> screenshotComboBox;
     private javax.swing.JComboBox<String> settingsComboBox;
     private javax.swing.JTextField settingsDirectoryManual;
     private javax.swing.JLabel settingsFileStatus;

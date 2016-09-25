@@ -25,6 +25,7 @@ public class LogReader {
     private String selectedTwsSettingsFile = new String();
     private String selectedIbgSettingsFile = new String();
     private String selectedTradeFile = new String();
+    private String selectedScreenshot = new String();
     
     private String manualSelectedLogFile = new String();
     private String manualSelectedSettingsFile = new String();
@@ -36,6 +37,7 @@ public class LogReader {
     private List<File> twsSettingsFileList = null;
     private List<File> ibgSettingsFileList = null;
     private List<File> tradeFileList = null;
+    private List<File> screenshotList = null;
     
     private final MarketDataSettingsMessage mdSettingsMessage;
     private final ApiSettingsMessage apiSettingsMessage;
@@ -102,6 +104,13 @@ public class LogReader {
             tradeFileList.clear();
             tradeFileList = null;
         }        
+    }
+    
+    public void resetScreenshotList(){
+        if(screenshotList != null){
+            screenshotList.clear();
+            screenshotList = null;
+        }
     }
     
     public void extractZip() throws Exception{
@@ -226,6 +235,30 @@ public class LogReader {
             String[] list = new String[tradeFileList.size()];
             for(int i = 0; i < tradeFileList.size(); i++){
                 list[i] = tradeFileList.get(i).getName();
+            }
+            return list;
+        }
+    }
+    
+    public String [] getScreenshotListNames() {
+        if(screenshotList == null){
+            try {
+                if(loadScreenshotList()){
+                    String[] list = new String[screenshotList.size()];
+                    for(int i = 0; i < screenshotList.size(); i++){
+                        list[i] = screenshotList.get(i).getName();
+                    }
+                    return list;
+                } else
+                    return null;
+            } catch (Exception e){
+                e.printStackTrace();
+                return null;
+            }
+        } else {
+            String[] list = new String[screenshotList.size()];
+            for(int i = 0; i < screenshotList.size(); i++){
+                list[i] = screenshotList.get(i).getName();
             }
             return list;
         }
@@ -437,6 +470,29 @@ public class LogReader {
         
     }
     
+    public boolean loadScreenshotList() throws Exception{
+        if(outputDirectory == null){
+            throw new Exception("Invalid Directory");
+        }
+        
+        if(screenshotList != null && !screenshotList.isEmpty()){
+            screenshotList.clear();
+        }
+        
+        File dir = new File(outputDirectory);
+        //fileList = (List<File>) FileUtils.listFiles(dir, new String[] {"log", "xml"}, true);
+        IOFileFilter fileFilter = new WildcardFileFilter(Arrays.asList("screenshot*.jpg"));
+        screenshotList = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
+        
+        if(screenshotList == null || screenshotList.isEmpty()){
+            //javax.swing.JOptionPane.showMessageDialog(null, "No .trd file is found.");
+            screenshotList = null;
+            return false;
+        }
+        
+        return true;        
+    }
+    
     public String getTodayTwsSettingsFileName(){
         if(todayTwsSettingsFile == null)
             return null;
@@ -467,6 +523,13 @@ public class LogReader {
         return new String(todayTradeFile);
     }
     
+    public String getFirstScreenshotName(){
+        if(screenshotList == null || screenshotList.isEmpty()){
+            return null;
+        }
+        return new String(screenshotList.get(screenshotList.size()-1).getName());
+    }
+    
     public void selectTwsLogFile(String s){
         selectedTwsLogFile = s;
     }
@@ -485,6 +548,10 @@ public class LogReader {
     
     public void selectTradeFile(String s){
         selectedTradeFile = s;
+    }
+    
+    public void selectScreenshot(String s){
+        selectedScreenshot = s;
     }
     
     public void selectLogFileManual(String s){
@@ -534,6 +601,15 @@ public class LogReader {
     private File getSelectedTradeFile() throws Exception{
         for(File file: tradeFileList){
             if(file.getName().equals(this.selectedTradeFile)){
+                return new File(file.getPath());
+            }
+        }
+        return null;
+    }
+    
+    private File getSelectedScreenshot() throws Exception{
+        for(File file: screenshotList){
+            if(file.getName().equals(this.selectedScreenshot)){
                 return new File(file.getPath());
             }
         }
@@ -776,5 +852,13 @@ public class LogReader {
         }
         
         java.awt.Desktop.getDesktop().open(currentLogFile);
+    }
+    
+    public void openScreenshots() throws Exception{
+        if(selectedScreenshot == null || screenshotList == null || screenshotList.isEmpty()){
+            javax.swing.JOptionPane.showMessageDialog(null, "No screenshot selected");
+            return;
+        }
+        java.awt.Desktop.getDesktop().open(getSelectedScreenshot());
     }
 }
