@@ -50,6 +50,9 @@ public class EnvSettingsMessage extends SettingsMessage {
         }
         
         public String getCurrentWorkSpaceKey(){
+            if(currentWorkspaceKey == null){
+                return null;
+            }
             return new String(currentWorkspaceKey);
         }
         
@@ -100,6 +103,9 @@ public class EnvSettingsMessage extends SettingsMessage {
         }
         
         public String getShowAllInBaseCurrency(){
+            if(showAllInBaseCurrency == null){
+                return null;
+            }
             return new String(showAllInBaseCurrency);
         }
         
@@ -137,6 +143,9 @@ public class EnvSettingsMessage extends SettingsMessage {
         }
         
         public String getCopyOrderWizardDisplayMode(){
+            if(orderWizardDisplayMode == null){
+                return null;
+            }
             return new String(orderWizardDisplayMode);
         }
         

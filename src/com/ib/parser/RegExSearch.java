@@ -5,7 +5,7 @@
 */
 package com.ib.parser;
 
-import com.ib.demoFrame.AnalyzerGUI;
+import com.ib.analyzerGui.AnalyzerGUI;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -24,7 +24,7 @@ public class RegExSearch {
         StyledDocument doc = textPane.getStyledDocument();
         AnalyzerGUI.addStylesToDocument(doc);
         
-        doc.insertString(doc.getLength(), "================= Begin of RegEx Search from file " + twsLogFile.getName() + "=================\n\n", doc.getStyle("blackBold"));
+        doc.insertString(doc.getLength(), "================= Begin of RegEx Search of \"" + regEx + "\" from file " + twsLogFile.getName() + "=================\n\n", doc.getStyle("blackBold"));
         
         String currentLine;
         

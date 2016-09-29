@@ -1,3 +1,6 @@
+/**
+ * The Reader class is the major class that handles all the file reading, parsing and data populating
+ */
 package com.ib.reader;
 
 import com.ib.parser.*;
@@ -14,12 +17,15 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 import java.util.HashMap;
 
 public class LogReader {
+    // String name of today's log file
     private String todayTwsLogFile = new String();
     private String todayIbgLogFile = new String();
     private String todayTwsSettingsFile = new String();
     private String todayIbgSettingsFile = new String();
     private String todayTradeFile = new String();
+    private String firstScreenshot = new String();
     
+    // Name of selected log file for analyze
     private String selectedTwsLogFile = new String();
     private String selectedIbgLogFile = new String();
     private String selectedTwsSettingsFile = new String();
@@ -27,11 +33,14 @@ public class LogReader {
     private String selectedTradeFile = new String();
     private String selectedScreenshot = new String();
     
+    // Name of manual selected log file for analyze
     private String manualSelectedLogFile = new String();
     private String manualSelectedSettingsFile = new String();
     
-    private String zipLocation = null;
-    private String outputDirectory = null;
+    private String zipLocation = null; // Location of stored uploaded diagnostic .zip file
+    private String outputDirectory = null; // Location of the extracted folder
+    
+    // List of log files read from extracted folder
     private List<File> twsLogFileList = null;
     private List<File> ibgLogFileList = null;
     private List<File> twsSettingsFileList = null;
@@ -39,13 +48,14 @@ public class LogReader {
     private List<File> tradeFileList = null;
     private List<File> screenshotList = null;
     
+    // Containers to store settings information
     private final MarketDataSettingsMessage mdSettingsMessage;
     private final ApiSettingsMessage apiSettingsMessage;
     private final EnvSettingsMessage envSettingsMessage;
     
-    private boolean autoCls = true;
-    private boolean includeXml = true;
-    private boolean includeTrd = false;
+    private boolean autoCls = true; // Auto clear display pane after extraction
+    private boolean includeXml = true; // Include settings xml examination
+    private boolean includeTrd = false; // Include .trd file exmanination
     
     public LogReader(){
         mdSettingsMessage = new MarketDataSettingsMessage();
@@ -65,6 +75,16 @@ public class LogReader {
         }
     }
     
+    public boolean checkValidZipLocation(){
+        if(zipLocation == null)
+            return false;
+        if(zipLocation.endsWith(".zip")){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
     public void setAutoCls(boolean autoCls){
         this.autoCls = autoCls;
     }
@@ -77,6 +97,7 @@ public class LogReader {
         this.includeTrd = includeTrd;
     }
     
+    // Reset read list
     public void resetLogFileList(){
         if(twsLogFileList != null){
             twsLogFileList.clear();
@@ -113,9 +134,10 @@ public class LogReader {
         }
     }
     
+    // Extract file at zipLocation to outputDirectory
     public void extractZip() throws Exception{
         if(zipLocation != null && outputDirectory != null){
-            ExtractZip.unZipIt(zipLocation, outputDirectory);
+                ExtractZip.unZipIt(zipLocation, outputDirectory);
         }
     }
     
@@ -264,6 +286,7 @@ public class LogReader {
         }
     }
     
+    // Find all log file names and store in list, returns true if loading is successful
     public boolean loadTwsLogFileList() throws Exception{
         if(outputDirectory == null){
             throw new Exception("Invalid Directory");
@@ -274,7 +297,6 @@ public class LogReader {
         }
         
         File dir = new File(outputDirectory);
-        //fileList = (List<File>) FileUtils.listFiles(dir, new String[] {"log", "xml"}, true);
         IOFileFilter fileFilter = new WildcardFileFilter(Arrays.asList("tws.log", "tws.*.log", "log.*.txt"));
         twsLogFileList = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
         
@@ -322,7 +344,6 @@ public class LogReader {
         }
         
         File dir = new File(outputDirectory);
-        //fileList = (List<File>) FileUtils.listFiles(dir, new String[] {"log", "xml"}, true);
         IOFileFilter fileFilter = new WildcardFileFilter(Arrays.asList("ibgateway.log", "ibgateway.*.log"));
         ibgLogFileList = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
         
@@ -370,7 +391,6 @@ public class LogReader {
         }
         
         File dir = new File(outputDirectory);
-        //fileList = (List<File>) FileUtils.listFiles(dir, new String[] {"log", "xml"}, true);
         IOFileFilter fileFilter = new WildcardFileFilter(Arrays.asList("tws.*.xml"));
         twsSettingsFileList = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
         
@@ -406,7 +426,6 @@ public class LogReader {
         }
         
         File dir = new File(outputDirectory);
-        //fileList = (List<File>) FileUtils.listFiles(dir, new String[] {"log", "xml"}, true);
         IOFileFilter fileFilter = new WildcardFileFilter(Arrays.asList("ibg.*.xml", "ibg.xml"));
         ibgSettingsFileList = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
         
@@ -441,12 +460,10 @@ public class LogReader {
         }
         
         File dir = new File(outputDirectory);
-        //fileList = (List<File>) FileUtils.listFiles(dir, new String[] {"log", "xml"}, true);
         IOFileFilter fileFilter = new WildcardFileFilter(Arrays.asList("*.trd"));
         tradeFileList = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
         
         if(tradeFileList == null || tradeFileList.isEmpty()){
-            //javax.swing.JOptionPane.showMessageDialog(null, "No .trd file is found.");
             todayTradeFile = null;
             return false;
         }
@@ -464,7 +481,7 @@ public class LogReader {
         if(hasToday == true){
             return true;
         } else {
-            todayTwsLogFile = twsLogFileList.get(0).getName();
+            todayTradeFile = tradeFileList.get(0).getName();
             return true;
         }
         
@@ -480,56 +497,43 @@ public class LogReader {
         }
         
         File dir = new File(outputDirectory);
-        //fileList = (List<File>) FileUtils.listFiles(dir, new String[] {"log", "xml"}, true);
         IOFileFilter fileFilter = new WildcardFileFilter(Arrays.asList("screenshot*.jpg"));
         screenshotList = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
         
         if(screenshotList == null || screenshotList.isEmpty()){
-            //javax.swing.JOptionPane.showMessageDialog(null, "No .trd file is found.");
-            screenshotList = null;
+            firstScreenshot = null;
             return false;
         }
         
+        firstScreenshot = screenshotList.get(0).getName();
         return true;        
     }
     
     public String getTodayTwsSettingsFileName(){
-        if(todayTwsSettingsFile == null)
-            return null;
         return new String(todayTwsSettingsFile);
     }
     
     public String getTodayIbgSettingsFileName(){
-        if(todayIbgSettingsFile == null)
-            return null;
         return new String(todayIbgSettingsFile);
     }
     
     public String getTodayTwsLogFileName(){
-        if(todayTwsLogFile == null)
-            return null;
         return new String(todayTwsLogFile);
     }
     
     public String getTodayIbgLogFileName(){
-        if(todayIbgLogFile == null)
-            return null;
         return new String(todayIbgLogFile);
     }
     
     public String getTodayTradeFileName(){
-        if(todayTradeFile == null)
-            return null;
         return new String(todayTradeFile);
     }
     
     public String getFirstScreenshotName(){
-        if(screenshotList == null || screenshotList.isEmpty()){
-            return null;
-        }
-        return new String(screenshotList.get(screenshotList.size()-1).getName());
+        return new String(firstScreenshot);
     }
     
+    // Select file for analysis
     public void selectTwsLogFile(String s){
         selectedTwsLogFile = s;
     }
@@ -854,11 +858,7 @@ public class LogReader {
         java.awt.Desktop.getDesktop().open(currentLogFile);
     }
     
-    public void openScreenshots() throws Exception{
-        if(selectedScreenshot == null || screenshotList == null || screenshotList.isEmpty()){
-            javax.swing.JOptionPane.showMessageDialog(null, "No screenshot selected");
-            return;
-        }
+    public void openScreenshots() throws Exception{        
         java.awt.Desktop.getDesktop().open(getSelectedScreenshot());
     }
 }

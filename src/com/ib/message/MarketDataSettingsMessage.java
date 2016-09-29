@@ -130,7 +130,7 @@ public class MarketDataSettingsMessage extends SettingsMessage {
         smartRoutingSettingsList.put(key, value);
     }
     
-    public HashMap<String, String> getCopySmartRoutSettingsList() {
+    public HashMap<String, String> getCopySmartRouteSettingsList() {
         if(smartRoutingSettingsList != null)
             return new HashMap<String, String>(smartRoutingSettingsList);
         return null;

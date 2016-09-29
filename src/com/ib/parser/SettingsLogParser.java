@@ -11,9 +11,10 @@ import org.w3c.dom.Element;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 import javax.swing.text.StyledDocument;
-import com.ib.demoFrame.AnalyzerGUI;
+import com.ib.analyzerGui.AnalyzerGUI;
 
 import com.ib.message.*;
+import java.util.ArrayList;
 
 public class SettingsLogParser {
     
@@ -59,31 +60,41 @@ public class SettingsLogParser {
         styledDoc.insertString(styledDoc.getLength(), "================= Begin of transcript from file " + settingsFile.getName() + "=================\n\n", styledDoc.getStyle("blackBold"));
         styledDoc.insertString(styledDoc.getLength(), "API Settings: \n", styledDoc.getStyle("italic"));
         
+        HashMap<String, String> copyApiSettingsList = apiSettingsMessage.getCopyApiSettingsList();
         for(int i = 0; i < ApiSettingsMessage.APISETTINGSTAGS.length; i++){
             if (ApiSettingsMessage.APISETTINGSTAGS[i].equals("slowBufferTimeout")){
                 styledDoc.insertString(styledDoc.getLength(), ApiSettingsMessage.APISETTINGSTEXT[i], styledDoc.getStyle("regular"));
-                styledDoc.insertString(styledDoc.getLength(), apiSettingsMessage.getCopyApiSettingsList().get(ApiSettingsMessage.APISETTINGSTAGS[i]) + " seconds\n", styledDoc.getStyle("blackBold"));
+                if(copyApiSettingsList != null)
+                    styledDoc.insertString(styledDoc.getLength(), copyApiSettingsList.get(ApiSettingsMessage.APISETTINGSTAGS[i]) + " seconds\n", styledDoc.getStyle("blackBold"));
+                else
+                    styledDoc.insertString(styledDoc.getLength(), "\n", styledDoc.getStyle("blackBold"));
             } else {
                 styledDoc.insertString(styledDoc.getLength(), ApiSettingsMessage.APISETTINGSTEXT[i], styledDoc.getStyle("regular"));
-                styledDoc.insertString(styledDoc.getLength(), apiSettingsMessage.getCopyApiSettingsList().get(ApiSettingsMessage.APISETTINGSTAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+                if(copyApiSettingsList != null)
+                    styledDoc.insertString(styledDoc.getLength(), copyApiSettingsList.get(ApiSettingsMessage.APISETTINGSTAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+                else
+                    styledDoc.insertString(styledDoc.getLength(), "\n", styledDoc.getStyle("blackBold"));
             }
         }
         
         styledDoc.insertString(styledDoc.getLength(), "\nAPI Precautions: \n", styledDoc.getStyle("italic"));
         
+        HashMap<String, String> copyApiPrecautionsList = apiSettingsMessage.getCopyApiPrecautionsList();
         for(int i = 0; i < ApiSettingsMessage.APIPRECAUTIONSTAGS.length; i++){
             styledDoc.insertString(styledDoc.getLength(), ApiSettingsMessage.APIPRECAUTIONSTEXT[i], styledDoc.getStyle("regular"));
-            styledDoc.insertString(styledDoc.getLength(), apiSettingsMessage.getCopyApiPrecautionsList().get(ApiSettingsMessage.APIPRECAUTIONSTAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+            if(copyApiPrecautionsList != null)
+                styledDoc.insertString(styledDoc.getLength(), copyApiPrecautionsList.get(ApiSettingsMessage.APIPRECAUTIONSTAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+            else
+                styledDoc.insertString(styledDoc.getLength(), "\n", styledDoc.getStyle("blackBold"));
         }
         
-        styledDoc.insertString(styledDoc.getLength(), "\nTrusted IP Addresses: \n", styledDoc.getStyle("italic"));
-               
-        if(apiSettingsMessage.getCopyTrustedIPs() != null){
+        ArrayList<String> copyTrustedIPs = apiSettingsMessage.getCopyTrustedIPs();
+        if(copyTrustedIPs != null){
             for(int i = 0; i < apiSettingsMessage.getCopyTrustedIPs().size(); i++){
-                styledDoc.insertString(styledDoc.getLength(), apiSettingsMessage.getCopyTrustedIPs().get(i) + "\n", styledDoc.getStyle("blackBold"));
+                styledDoc.insertString(styledDoc.getLength(), copyTrustedIPs.get(i) + "\n", styledDoc.getStyle("blackBold"));
             }
         }
-                
+        
         styledDoc.insertString(styledDoc.getLength(), "\n================= End of transcript from file " + settingsFile.getName() + "=================\n\n", styledDoc.getStyle("blackBold"));
     }
     
@@ -198,17 +209,27 @@ public class SettingsLogParser {
         styledDoc.insertString(styledDoc.getLength(), "================= Begin of transcript from file " + settingsFile.getName() + "=================\n\n", styledDoc.getStyle("blackBold"));
         styledDoc.insertString(styledDoc.getLength(), "Market Data Settings: \n", styledDoc.getStyle("italic"));
         
+        HashMap<String, String> copyMdSettingsList = mdSettingsMessage.getCopyMdSettingsList();
         for(int i = 0; i < MarketDataSettingsMessage.MARKETDATASETTINGSTAGS.length; i++){
             styledDoc.insertString(styledDoc.getLength(), MarketDataSettingsMessage.MARKETDATASETTINGSTEXT[i], styledDoc.getStyle("regular"));
-            styledDoc.insertString(styledDoc.getLength(), mdSettingsMessage.getCopyMdSettingsList().get(MarketDataSettingsMessage.MARKETDATASETTINGSTAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+            if(copyMdSettingsList != null)
+                styledDoc.insertString(styledDoc.getLength(), copyMdSettingsList.get(MarketDataSettingsMessage.MARKETDATASETTINGSTAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+            else
+                styledDoc.insertString(styledDoc.getLength(), "\n", styledDoc.getStyle("blackBold"));
+            
         }
         
         styledDoc.insertString(styledDoc.getLength(), "\nESignal Settings: \n", styledDoc.getStyle("italic"));
         
+        HashMap<String, String> copyEsignalSettingsList = mdSettingsMessage.getCopyEsignalSettingsList();
         for(int i = 0; i < MarketDataSettingsMessage.ESIGNALSETTINGSTAGS.length; i++){
             styledDoc.insertString(styledDoc.getLength(), MarketDataSettingsMessage.ESIGNALSETTINGSTEXT[i], styledDoc.getStyle("regular"));
-            styledDoc.insertString(styledDoc.getLength(), mdSettingsMessage.getCopyEsignalSettingsList().get(MarketDataSettingsMessage.ESIGNALSETTINGSTAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+            if(copyEsignalSettingsList != null)
+                styledDoc.insertString(styledDoc.getLength(), copyEsignalSettingsList.get(MarketDataSettingsMessage.ESIGNALSETTINGSTAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+            else
+                styledDoc.insertString(styledDoc.getLength(), "\n", styledDoc.getStyle("blackBold"));
         }
+        
         styledDoc.insertString(styledDoc.getLength(), "\nESignal Products Settings: \n", styledDoc.getStyle("italic"));
         
         styledDoc.insertString(styledDoc.getLength(), "STK (US): " + mdSettingsMessage.getCopyEsignalSecSettingsListStk().get("usa").toString() + "\n", styledDoc.getStyle("blackBold"));
@@ -222,9 +243,13 @@ public class SettingsLogParser {
         
         styledDoc.insertString(styledDoc.getLength(), "\nSmart Routing Settings: \n", styledDoc.getStyle("italic"));
         
+        HashMap<String, String> copySmartRouteSettingsList = mdSettingsMessage.getCopySmartRouteSettingsList();
         for(int i = 0; i < MarketDataSettingsMessage.SMARTROUTINGSETTINGSTAGS.length; i++){
             styledDoc.insertString(styledDoc.getLength(), MarketDataSettingsMessage.SMARTROUTINGSETTINGSTEXT[i], styledDoc.getStyle("regular"));
-            styledDoc.insertString(styledDoc.getLength(), mdSettingsMessage.getCopySmartRoutSettingsList().get(MarketDataSettingsMessage.SMARTROUTINGSETTINGSTAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+            if(copySmartRouteSettingsList != null)
+                styledDoc.insertString(styledDoc.getLength(), copySmartRouteSettingsList.get(MarketDataSettingsMessage.SMARTROUTINGSETTINGSTAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+            else
+                styledDoc.insertString(styledDoc.getLength(), "\n", styledDoc.getStyle("blackBold"));
         }
         
         styledDoc.insertString(styledDoc.getLength(), "\n================= End of transcript from file " + settingsFile.getName() + "=================\n\n", styledDoc.getStyle("blackBold"));
@@ -361,23 +386,35 @@ public class SettingsLogParser {
         
         styledDoc.insertString(styledDoc.getLength(), envSettingsMessage.getCurrentWorkSpaceKey() + "\n", styledDoc.getStyle("blackBold"));
         
+        HashMap<String, String> copyWorkSpaceKey = envSettingsMessage.getCopyWorkSpaceKey();
         for(int i = 0; i < EnvSettingsMessage.WORKSPACETAGS.length; i++){
             styledDoc.insertString(styledDoc.getLength(), EnvSettingsMessage.WORKSPACETEXT[i], styledDoc.getStyle("regular"));
-            styledDoc.insertString(styledDoc.getLength(), envSettingsMessage.getCopyWorkSpaceKey().get(EnvSettingsMessage.WORKSPACETAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+            if(copyWorkSpaceKey != null)
+                styledDoc.insertString(styledDoc.getLength(), copyWorkSpaceKey.get(EnvSettingsMessage.WORKSPACETAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+            else
+                styledDoc.insertString(styledDoc.getLength(), "\n", styledDoc.getStyle("blackBold"));
         }
         
         styledDoc.insertString(styledDoc.getLength(), "\nTWS Tabs: (Origin:6 = Created by the user - Origin:0 = Created by the system)\n", styledDoc.getStyle("italic"));
         
+        HashMap<String, String> copyTickerPageSettings = envSettingsMessage.getCopyTickerPageSettings();
         for(int i = 0; i < EnvSettingsMessage.TICKERPAGESETTINGSTAGS.length; i++){
             styledDoc.insertString(styledDoc.getLength(), EnvSettingsMessage.TICKERPAGESETTINGSTEXT[i], styledDoc.getStyle("regular"));
-            styledDoc.insertString(styledDoc.getLength(), envSettingsMessage.getCopyTickerPageSettings().get(EnvSettingsMessage.TICKERPAGESETTINGSTAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+            if(copyTickerPageSettings != null)
+                styledDoc.insertString(styledDoc.getLength(), copyTickerPageSettings.get(EnvSettingsMessage.TICKERPAGESETTINGSTAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+            else
+                styledDoc.insertString(styledDoc.getLength(), "\n", styledDoc.getStyle("blackBold"));
         }
         
-        styledDoc.insertString(styledDoc.getLength(), "\nTWS System settings:\n", styledDoc.getStyle("italic"));
+        styledDoc.insertString(styledDoc.getLength(), "\nTWS System settings:\n", styledDoc.getStyle("italicBold"));
         
+        HashMap<String, String> copySystemSettings = envSettingsMessage.getCopySystemSettings();
         for(int i = 0; i < EnvSettingsMessage.SYSTEMSETTINGSTAGS.length; i++){
             styledDoc.insertString(styledDoc.getLength(), EnvSettingsMessage.SYSTEMSETTINGSTEXT[i], styledDoc.getStyle("regular"));
-            styledDoc.insertString(styledDoc.getLength(), envSettingsMessage.getCopySystemSettings().get(EnvSettingsMessage.SYSTEMSETTINGSTAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+            if(copySystemSettings != null)
+                styledDoc.insertString(styledDoc.getLength(), copySystemSettings.get(EnvSettingsMessage.SYSTEMSETTINGSTAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+            else
+                styledDoc.insertString(styledDoc.getLength(), "\n", styledDoc.getStyle("blackBold"));
         }
         
         styledDoc.insertString(styledDoc.getLength(), "\nShow positions in base currency (In Account,Portfolio and Quote monitor pages): ", styledDoc.getStyle("italic"));
@@ -386,16 +423,24 @@ public class SettingsLogParser {
         
         styledDoc.insertString(styledDoc.getLength(), "\nUser Interface Settings: \n", styledDoc.getStyle("italicBold"));
         
+        HashMap<String, String> copyUISettings = envSettingsMessage.getCopyUISettings();
         for(int i = 0; i < EnvSettingsMessage.UISETTINGSTAGS.length; i++){
             styledDoc.insertString(styledDoc.getLength(), EnvSettingsMessage.UISETTINGSTEXT[i], styledDoc.getStyle("regular"));
-            styledDoc.insertString(styledDoc.getLength(), envSettingsMessage.getCopyUISettings().get(EnvSettingsMessage.UISETTINGSTAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+            if(copyUISettings != null)
+                styledDoc.insertString(styledDoc.getLength(), copyUISettings.get(EnvSettingsMessage.UISETTINGSTAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+            else
+                styledDoc.insertString(styledDoc.getLength(), "\n", styledDoc.getStyle("blackBold"));
         }
         
         styledDoc.insertString(styledDoc.getLength(), "\nUser Interface Settings Orders Settings: \n", styledDoc.getStyle("italicBold"));
         
+        HashMap<String, String> copyUIOrdsSettings = envSettingsMessage.getCopyUIOrdsSettings();
         for(int i = 0; i < EnvSettingsMessage.UIORDERSSETTINGSTAGS.length; i++){
             styledDoc.insertString(styledDoc.getLength(), EnvSettingsMessage.UIORDERSSETTINGSTEXT[i], styledDoc.getStyle("regular"));
-            styledDoc.insertString(styledDoc.getLength(), envSettingsMessage.getCopyUIOrdsSettings().get(EnvSettingsMessage.UIORDERSSETTINGSTAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+            if(copyUIOrdsSettings != null)
+                styledDoc.insertString(styledDoc.getLength(), copyUIOrdsSettings.get(EnvSettingsMessage.UIORDERSSETTINGSTAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+            else
+                styledDoc.insertString(styledDoc.getLength(), "\n", styledDoc.getStyle("blackBold"));
         }
         
         styledDoc.insertString(styledDoc.getLength(), "\nOrder Wizard Display Mode (1=Show/Hide Manually 2=Show when an order is created): ", styledDoc.getStyle("italic"));
@@ -404,9 +449,13 @@ public class SettingsLogParser {
         
         styledDoc.insertString(styledDoc.getLength(), "\nOrders Settings: \n", styledDoc.getStyle("italicBold"));
         
+        HashMap<String, String> copyOrdersSettings = envSettingsMessage.getCopyOrderSettings();
         for(int i = 0; i < EnvSettingsMessage.ORDERSETTINGSTAGS.length; i++){
             styledDoc.insertString(styledDoc.getLength(), EnvSettingsMessage.ORDERSETTINGSTEXT[i], styledDoc.getStyle("regular"));
-            styledDoc.insertString(styledDoc.getLength(), envSettingsMessage.getCopyOrderSettings().get(EnvSettingsMessage.ORDERSETTINGSTAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+            if(copyOrdersSettings != null)
+                styledDoc.insertString(styledDoc.getLength(), copyOrdersSettings.get(EnvSettingsMessage.ORDERSETTINGSTAGS[i]) + "\n", styledDoc.getStyle("blackBold"));
+            else
+                styledDoc.insertString(styledDoc.getLength(), "\n", styledDoc.getStyle("blackBold"));
         }
         
         styledDoc.insertString(styledDoc.getLength(), "\n================= End of transcript from file " + settingsFile.getName() + "=================\n\n", styledDoc.getStyle("blackBold"));

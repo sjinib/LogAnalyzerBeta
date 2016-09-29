@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import javax.swing.text.StyledDocument;
-import com.ib.demoFrame.AnalyzerGUI;
+import com.ib.analyzerGui.AnalyzerGUI;
 
 public class TwsLogParserShallow {
     // Choice(1)

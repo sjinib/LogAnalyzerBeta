@@ -1,3 +1,6 @@
+/**
+ * The LogManager manages commands from GUI and give signals to Reader to perform corresponding actions
+ */
 package com.ib.manager;
 
 import com.ib.reader.*;
@@ -5,13 +8,14 @@ import java.util.HashMap;
 
 public class LogManager {
     private final LogReader reader;
-    private boolean isDeepDiagnostic = true;
+    private boolean isDeepDiagnostic = true; // True if use deep analysis
     private boolean isTWS; // If the files being investigated are from TWS (true) or IBG (false)
     
     public LogManager(){
         reader = new LogReader();
     }
     
+    // Invoke to extract file
     public void extract(){
         try {
             reader.extractZip();
@@ -40,6 +44,7 @@ public class LogManager {
         reader.setIncludeTrd(includeTrd);
     }
     
+    // Set location of zipLocation and outputDirectory
     public void setReaderLocation(String zipLocation, String outputDirectory){
         if(zipLocation != null){
             reader.setZipLocation(zipLocation);
@@ -49,12 +54,18 @@ public class LogManager {
         }
     }
     
+    // Check if the zipLocation is valid
+    public boolean checkValidZipLocation(){
+        return reader.checkValidZipLocation();
+    }
+    
     public void resetAllFileList(){
         reader.resetLogFileList();
         reader.resetSettingsFileList();
         reader.resetTradeFileList();
     }
     
+    // Get list of log file names read, used for displaying on the GUI combo box
     public String[] getLogFileListNames(){
         if(isTWS == true){
             return reader.getTwsLogFileListNames();
@@ -80,13 +91,10 @@ public class LogManager {
     }
     
     public String[] getScreenshotListNames(){
-        if(isTWS == true){
-            return reader.getScreenshotListNames();
-        } else {
-            return null;
-        }
+        return reader.getScreenshotListNames();
     }
     
+    // Get the log file from today, used as the default choice in log combo boxes
     public String getTodayLogFileName(){
         if(isTWS == true){
             return reader.getTodayTwsLogFileName();
@@ -112,13 +120,10 @@ public class LogManager {
     }
     
     public String getFirstScreenshotName(){
-        if(isTWS == true){
-            return reader.getFirstScreenshotName();
-        } else {
-            return null;
-        }
+        return reader.getFirstScreenshotName();
     }
     
+    // Select file for analyzing. Triggered when selecting log file from GUI combo box
     public void selectLogFile(String s, boolean useManual){
         if(useManual){
             reader.selectLogFileManual(s);
@@ -150,9 +155,7 @@ public class LogManager {
     }
     
     public void selectScreenshot(String s){
-        if(isTWS == true){
-            reader.selectScreenshot(s);
-        }
+        reader.selectScreenshot(s);
     }
     
     public void openLogFileInNotePad(boolean useManual){
@@ -164,12 +167,10 @@ public class LogManager {
     }
     
     public void openScreenshot(){
-        if(isTWS){
-            try {
-                reader.openScreenshots();
-            } catch (Exception e){
-                e.printStackTrace();
-            }
+        try {
+            reader.openScreenshots();
+        } catch (Exception e){
+            e.printStackTrace();
         }
     }
     
@@ -181,6 +182,7 @@ public class LogManager {
         }
     }
     
+    // Start parsing log information, triggered when one of the analyze button is clicked.
     public void startParse(int choice, boolean useManual, HashMap<Integer, javax.swing.JTextPane> textPaneList){
         try {
             if(isDeepDiagnostic == true){
