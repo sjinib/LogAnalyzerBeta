@@ -63,28 +63,28 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         MainPane = new javax.swing.JTabbedPane();
         configurePanel = new javax.swing.JPanel();
         configurePane = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        importLabel = new javax.swing.JLabel();
         loadDirectory = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         extractDirectory = new javax.swing.JTextField();
         extractBtn = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
+        twsIbgLogLabel = new javax.swing.JLabel();
         logComboBox = new javax.swing.JComboBox<>();
-        jLabel5 = new javax.swing.JLabel();
+        settingsLabel = new javax.swing.JLabel();
         settingsComboBox = new javax.swing.JComboBox<>();
-        jLabel7 = new javax.swing.JLabel();
+        manualLogLabel = new javax.swing.JLabel();
         logDirectoryManual = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
+        manualSettingsLabel = new javax.swing.JLabel();
         browseSettingsManual = new javax.swing.JButton();
         browseZip = new javax.swing.JButton();
         browseExtract = new javax.swing.JButton();
         twsRadio = new javax.swing.JRadioButton();
         ibgRadio = new javax.swing.JRadioButton();
         extractProgressBar = new javax.swing.JProgressBar();
-        jLabel10 = new javax.swing.JLabel();
+        extractLabel = new javax.swing.JLabel();
         browseLogManual = new javax.swing.JButton();
         settingsDirectoryManual = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
+        tradeLabel = new javax.swing.JLabel();
         tradeComboBox = new javax.swing.JComboBox<>();
         jSeparator1 = new javax.swing.JSeparator();
         statusPanel = new javax.swing.JPanel();
@@ -95,6 +95,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         settingsFileStatus = new javax.swing.JLabel();
         analyzeBtn = new javax.swing.JButton();
         tradeFileStatus = new javax.swing.JLabel();
+        screenshotStatus = new javax.swing.JLabel();
         twsLogFilterPanel = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         analyzeAllBtn = new javax.swing.JButton();
@@ -132,7 +133,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
 
         configurePane.setBorder(javax.swing.BorderFactory.createTitledBorder("Log File Configuration"));
 
-        jLabel2.setText("Import downloaded diagnostic zip file:");
+        importLabel.setText("Import downloaded diagnostic zip file:");
 
         loadDirectory.setEditable(false);
         loadDirectory.setText(System.getProperty("user.home").toString());
@@ -153,7 +154,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             }
         });
 
-        jLabel4.setText("TWS/IB Gateway log:");
+        twsIbgLogLabel.setText("TWS/IB Gateway log:");
 
         logComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -161,7 +162,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             }
         });
 
-        jLabel5.setText("Settings File:");
+        settingsLabel.setText("Settings File:");
 
         settingsComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -169,12 +170,12 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             }
         });
 
-        jLabel7.setText("Manually select TWS/IB Gateway log file:");
+        manualLogLabel.setText("Manually select TWS/IB Gateway log file:");
 
         logDirectoryManual.setEditable(false);
         logDirectoryManual.setToolTipText("Select path to the log file for analysis");
 
-        jLabel8.setText("Manually select settings file:");
+        manualSettingsLabel.setText("Manually select settings file:");
 
         browseSettingsManual.setText("Browse");
         browseSettingsManual.addActionListener(new java.awt.event.ActionListener() {
@@ -218,7 +219,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         extractProgressBar.setForeground(new java.awt.Color(153, 153, 153));
         extractProgressBar.setStringPainted(true);
 
-        jLabel10.setText("Extraction Progress:");
+        extractLabel.setText("Extraction Progress:");
 
         browseLogManual.setText("Browse");
         browseLogManual.addActionListener(new java.awt.event.ActionListener() {
@@ -230,7 +231,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         settingsDirectoryManual.setEditable(false);
         settingsDirectoryManual.setToolTipText("Select path to the settings file for analysis");
 
-        jLabel1.setText("Trade File:");
+        tradeLabel.setText("Trade File:");
 
         tradeComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -269,27 +270,27 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                         .addGap(10, 10, 10)
                         .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel7)
+                            .addComponent(manualSettingsLabel)
+                            .addComponent(manualLogLabel)
                             .addGroup(configurePaneLayout.createSequentialGroup()
                                 .addComponent(twsRadio)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(ibgRadio))
                             .addGroup(configurePaneLayout.createSequentialGroup()
                                 .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
+                                    .addComponent(twsIbgLogLabel)
                                     .addComponent(logComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(100, 100, 100)
                                 .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
+                                    .addComponent(settingsLabel)
                                     .addComponent(settingsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(100, 100, 100)
                                 .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
+                                    .addComponent(tradeLabel)
                                     .addComponent(tradeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(extractProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10)
-                            .addComponent(jLabel2)))
+                            .addComponent(extractLabel)
+                            .addComponent(importLabel)))
                     .addGroup(configurePaneLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jSeparator1)))
@@ -304,7 +305,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(configurePaneLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel2)
+                .addComponent(importLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(loadDirectory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -317,7 +318,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                     .addComponent(browseExtract)
                     .addComponent(extractBtn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel10)
+                .addComponent(extractLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(extractProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -326,9 +327,9 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                     .addComponent(ibgRadio))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel1))
+                    .addComponent(twsIbgLogLabel)
+                    .addComponent(settingsLabel)
+                    .addComponent(tradeLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(logComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -337,13 +338,13 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel7)
+                .addComponent(manualLogLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(logDirectoryManual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(browseLogManual))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel8)
+                .addComponent(manualSettingsLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(configurePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(settingsDirectoryManual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -374,8 +375,10 @@ public class AnalyzerGUI extends javax.swing.JFrame {
 
         statusLabel.setText("Status:");
 
+        logFileStatus.setForeground(new java.awt.Color(153, 153, 153));
         logFileStatus.setText("Log File");
 
+        settingsFileStatus.setForeground(new java.awt.Color(153, 153, 153));
         settingsFileStatus.setText("Settings File");
 
         analyzeBtn.setText("Analyze");
@@ -386,7 +389,11 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             }
         });
 
+        tradeFileStatus.setForeground(new java.awt.Color(153, 153, 153));
         tradeFileStatus.setText("Trade File");
+
+        screenshotStatus.setForeground(new java.awt.Color(153, 153, 153));
+        screenshotStatus.setText("Screenshot");
 
         javax.swing.GroupLayout statusPanelLayout = new javax.swing.GroupLayout(statusPanel);
         statusPanel.setLayout(statusPanelLayout);
@@ -403,7 +410,8 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                     .addComponent(statusLabel)
                     .addComponent(logFileStatus)
                     .addComponent(settingsFileStatus)
-                    .addComponent(tradeFileStatus))
+                    .addComponent(tradeFileStatus)
+                    .addComponent(screenshotStatus))
                 .addContainerGap(89, Short.MAX_VALUE))
         );
         statusPanelLayout.setVerticalGroup(
@@ -419,6 +427,8 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 .addComponent(logFileStatus)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(settingsFileStatus)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(screenshotStatus)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tradeFileStatus)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -555,7 +565,8 @@ public class AnalyzerGUI extends javax.swing.JFrame {
 
         deepAnalysisCheck.setSelected(true);
         deepAnalysisCheck.setText("Deep Analysis");
-        deepAnalysisCheck.setToolTipText("Select to run a deep analysis of the log file");
+        deepAnalysisCheck.setToolTipText("This feature has been deprecated. All analysis is defaulted to use \"Deep\" analysis.");
+        deepAnalysisCheck.setEnabled(false);
         deepAnalysisCheck.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deepAnalysisCheckActionPerformed(evt);
@@ -720,7 +731,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        MainPane.addTab("TWS Log Filter", twsLogFilterPanel);
+        MainPane.addTab("Log Filter", twsLogFilterPanel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1058,6 +1069,11 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             settingsReady = false;
             updateStatus();
         }
+        
+        // Have main window show extracted directory
+        if(isExtracted == true){
+            this.setTitle("Log Analyzer - " + extractDirectory.getText());
+        }
     }//GEN-LAST:event_useExtractFileBtnActionPerformed
     
     private void useManualFileBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useManualFileBtnActionPerformed
@@ -1085,6 +1101,13 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             manager.selectSettingsFile(null, true);
             settingsReady = false;
             updateStatus();
+        }
+        
+        // Have main window show extracted directory
+        if(logDirectoryManual.getText().isEmpty()){
+            this.setTitle("Log Analyzer");
+        } else {
+            this.setTitle("Log Analyzer - " + logDirectoryManual.getText());
         }
     }//GEN-LAST:event_useManualFileBtnActionPerformed
     
@@ -1301,6 +1324,11 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                     textPaneList.get(Choices.ORDERSTRDS).setText(null);
                 }
                 extractProgressBar.setValue(100); /*Progress bar setting*/
+                
+                // Have main window show extracted directory
+                if(useExtractFileBtn.isSelected()){
+                    this.setTitle("Log Analyzer - " + extractDirectory.getText());
+                }
             } else {
                 javax.swing.JOptionPane.showMessageDialog(null, "Please choose a valid directory");
                 extractDirectory.setText(System.getProperty("user.home").toString() + "\\Temp");
@@ -1372,6 +1400,11 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                     textPaneList.get(Choices.ORDERSTRDS).setText(null);
                 }
                 extractProgressBar.setValue(100); /*Progress bar setting*/
+                
+                // Have main window show extracted directory
+                if(useExtractFileBtn.isSelected()){
+                    this.setTitle("Log Analyzer - " + extractDirectory.getText());
+                }
             }
             else {
                 javax.swing.JOptionPane.showMessageDialog(null, "Failed to load directory. Please find a different directory.");
@@ -1781,10 +1814,19 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         }
         
         //Update Screenshot combo ability
-        if(useExtractFileBtn.isSelected()){
+        if(useExtractFileBtn.isSelected() && screenshotReady == true){
+            screenshotStatus.setText("Screenshot - Ready");
+            screenshotStatus.setForeground(Color.GREEN.darker());
+            screenshotComboBox.setEnabled(true);
+            openScreenshotBtn.setEnabled(true);
+        } else if(useExtractFileBtn.isSelected() && screenshotReady == false) {
+            screenshotStatus.setText("Screenshot - No screenshot is found");
+            screenshotStatus.setForeground(Color.RED);
             screenshotComboBox.setEnabled(true);
             openScreenshotBtn.setEnabled(true);
         } else if(useManualFileBtn.isSelected()){
+            screenshotStatus.setText("Screenshot - Not used when selecting files manually");
+            screenshotStatus.setForeground(Color.RED);
             screenshotComboBox.setEnabled(false);
             openScreenshotBtn.setEnabled(false);
         }
@@ -1895,41 +1937,42 @@ public class AnalyzerGUI extends javax.swing.JFrame {
     private javax.swing.JFileChooser directoryChooser;
     private javax.swing.JButton extractBtn;
     private javax.swing.JTextField extractDirectory;
+    private javax.swing.JLabel extractLabel;
     private javax.swing.ButtonGroup extractManualGroup;
     private javax.swing.JProgressBar extractProgressBar;
     private javax.swing.JFileChooser fileChooser;
     private javax.swing.JRadioButton ibgRadio;
+    private javax.swing.JLabel importLabel;
     private javax.swing.JCheckBox includeTrdFileCheck;
     private javax.swing.JCheckBox includeXmlCheck;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField loadDirectory;
     private javax.swing.JComboBox<String> logComboBox;
     private javax.swing.JTextField logDirectoryManual;
     private javax.swing.JLabel logFileStatus;
+    private javax.swing.JLabel manualLogLabel;
+    private javax.swing.JLabel manualSettingsLabel;
     private javax.swing.JCheckBox matchCaseCheck;
     private javax.swing.JButton openLogFileBtn;
     private javax.swing.JButton openScreenshotBtn;
     private javax.swing.JButton regExSearchBtn;
     private javax.swing.JTextField regExText;
     private javax.swing.JComboBox<String> screenshotComboBox;
+    private javax.swing.JLabel screenshotStatus;
     private javax.swing.JComboBox<String> settingsComboBox;
     private javax.swing.JTextField settingsDirectoryManual;
     private javax.swing.JLabel settingsFileStatus;
+    private javax.swing.JLabel settingsLabel;
     private javax.swing.JLabel statusLabel;
     private javax.swing.JPanel statusPanel;
     private javax.swing.JPanel textMainPane;
     private javax.swing.JComboBox<String> tradeComboBox;
     private javax.swing.JLabel tradeFileStatus;
+    private javax.swing.JLabel tradeLabel;
     private javax.swing.ButtonGroup twsIbgGroup;
+    private javax.swing.JLabel twsIbgLogLabel;
     private javax.swing.JPanel twsLogFilterPanel;
     private javax.swing.JRadioButton twsRadio;
     private javax.swing.JRadioButton useExtractFileBtn;

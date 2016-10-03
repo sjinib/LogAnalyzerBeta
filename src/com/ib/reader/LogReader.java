@@ -510,26 +510,38 @@ public class LogReader {
     }
     
     public String getTodayTwsSettingsFileName(){
+        if(todayTwsSettingsFile == null)
+            return null;
         return new String(todayTwsSettingsFile);
     }
     
     public String getTodayIbgSettingsFileName(){
+        if(todayIbgSettingsFile == null)
+            return null;
         return new String(todayIbgSettingsFile);
     }
     
     public String getTodayTwsLogFileName(){
+        if(todayTwsLogFile == null)
+            return null;
         return new String(todayTwsLogFile);
     }
     
     public String getTodayIbgLogFileName(){
+        if(todayIbgLogFile == null)
+            return null;
         return new String(todayIbgLogFile);
     }
     
     public String getTodayTradeFileName(){
+        if(todayTradeFile == null)
+            return null;
         return new String(todayTradeFile);
     }
     
     public String getFirstScreenshotName(){
+        if(firstScreenshot == null)
+            return null;
         return new String(firstScreenshot);
     }
     
