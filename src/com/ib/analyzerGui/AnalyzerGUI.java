@@ -1070,6 +1070,19 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             updateStatus();
         }
         
+        // Trading section
+        if(tradeComboBox.getSelectedItem() != null){
+            manager.selectTradeFile(tradeComboBox.getSelectedItem().toString());
+            // Set Status
+            trdReady = true;
+            updateStatus();
+        } else {
+            manager.selectTradeFile(null);
+            // Set Status
+            trdReady = false;
+            updateStatus();
+        }
+        
         // Have main window show extracted directory
         if(isExtracted == true){
             this.setTitle("Log Analyzer - " + extractDirectory.getText());
@@ -1134,7 +1147,12 @@ public class AnalyzerGUI extends javax.swing.JFrame {
     private void browseLogManualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseLogManualActionPerformed
         int returnVal = fileChooser.showOpenDialog(this);
         if (returnVal == javax.swing.JFileChooser.APPROVE_OPTION) {
-            logDirectoryManual.setText(fileChooser.getSelectedFile().getAbsolutePath());
+            File choosedFile = fileChooser.getSelectedFile();
+            if(!(choosedFile.getAbsolutePath().endsWith(".log") || choosedFile.getAbsolutePath().endsWith(".txt"))){
+                javax.swing.JOptionPane.showMessageDialog(null, "Please choose a valid log file.");
+                return;
+            }
+            logDirectoryManual.setText(choosedFile.getAbsolutePath());
             if(useManualFileBtn.isSelected()){
                 manager.selectLogFile(logDirectoryManual.getText(), true);
                 logReady = true;
@@ -1194,6 +1212,10 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         int returnVal = fileChooser.showOpenDialog(this);
         if (returnVal == javax.swing.JFileChooser.APPROVE_OPTION) {
             diagnosticFile = fileChooser.getSelectedFile();
+            if(!diagnosticFile.getAbsolutePath().endsWith(".zip")){
+                javax.swing.JOptionPane.showMessageDialog(null, "Please choose a valid .zip diagnostic file");
+                return;
+            }
             loadDirectory.setText(diagnosticFile.getAbsolutePath());
             extractDirectory.setText(diagnosticFile.getAbsolutePath() + "_extracted");
             manager.setReaderLocation(loadDirectory.getText(), extractDirectory.getText());
@@ -1206,6 +1228,11 @@ public class AnalyzerGUI extends javax.swing.JFrame {
     private void browseSettingsManualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseSettingsManualActionPerformed
         int returnVal = fileChooser.showOpenDialog(this);
         if (returnVal == javax.swing.JFileChooser.APPROVE_OPTION) {
+            File choosedFile = fileChooser.getSelectedFile();
+            if(!choosedFile.getAbsolutePath().endsWith(".xml")){
+                javax.swing.JOptionPane.showMessageDialog(null, "Please choose a valid settings file");
+                return;
+            }
             settingsDirectoryManual.setText(fileChooser.getSelectedFile().getAbsolutePath());
             if(useManualFileBtn.isSelected()){
                 manager.selectSettingsFile(settingsDirectoryManual.getText(), true);
@@ -1577,7 +1604,9 @@ public class AnalyzerGUI extends javax.swing.JFrame {
 
     private void screenshotComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_screenshotComboBoxActionPerformed
         // TODO add your handling code here:
-        manager.selectScreenshot(screenshotComboBox.getSelectedItem().toString());
+        if(screenshotComboBox.getSelectedItem() != null){
+            manager.selectScreenshot(screenshotComboBox.getSelectedItem().toString());
+        }
     }//GEN-LAST:event_screenshotComboBoxActionPerformed
     
     private void customInitComponents(){
@@ -1766,8 +1795,10 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         if(screenshotComboBox.getSelectedItem() != null && useExtractFileBtn.isSelected()){
             manager.selectScreenshot(screenshotComboBox.getSelectedItem().toString());
             screenshotReady = true;
+            updateStatus();
         } else {
             screenshotReady = false;
+            updateStatus();
         }
     }
     

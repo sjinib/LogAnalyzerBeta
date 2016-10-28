@@ -151,8 +151,8 @@
                                   <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel8" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
+                                      <Component id="manualSettingsLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="manualLogLabel" min="-2" max="-2" attributes="0"/>
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="twsRadio" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
@@ -160,23 +160,23 @@
                                       </Group>
                                       <Group type="102" alignment="0" attributes="0">
                                           <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="twsIbgLogLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                                               <Component id="logComboBox" alignment="0" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="settingsLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                                               <Component id="settingsComboBox" alignment="0" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                                              <Component id="tradeLabel" min="-2" max="-2" attributes="0"/>
                                               <Component id="tradeComboBox" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                       <Component id="extractProgressBar" min="-2" pref="213" max="-2" attributes="0"/>
-                                      <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                                      <Component id="extractLabel" min="-2" max="-2" attributes="0"/>
+                                      <Component id="importLabel" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
@@ -192,7 +192,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                          <Component id="importLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="loadDirectory" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -207,7 +207,7 @@
                               <Component id="extractBtn" alignment="2" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
+                          <Component id="extractLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="extractProgressBar" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
@@ -217,9 +217,9 @@
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="twsIbgLogLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="settingsLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="tradeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -230,14 +230,14 @@
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="jSeparator1" min="-2" pref="14" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
+                          <Component id="manualLogLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="logDirectoryManual" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="browseLogManual" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
+                          <Component id="manualSettingsLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="settingsDirectoryManual" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -249,7 +249,7 @@
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JLabel" name="jLabel2">
+                <Component class="javax.swing.JLabel" name="importLabel">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Import downloaded diagnostic zip file:"/>
                   </Properties>
@@ -291,7 +291,7 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="extractBtnActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JLabel" name="jLabel4">
+                <Component class="javax.swing.JLabel" name="twsIbgLogLabel">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="TWS/IB Gateway log:"/>
                   </Properties>
@@ -309,7 +309,7 @@
                     <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                   </AuxValues>
                 </Component>
-                <Component class="javax.swing.JLabel" name="jLabel5">
+                <Component class="javax.swing.JLabel" name="settingsLabel">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Settings File:"/>
                   </Properties>
@@ -327,7 +327,7 @@
                     <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                   </AuxValues>
                 </Component>
-                <Component class="javax.swing.JLabel" name="jLabel7">
+                <Component class="javax.swing.JLabel" name="manualLogLabel">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Manually select TWS/IB Gateway log file:"/>
                   </Properties>
@@ -338,7 +338,7 @@
                     <Property name="toolTipText" type="java.lang.String" value="Select path to the log file for analysis"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="jLabel8">
+                <Component class="javax.swing.JLabel" name="manualSettingsLabel">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Manually select settings file:"/>
                   </Properties>
@@ -399,7 +399,7 @@
                     <Property name="stringPainted" type="boolean" value="true"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="jLabel10">
+                <Component class="javax.swing.JLabel" name="extractLabel">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Extraction Progress:"/>
                   </Properties>
@@ -418,7 +418,7 @@
                     <Property name="toolTipText" type="java.lang.String" value="Select path to the settings file for analysis"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="jLabel1">
+                <Component class="javax.swing.JLabel" name="tradeLabel">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Trade File:"/>
                   </Properties>
@@ -465,6 +465,7 @@
                               <Component id="logFileStatus" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="settingsFileStatus" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="tradeFileStatus" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="screenshotStatus" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace pref="89" max="32767" attributes="0"/>
                       </Group>
@@ -483,6 +484,8 @@
                           <Component id="logFileStatus" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="settingsFileStatus" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="screenshotStatus" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="tradeFileStatus" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
@@ -525,11 +528,17 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="logFileStatus">
                   <Properties>
+                    <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="99" green="99" red="99" type="rgb"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="Log File"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="settingsFileStatus">
                   <Properties>
+                    <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="99" green="99" red="99" type="rgb"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="Settings File"/>
                   </Properties>
                 </Component>
@@ -544,7 +553,18 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="tradeFileStatus">
                   <Properties>
+                    <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="99" green="99" red="99" type="rgb"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="Trade File"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="screenshotStatus">
+                  <Properties>
+                    <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="99" green="99" red="99" type="rgb"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="Screenshot"/>
                   </Properties>
                 </Component>
               </SubComponents>
@@ -554,8 +574,8 @@
         <Container class="javax.swing.JPanel" name="twsLogFilterPanel">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="TWS Log Filter">
-                <Property name="tabTitle" type="java.lang.String" value="TWS Log Filter"/>
+              <JTabbedPaneConstraints tabName="Log Filter">
+                <Property name="tabTitle" type="java.lang.String" value="Log Filter"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -827,7 +847,8 @@
                   <Properties>
                     <Property name="selected" type="boolean" value="true"/>
                     <Property name="text" type="java.lang.String" value="Deep Analysis"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Select to run a deep analysis of the log file"/>
+                    <Property name="toolTipText" type="java.lang.String" value="This feature has been deprecated. All analysis is defaulted to use &quot;Deep&quot; analysis."/>
+                    <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deepAnalysisCheckActionPerformed"/>
