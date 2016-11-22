@@ -4,7 +4,7 @@ import com.ib.manager.*;
 
 public class testAnalyzer {
 	public static void main(String [] arg){
-		LogManager manager = new LogManager();
+		LogManager_local manager = new LogManager_local();
 		//manager.start();
 	}
 }
