@@ -1,6 +1,6 @@
-/**
- * The Reader class is the major class that handles all the file reading, parsing and data populating
- */
+ /**
+  * The Reader class is the major class that handles all the file reading, parsing and data populating
+  */
 package com.ib.reader;
 
 import com.ib.parser.*;
@@ -18,7 +18,7 @@ import java.util.HashMap;
 
 public class LogReader {
     public final static int USESERVER = 1;
-    public final static int USELOCAL = 1;
+    public final static int USELOCAL = 2;
     // Name of selected log file from server download for analyze
     private String selectedTwsLogFile_server = new String();
     private String selectedIbgLogFile_server = new String();
@@ -34,7 +34,7 @@ public class LogReader {
     private String selectedIbgSettingsFile_local = new String();
     private String selectedTradeFile_local = new String();
     private String selectedScreenshot_local = new String();
-        
+    
     // Name of manual selected log file for analyze
     private String selectedLogFile_manual = new String();
     private String selectedSettingsFile_manual = new String();
@@ -45,7 +45,7 @@ public class LogReader {
     private String todayTwsSettingsFile_server = new String();
     private String todayIbgSettingsFile_server = new String();
     private String todayTradeFile_server = new String();
-    private String firstScreenshot_server = new String(); 
+    private String firstScreenshot_server = new String();
     
     // String name of today's log file from import
     private String todayTwsLogFile_local = new String();
@@ -53,7 +53,7 @@ public class LogReader {
     private String todayTwsSettingsFile_local = new String();
     private String todayIbgSettingsFile_local = new String();
     private String todayTradeFile_local = new String();
-    private String firstScreenshot_local = new String();    
+    private String firstScreenshot_local = new String();
     
     // String name of file locations from server download
     private String zipLocation_server = null; // Location of stored uploaded diagnostic .zip file
@@ -93,7 +93,7 @@ public class LogReader {
         apiSettingsMessage = new ApiSettingsMessage();
         envSettingsMessage = new EnvSettingsMessage();
     }
-
+    
     public void setOutputDirectory(int method, String dir){
         if(dir != null){
             if(method == LogReader.USESERVER)
@@ -118,7 +118,7 @@ public class LogReader {
             currentZipLocation = zipLocation_server;
         else if(method == LogReader.USELOCAL)
             currentZipLocation = zipLocation_local;
-                
+        
         if(currentZipLocation == null)
             return false;
         if(currentZipLocation.endsWith(".zip")){
@@ -151,7 +151,7 @@ public class LogReader {
                 ibgLogFileList_server.clear();
                 ibgLogFileList_server = null;
             }
-        } else if(method == LogReader.USELOCAL){            
+        } else if(method == LogReader.USELOCAL){
             if(twsLogFileList_local != null){
                 twsLogFileList_local.clear();
                 twsLogFileList_local = null;
@@ -227,185 +227,332 @@ public class LogReader {
     }
     
     // Return String array of names of tws log list for tws log selector
-    public String [] getTwsLogFileListNames() {
-        if(twsLogFileList_local == null){
-            try {
-                if(loadTwsLogFileList()){
-                    String[] list = new String[twsLogFileList_local.size()];
-                    for(int i = 0; i < twsLogFileList_local.size(); i++){
-                        list[i] = twsLogFileList_local.get(i).getName();
-                    }
-                    return list;
-                } else
+    public String [] getTwsLogFileListNames(int method) {
+        if(method == LogReader.USESERVER){
+            if(twsLogFileList_server == null){
+                try {
+                    if(loadTwsLogFileList(method)){
+                        String[] list = new String[twsLogFileList_server.size()];
+                        for(int i = 0; i < twsLogFileList_server.size(); i++){
+                            list[i] = twsLogFileList_server.get(i).getName();
+                        }
+                        return list;
+                    } else
+                        return null;
+                } catch (Exception e){
+                    e.printStackTrace();
                     return null;
-            } catch (Exception e){
-                e.printStackTrace();
-                return null;
+                }
+            } else {
+                String[] list = new String[twsLogFileList_server.size()];
+                for(int i = 0; i < twsLogFileList_server.size(); i++){
+                    list[i] = twsLogFileList_server.get(i).getName();
+                }
+                return list;
+            }
+        } else if(method == LogReader.USELOCAL){
+            if(twsLogFileList_local == null){
+                try {
+                    if(loadTwsLogFileList(method)){
+                        String[] list = new String[twsLogFileList_local.size()];
+                        for(int i = 0; i < twsLogFileList_local.size(); i++){
+                            list[i] = twsLogFileList_local.get(i).getName();
+                        }
+                        return list;
+                    } else
+                        return null;
+                } catch (Exception e){
+                    e.printStackTrace();
+                    return null;
+                }
+            } else {
+                String[] list = new String[twsLogFileList_local.size()];
+                for(int i = 0; i < twsLogFileList_local.size(); i++){
+                    list[i] = twsLogFileList_local.get(i).getName();
+                }
+                return list;
             }
         } else {
-            String[] list = new String[twsLogFileList_local.size()];
-            for(int i = 0; i < twsLogFileList_local.size(); i++){
-                list[i] = twsLogFileList_local.get(i).getName();
-            }
-            return list;
+            return null;
         }
     }
     
-    public String [] getIBGLogFilesListNames() {        
-        if(ibgLogFileList_local == null || ibgLogFileList_local.isEmpty()){
-            try {
-                if(loadIBGLogFileList() == true){
-                    String[] list = new String[ibgLogFileList_local.size()];
-                    for(int i = 0; i < ibgLogFileList_local.size(); i++){
-                        list[i] = ibgLogFileList_local.get(i).getName();
-                    }
-                    return list;
-                } else 
+    public String [] getIBGLogFilesListNames(int method) {
+        if(method == LogReader.USESERVER){
+            if(ibgLogFileList_server == null || ibgLogFileList_server.isEmpty()){
+                try {
+                    if(loadIBGLogFileList(method) == true){
+                        String[] list = new String[ibgLogFileList_server.size()];
+                        for(int i = 0; i < ibgLogFileList_server.size(); i++){
+                            list[i] = ibgLogFileList_server.get(i).getName();
+                        }
+                        return list;
+                    } else
+                        return null;
+                } catch (Exception e){
+                    e.printStackTrace();
                     return null;
-            } catch (Exception e){
-                e.printStackTrace();
-                return null;
+                }
+            } else {
+                String[] list = new String[ibgLogFileList_server.size()];
+                for(int i = 0; i < ibgLogFileList_server.size(); i++){
+                    list[i] = ibgLogFileList_server.get(i).getName();
+                }
+                return list;
+            }
+        } else if(method == LogReader.USELOCAL){
+            if(ibgLogFileList_local == null || ibgLogFileList_local.isEmpty()){
+                try {
+                    if(loadIBGLogFileList(method) == true){
+                        String[] list = new String[ibgLogFileList_local.size()];
+                        for(int i = 0; i < ibgLogFileList_local.size(); i++){
+                            list[i] = ibgLogFileList_local.get(i).getName();
+                        }
+                        return list;
+                    } else
+                        return null;
+                } catch (Exception e){
+                    e.printStackTrace();
+                    return null;
+                }
+            } else {
+                String[] list = new String[ibgLogFileList_local.size()];
+                for(int i = 0; i < ibgLogFileList_local.size(); i++){
+                    list[i] = ibgLogFileList_local.get(i).getName();
+                }
+                return list;
             }
         } else {
-            String[] list = new String[ibgLogFileList_local.size()];
-            for(int i = 0; i < ibgLogFileList_local.size(); i++){
-                list[i] = ibgLogFileList_local.get(i).getName();
-            }
-            return list;
+            return null;
         }
     }
     
-    public String [] getTwsSettingsFilesListNames() {
-        if(twsSettingsFileList_local == null){
-            try {
-                if(loadTwsSettingsFileList()){
-                    String[] list = new String[twsSettingsFileList_local.size()];
-                    for(int i = 0; i < twsSettingsFileList_local.size(); i++){
-                        list[i] = twsSettingsFileList_local.get(i).getName();
-                    }
-                    return list;
-                } else
+    public String [] getTwsSettingsFilesListNames(int method) {
+        if(method == LogReader.USESERVER){
+            if(twsSettingsFileList_server == null){
+                try {
+                    if(loadTwsSettingsFileList(method)){
+                        String[] list = new String[twsSettingsFileList_server.size()];
+                        for(int i = 0; i < twsSettingsFileList_server.size(); i++){
+                            list[i] = twsSettingsFileList_server.get(i).getName();
+                        }
+                        return list;
+                    } else
+                        return null;
+                } catch (Exception e){
+                    e.printStackTrace();
                     return null;
-            } catch (Exception e){
-                e.printStackTrace();
-                return null;
+                }
+            } else {
+                String[] list = new String[twsSettingsFileList_server.size()];
+                for(int i = 0; i < twsSettingsFileList_server.size(); i++){
+                    list[i] = twsSettingsFileList_server.get(i).getName();
+                }
+                return list;
+            }
+        } else if(method == LogReader.USELOCAL){
+            if(twsSettingsFileList_local == null){
+                try {
+                    if(loadTwsSettingsFileList(method)){
+                        String[] list = new String[twsSettingsFileList_local.size()];
+                        for(int i = 0; i < twsSettingsFileList_local.size(); i++){
+                            list[i] = twsSettingsFileList_local.get(i).getName();
+                        }
+                        return list;
+                    } else
+                        return null;
+                } catch (Exception e){
+                    e.printStackTrace();
+                    return null;
+                }
+            } else {
+                String[] list = new String[twsSettingsFileList_local.size()];
+                for(int i = 0; i < twsSettingsFileList_local.size(); i++){
+                    list[i] = twsSettingsFileList_local.get(i).getName();
+                }
+                return list;
             }
         } else {
-            String[] list = new String[twsSettingsFileList_local.size()];
-            for(int i = 0; i < twsSettingsFileList_local.size(); i++){
-                list[i] = twsSettingsFileList_local.get(i).getName();
-            }
-            return list;
+            return null;
         }
     }
     
-    public String [] getIbgSettingsFilesListNames() {
-        if(ibgSettingsFileList_local == null){
-            try {
-                if(loadIbgSettingsFileList()){
-                    String[] list = new String[ibgSettingsFileList_local.size()];
-                    for(int i = 0; i < ibgSettingsFileList_local.size(); i++){
-                        list[i] = ibgSettingsFileList_local.get(i).getName();
-                    }
-                    return list;
-                } else
+    public String [] getIbgSettingsFilesListNames(int method) {
+        if(method == LogReader.USESERVER){
+            if(ibgSettingsFileList_server == null){
+                try {
+                    if(loadIbgSettingsFileList(method)){
+                        String[] list = new String[ibgSettingsFileList_server.size()];
+                        for(int i = 0; i < ibgSettingsFileList_server.size(); i++){
+                            list[i] = ibgSettingsFileList_server.get(i).getName();
+                        }
+                        return list;
+                    } else
+                        return null;
+                } catch (Exception e){
+                    e.printStackTrace();
                     return null;
-            } catch (Exception e){
-                e.printStackTrace();
-                return null;
+                }
+            } else {
+                String[] list = new String[ibgSettingsFileList_server.size()];
+                for(int i = 0; i < ibgSettingsFileList_server.size(); i++){
+                    list[i] = ibgSettingsFileList_server.get(i).getName();
+                }
+                return list;
+            }
+        } else if(method == LogReader.USELOCAL){
+            if(ibgSettingsFileList_local == null){
+                try {
+                    if(loadIbgSettingsFileList(method)){
+                        String[] list = new String[ibgSettingsFileList_local.size()];
+                        for(int i = 0; i < ibgSettingsFileList_local.size(); i++){
+                            list[i] = ibgSettingsFileList_local.get(i).getName();
+                        }
+                        return list;
+                    } else
+                        return null;
+                } catch (Exception e){
+                    e.printStackTrace();
+                    return null;
+                }
+            } else {
+                String[] list = new String[ibgSettingsFileList_local.size()];
+                for(int i = 0; i < ibgSettingsFileList_local.size(); i++){
+                    list[i] = ibgSettingsFileList_local.get(i).getName();
+                }
+                return list;
             }
         } else {
-            String[] list = new String[ibgSettingsFileList_local.size()];
-            for(int i = 0; i < ibgSettingsFileList_local.size(); i++){
-                list[i] = ibgSettingsFileList_local.get(i).getName();
-            }
-            return list;
+            return null;
         }
     }
     
-    public String [] getTradeFileListNames() {
-        if(tradeFileList_local == null){
-            try {
-                if(loadTradeFileList()){
-                    String[] list = new String[tradeFileList_local.size()];
-                    for(int i = 0; i < tradeFileList_local.size(); i++){
-                        list[i] = tradeFileList_local.get(i).getName();
-                    }
-                    return list;
-                } else
+    public String [] getTradeFileListNames(int method) {
+        if(method == LogReader.USESERVER){
+            if(tradeFileList_server == null){
+                try {
+                    if(loadTradeFileList(method)){
+                        String[] list = new String[tradeFileList_server.size()];
+                        for(int i = 0; i < tradeFileList_server.size(); i++){
+                            list[i] = tradeFileList_server.get(i).getName();
+                        }
+                        return list;
+                    } else
+                        return null;
+                } catch (Exception e){
+                    e.printStackTrace();
                     return null;
-            } catch (Exception e){
-                e.printStackTrace();
-                return null;
+                }
+            } else {
+                String[] list = new String[tradeFileList_server.size()];
+                for(int i = 0; i < tradeFileList_server.size(); i++){
+                    list[i] = tradeFileList_server.get(i).getName();
+                }
+                return list;
+            }
+        } else if(method == LogReader.USELOCAL){
+            if(tradeFileList_local == null){
+                try {
+                    if(loadTradeFileList(method)){
+                        String[] list = new String[tradeFileList_local.size()];
+                        for(int i = 0; i < tradeFileList_local.size(); i++){
+                            list[i] = tradeFileList_local.get(i).getName();
+                        }
+                        return list;
+                    } else
+                        return null;
+                } catch (Exception e){
+                    e.printStackTrace();
+                    return null;
+                }
+            } else {
+                String[] list = new String[tradeFileList_local.size()];
+                for(int i = 0; i < tradeFileList_local.size(); i++){
+                    list[i] = tradeFileList_local.get(i).getName();
+                }
+                return list;
             }
         } else {
-            String[] list = new String[tradeFileList_local.size()];
-            for(int i = 0; i < tradeFileList_local.size(); i++){
-                list[i] = tradeFileList_local.get(i).getName();
-            }
-            return list;
+            return null;
         }
     }
     
-    public String [] getScreenshotListNames() {
-        if(screenshotList_local == null){
-            try {
-                if(loadScreenshotList()){
-                    String[] list = new String[screenshotList_local.size()];
-                    for(int i = 0; i < screenshotList_local.size(); i++){
-                        list[i] = screenshotList_local.get(i).getName();
-                    }
-                    return list;
-                } else
+    public String [] getScreenshotListNames(int method) {
+        if(method == LogReader.USESERVER){
+            if(screenshotList_server == null){
+                try {
+                    if(loadScreenshotList(method)){
+                        String[] list = new String[screenshotList_server.size()];
+                        for(int i = 0; i < screenshotList_server.size(); i++){
+                            list[i] = screenshotList_server.get(i).getName();
+                        }
+                        return list;
+                    } else
+                        return null;
+                } catch (Exception e){
+                    e.printStackTrace();
                     return null;
-            } catch (Exception e){
-                e.printStackTrace();
-                return null;
+                }
+            } else {
+                String[] list = new String[screenshotList_server.size()];
+                for(int i = 0; i < screenshotList_server.size(); i++){
+                    list[i] = screenshotList_server.get(i).getName();
+                }
+                return list;
+            }
+        } else if(method == LogReader.USELOCAL){
+            if(screenshotList_local == null){
+                try {
+                    if(loadScreenshotList(method)){
+                        String[] list = new String[screenshotList_local.size()];
+                        for(int i = 0; i < screenshotList_local.size(); i++){
+                            list[i] = screenshotList_local.get(i).getName();
+                        }
+                        return list;
+                    } else
+                        return null;
+                } catch (Exception e){
+                    e.printStackTrace();
+                    return null;
+                }
+            } else {
+                String[] list = new String[screenshotList_local.size()];
+                for(int i = 0; i < screenshotList_local.size(); i++){
+                    list[i] = screenshotList_local.get(i).getName();
+                }
+                return list;
             }
         } else {
-            String[] list = new String[screenshotList_local.size()];
-            for(int i = 0; i < screenshotList_local.size(); i++){
-                list[i] = screenshotList_local.get(i).getName();
-            }
-            return list;
+            return null;
         }
     }
     
     // Find all log file names and store in list, returns true if loading is successful
-    public boolean loadTwsLogFileList() throws Exception{
-        if(outputDirectory_local == null){
-            throw new Exception("Invalid Directory");
-        }
-        
-        if(twsLogFileList_local != null && !twsLogFileList_local.isEmpty()){
-            twsLogFileList_local.clear();
-        }
-        
-        File dir = new File(outputDirectory_local);
-        IOFileFilter fileFilter = new WildcardFileFilter(Arrays.asList("tws.log", "tws.*.log", "log.*.txt"));
-        twsLogFileList_local = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
-        
-        if(twsLogFileList_local == null || twsLogFileList_local.isEmpty()){
-            javax.swing.JOptionPane.showMessageDialog(null, "No TWS log file is found.");
-            todayTwsLogFile_local = null;
-            return false;
-        }
-        
-        boolean hasToday = false;
-        String dayLogName = new String("log." + CurrentDay.findCurrentDay() + ".txt");
-        for(File file : twsLogFileList_local){
-            if(file.getName().equals("tws.log")){
-                todayTwsLogFile_local = "tws.log";
-                hasToday = true;
-                break;
+    public boolean loadTwsLogFileList(int method) throws Exception{
+        if(method == LogReader.USESERVER){
+            if(outputDirectory_server == null){
+                throw new Exception("Invalid Directory");
             }
-        }
-        if(hasToday == true){
-            return true;
-        } else {
-            for(File file : twsLogFileList_local){
-                if(file.getName().equals(dayLogName)){
-                    todayTwsLogFile_local = dayLogName;
+            
+            if(twsLogFileList_server != null && !twsLogFileList_server.isEmpty()){
+                twsLogFileList_server.clear();
+            }
+            
+            File dir = new File(outputDirectory_server);
+            IOFileFilter fileFilter = new WildcardFileFilter(Arrays.asList("tws.log", "tws.*.log", "log.*.txt"));
+            twsLogFileList_server = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
+            
+            if(twsLogFileList_server == null || twsLogFileList_server.isEmpty()){
+                javax.swing.JOptionPane.showMessageDialog(null, "No TWS log file is found.");
+                todayTwsLogFile_server = null;
+                return false;
+            }
+            
+            boolean hasToday = false;
+            String dayLogName = new String("log." + CurrentDay.findCurrentDay() + ".txt");
+            for(File file : twsLogFileList_server){
+                if(file.getName().equals("tws.log")){
+                    todayTwsLogFile_server = "tws.log";
                     hasToday = true;
                     break;
                 }
@@ -413,185 +560,426 @@ public class LogReader {
             if(hasToday == true){
                 return true;
             } else {
-                todayTwsLogFile_local = twsLogFileList_local.get(0).getName();
-                return true;
+                for(File file : twsLogFileList_server){
+                    if(file.getName().equals(dayLogName)){
+                        todayTwsLogFile_server = dayLogName;
+                        hasToday = true;
+                        break;
+                    }
+                }
+                if(hasToday == true){
+                    return true;
+                } else {
+                    todayTwsLogFile_server = twsLogFileList_server.get(0).getName();
+                    return true;
+                }
             }
-        }        
-    }
-    
-    public boolean loadIBGLogFileList() throws Exception{
-        if(outputDirectory_local == null){
-            throw new Exception("Invalid Directory");
-        }
-        
-        if(ibgLogFileList_local != null && !ibgLogFileList_local.isEmpty()){
-            ibgLogFileList_local.clear();
-        }
-        
-        File dir = new File(outputDirectory_local);
-        IOFileFilter fileFilter = new WildcardFileFilter(Arrays.asList("ibgateway.log", "ibgateway.*.log"));
-        ibgLogFileList_local = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
-        
-        if(ibgLogFileList_local == null || ibgLogFileList_local.isEmpty()){
-            javax.swing.JOptionPane.showMessageDialog(null, "No IB Gateway log file is found.");
-            todayIbgLogFile_local = null;
-            return false;
-        }        
-        
-        boolean hasToday = false;
-        String dayLogName = new String("ibgateway." + CurrentDay.findCurrentDay() + ".log");
-        for(File file : ibgLogFileList_local){
-            if(file.getName().equals("ibgateway.log")){
-                todayIbgLogFile_local = "ibgateway.log";
-                hasToday = true;
-                break;
+        } else if(method == LogReader.USELOCAL){
+            if(outputDirectory_local == null){
+                throw new Exception("Invalid Directory");
             }
-        }
-        if(hasToday == true){
-            return true;
-        } else {
-            for(File file : ibgLogFileList_local){
-                if(file.getName().equals(dayLogName)){
-                    todayIbgLogFile_local = dayLogName;
+            
+            if(twsLogFileList_local != null && !twsLogFileList_local.isEmpty()){
+                twsLogFileList_local.clear();
+            }
+            
+            File dir = new File(outputDirectory_local);
+            IOFileFilter fileFilter = new WildcardFileFilter(Arrays.asList("tws.log", "tws.*.log", "log.*.txt"));
+            twsLogFileList_local = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
+            
+            if(twsLogFileList_local == null || twsLogFileList_local.isEmpty()){
+                javax.swing.JOptionPane.showMessageDialog(null, "No TWS log file is found.");
+                todayTwsLogFile_local = null;
+                return false;
+            }
+            
+            boolean hasToday = false;
+            String dayLogName = new String("log." + CurrentDay.findCurrentDay() + ".txt");
+            for(File file : twsLogFileList_local){
+                if(file.getName().equals("tws.log")){
+                    todayTwsLogFile_local = "tws.log";
                     hasToday = true;
                     break;
                 }
             }
             if(hasToday == true){
                 return true;
-            } else {                
-                todayIbgLogFile_local = ibgLogFileList_local.get(0).getName();
+            } else {
+                for(File file : twsLogFileList_local){
+                    if(file.getName().equals(dayLogName)){
+                        todayTwsLogFile_local = dayLogName;
+                        hasToday = true;
+                        break;
+                    }
+                }
+                if(hasToday == true){
+                    return true;
+                } else {
+                    todayTwsLogFile_local = twsLogFileList_local.get(0).getName();
+                    return true;
+                }
+            }
+        } else {
+            return false;
+        }
+    }
+    
+    public boolean loadIBGLogFileList(int method) throws Exception{
+        if(method == LogReader.USESERVER){
+            if(outputDirectory_server == null){
+                throw new Exception("Invalid Directory");
+            }
+            
+            if(ibgLogFileList_server != null && !ibgLogFileList_server.isEmpty()){
+                ibgLogFileList_server.clear();
+            }
+            
+            File dir = new File(outputDirectory_server);
+            IOFileFilter fileFilter = new WildcardFileFilter(Arrays.asList("ibgateway.log", "ibgateway.*.log"));
+            ibgLogFileList_server = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
+            
+            if(ibgLogFileList_server == null || ibgLogFileList_server.isEmpty()){
+                javax.swing.JOptionPane.showMessageDialog(null, "No IB Gateway log file is found.");
+                todayIbgLogFile_server = null;
+                return false;
+            }
+            
+            boolean hasToday = false;
+            String dayLogName = new String("ibgateway." + CurrentDay.findCurrentDay() + ".log");
+            for(File file : ibgLogFileList_server){
+                if(file.getName().equals("ibgateway.log")){
+                    todayIbgLogFile_server = "ibgateway.log";
+                    hasToday = true;
+                    break;
+                }
+            }
+            if(hasToday == true){
+                return true;
+            } else {
+                for(File file : ibgLogFileList_server){
+                    if(file.getName().equals(dayLogName)){
+                        todayIbgLogFile_server = dayLogName;
+                        hasToday = true;
+                        break;
+                    }
+                }
+                if(hasToday == true){
+                    return true;
+                } else {
+                    todayIbgLogFile_server = ibgLogFileList_server.get(0).getName();
+                    return true;
+                }
+            }
+        } else if(method == LogReader.USELOCAL){
+            if(outputDirectory_local == null){
+                throw new Exception("Invalid Directory");
+            }
+            
+            if(ibgLogFileList_local != null && !ibgLogFileList_local.isEmpty()){
+                ibgLogFileList_local.clear();
+            }
+            
+            File dir = new File(outputDirectory_local);
+            IOFileFilter fileFilter = new WildcardFileFilter(Arrays.asList("ibgateway.log", "ibgateway.*.log"));
+            ibgLogFileList_local = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
+            
+            if(ibgLogFileList_local == null || ibgLogFileList_local.isEmpty()){
+                javax.swing.JOptionPane.showMessageDialog(null, "No IB Gateway log file is found.");
+                todayIbgLogFile_local = null;
+                return false;
+            }
+            
+            boolean hasToday = false;
+            String dayLogName = new String("ibgateway." + CurrentDay.findCurrentDay() + ".log");
+            for(File file : ibgLogFileList_local){
+                if(file.getName().equals("ibgateway.log")){
+                    todayIbgLogFile_local = "ibgateway.log";
+                    hasToday = true;
+                    break;
+                }
+            }
+            if(hasToday == true){
+                return true;
+            } else {
+                for(File file : ibgLogFileList_local){
+                    if(file.getName().equals(dayLogName)){
+                        todayIbgLogFile_local = dayLogName;
+                        hasToday = true;
+                        break;
+                    }
+                }
+                if(hasToday == true){
+                    return true;
+                } else {
+                    todayIbgLogFile_local = ibgLogFileList_local.get(0).getName();
+                    return true;
+                }
+            }
+        } else {
+            return false;
+        }
+    }
+    
+    public boolean loadTwsSettingsFileList(int method) throws Exception{
+        if(method == LogReader.USESERVER){
+            if(outputDirectory_server == null){
+                throw new Exception("Invalid Directory");
+            }
+            
+            if(twsSettingsFileList_server != null && !twsSettingsFileList_server.isEmpty()){
+                twsSettingsFileList_server.clear();
+            }
+            
+            File dir = new File(outputDirectory_server);
+            IOFileFilter fileFilter = new WildcardFileFilter(Arrays.asList("tws.*.xml"));
+            twsSettingsFileList_server = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
+            
+            if(twsSettingsFileList_server == null || twsSettingsFileList_server.isEmpty()){
+                javax.swing.JOptionPane.showMessageDialog(null, "No TWS settings file is found.");
+                todayTwsSettingsFile_server = null;
+                return false;
+            }
+            
+            boolean hasToday = false;
+            for(File file : twsSettingsFileList_server){
+                if(file.getName().equals("tws.error.xml")){
+                    todayTwsSettingsFile_server = "tws.error.xml";
+                    hasToday = true;
+                    break;
+                }
+            }
+            if(hasToday == true){
+                return true;
+            }else {
+                todayTwsSettingsFile_server = twsSettingsFileList_server.get(0).getName();
                 return true;
             }
+        } else if(method == LogReader.USELOCAL){
+            if(outputDirectory_local == null){
+                throw new Exception("Invalid Directory");
+            }
+            
+            if(twsSettingsFileList_local != null && !twsSettingsFileList_local.isEmpty()){
+                twsSettingsFileList_local.clear();
+            }
+            
+            File dir = new File(outputDirectory_local);
+            IOFileFilter fileFilter = new WildcardFileFilter(Arrays.asList("tws.*.xml"));
+            twsSettingsFileList_local = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
+            
+            if(twsSettingsFileList_local == null || twsSettingsFileList_local.isEmpty()){
+                javax.swing.JOptionPane.showMessageDialog(null, "No TWS settings file is found.");
+                todayTwsSettingsFile_local = null;
+                return false;
+            }
+            
+            boolean hasToday = false;
+            for(File file : twsSettingsFileList_local){
+                if(file.getName().equals("tws.error.xml")){
+                    todayTwsSettingsFile_local = "tws.error.xml";
+                    hasToday = true;
+                    break;
+                }
+            }
+            if(hasToday == true){
+                return true;
+            }else {
+                todayTwsSettingsFile_local = twsSettingsFileList_local.get(0).getName();
+                return true;
+            }
+        } else {
+            return false;
         }
     }
     
-    public boolean loadTwsSettingsFileList() throws Exception{
-        if(outputDirectory_local == null){
-            throw new Exception("Invalid Directory");
-        }
-        
-        if(twsSettingsFileList_local != null && !twsSettingsFileList_local.isEmpty()){
-            twsSettingsFileList_local.clear();
-        }
-        
-        File dir = new File(outputDirectory_local);
-        IOFileFilter fileFilter = new WildcardFileFilter(Arrays.asList("tws.*.xml"));
-        twsSettingsFileList_local = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
-        
-        if(twsSettingsFileList_local == null || twsSettingsFileList_local.isEmpty()){
-            javax.swing.JOptionPane.showMessageDialog(null, "No TWS settings file is found.");
-            todayTwsSettingsFile_local = null;
+    public boolean loadIbgSettingsFileList(int method) throws Exception{
+        if(method == LogReader.USESERVER){
+            if(outputDirectory_server == null){
+                throw new Exception("Invalid Directory");
+            }
+            
+            if(ibgSettingsFileList_server != null && !ibgSettingsFileList_server.isEmpty()){
+                ibgSettingsFileList_server.clear();
+            }
+            
+            File dir = new File(outputDirectory_server);
+            IOFileFilter fileFilter = new WildcardFileFilter(Arrays.asList("ibg.*.xml", "ibg.xml"));
+            ibgSettingsFileList_server = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
+            
+            if(ibgSettingsFileList_server == null || ibgSettingsFileList_server.isEmpty()){
+                javax.swing.JOptionPane.showMessageDialog(null, "No IB Gateway settings file is found.");
+                todayIbgSettingsFile_server = null;
+                return false;
+            }
+            
+            boolean hasToday = false;
+            for(File file : ibgSettingsFileList_server){
+                if(file.getName().equals("ibg.xml")){
+                    todayIbgSettingsFile_server = "ibg.xml";
+                    hasToday = true;
+                }
+            }
+            if(hasToday == true){
+                return true;
+            }else {
+                todayIbgSettingsFile_server = ibgSettingsFileList_server.get(0).getName();
+                return true;
+            }
+        } else if(method == LogReader.USELOCAL){
+            if(outputDirectory_local == null){
+                throw new Exception("Invalid Directory");
+            }
+            
+            if(ibgSettingsFileList_local != null && !ibgSettingsFileList_local.isEmpty()){
+                ibgSettingsFileList_local.clear();
+            }
+            
+            File dir = new File(outputDirectory_local);
+            IOFileFilter fileFilter = new WildcardFileFilter(Arrays.asList("ibg.*.xml", "ibg.xml"));
+            ibgSettingsFileList_local = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
+            
+            if(ibgSettingsFileList_local == null || ibgSettingsFileList_local.isEmpty()){
+                javax.swing.JOptionPane.showMessageDialog(null, "No IB Gateway settings file is found.");
+                todayIbgSettingsFile_local = null;
+                return false;
+            }
+            
+            boolean hasToday = false;
+            for(File file : ibgSettingsFileList_local){
+                if(file.getName().equals("ibg.xml")){
+                    todayIbgSettingsFile_local = "ibg.xml";
+                    hasToday = true;
+                }
+            }
+            if(hasToday == true){
+                return true;
+            }else {
+                todayIbgSettingsFile_local = ibgSettingsFileList_local.get(0).getName();
+                return true;
+            }
+        } else {
             return false;
         }
-        
-        boolean hasToday = false;
-        for(File file : twsSettingsFileList_local){
-            if(file.getName().equals("tws.error.xml")){
-                todayTwsSettingsFile_local = "tws.error.xml";
-                hasToday = true;
-                break;
-            }
-        }
-        if(hasToday == true){
-            return true;
-        }else {
-            todayTwsSettingsFile_local = twsSettingsFileList_local.get(0).getName();
-            return true;
-        }        
     }
     
-    public boolean loadIbgSettingsFileList() throws Exception{
-        if(outputDirectory_local == null){
-            throw new Exception("Invalid Directory");
-        }
-        
-        if(ibgSettingsFileList_local != null && !ibgSettingsFileList_local.isEmpty()){
-            ibgSettingsFileList_local.clear();
-        }
-        
-        File dir = new File(outputDirectory_local);
-        IOFileFilter fileFilter = new WildcardFileFilter(Arrays.asList("ibg.*.xml", "ibg.xml"));
-        ibgSettingsFileList_local = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
-        
-        if(ibgSettingsFileList_local == null || ibgSettingsFileList_local.isEmpty()){
-            javax.swing.JOptionPane.showMessageDialog(null, "No IB Gateway settings file is found.");
-            todayIbgSettingsFile_local = null;
+    public boolean loadTradeFileList(int method) throws Exception{
+        if(method == LogReader.USESERVER){
+            if(outputDirectory_server == null){
+                throw new Exception("Invalid Directory");
+            }
+            
+            if(tradeFileList_server != null && !tradeFileList_server.isEmpty()){
+                tradeFileList_server.clear();
+            }
+            
+            File dir = new File(outputDirectory_server);
+            IOFileFilter fileFilter = new WildcardFileFilter(Arrays.asList("*.trd"));
+            tradeFileList_server = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
+            
+            if(tradeFileList_server == null || tradeFileList_server.isEmpty()){
+                todayTradeFile_server = null;
+                return false;
+            }
+            
+            boolean hasToday = false;
+            String dayLogName = new String(CurrentDay.findCurrentDay() + ".trd");
+            
+            for(File file : tradeFileList_server){
+                if(file.getName().equals(dayLogName)){
+                    todayTradeFile_server = dayLogName;
+                    hasToday = true;
+                    break;
+                }
+            }
+            if(hasToday == true){
+                return true;
+            } else {
+                todayTradeFile_server = tradeFileList_server.get(0).getName();
+                return true;
+            }
+        } else if(method == LogReader.USELOCAL){
+            if(outputDirectory_local == null){
+                throw new Exception("Invalid Directory");
+            }
+            
+            if(tradeFileList_local != null && !tradeFileList_local.isEmpty()){
+                tradeFileList_local.clear();
+            }
+            
+            File dir = new File(outputDirectory_local);
+            IOFileFilter fileFilter = new WildcardFileFilter(Arrays.asList("*.trd"));
+            tradeFileList_local = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
+            
+            if(tradeFileList_local == null || tradeFileList_local.isEmpty()){
+                todayTradeFile_local = null;
+                return false;
+            }
+            
+            boolean hasToday = false;
+            String dayLogName = new String(CurrentDay.findCurrentDay() + ".trd");
+            
+            for(File file : tradeFileList_local){
+                if(file.getName().equals(dayLogName)){
+                    todayTradeFile_local = dayLogName;
+                    hasToday = true;
+                    break;
+                }
+            }
+            if(hasToday == true){
+                return true;
+            } else {
+                todayTradeFile_local = tradeFileList_local.get(0).getName();
+                return true;
+            }
+        } else {
             return false;
         }
-        
-        boolean hasToday = false;
-        for(File file : ibgSettingsFileList_local){
-            if(file.getName().equals("ibg.xml")){
-                todayIbgSettingsFile_local = "ibg.xml";
-                hasToday = true;
-            }
-        }
-        if(hasToday == true){
-            return true;
-        }else {
-            todayIbgSettingsFile_local = ibgSettingsFileList_local.get(0).getName();
-            return true;
-        }        
     }
     
-    public boolean loadTradeFileList() throws Exception{
-        if(outputDirectory_local == null){
-            throw new Exception("Invalid Directory");
-        }
-        
-        if(tradeFileList_local != null && !tradeFileList_local.isEmpty()){
-            tradeFileList_local.clear();
-        }
-        
-        File dir = new File(outputDirectory_local);
-        IOFileFilter fileFilter = new WildcardFileFilter(Arrays.asList("*.trd"));
-        tradeFileList_local = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
-        
-        if(tradeFileList_local == null || tradeFileList_local.isEmpty()){
-            todayTradeFile_local = null;
-            return false;
-        }
-        
-        boolean hasToday = false;
-        String dayLogName = new String(CurrentDay.findCurrentDay() + ".trd");
-        
-        for(File file : tradeFileList_local){
-            if(file.getName().equals(dayLogName)){
-                todayTradeFile_local = dayLogName;
-                hasToday = true;
-                break;
+    public boolean loadScreenshotList(int method) throws Exception{
+        if(method == LogReader.USESERVER){
+            if(outputDirectory_server == null){
+                throw new Exception("Invalid Directory");
             }
-        }
-        if(hasToday == true){
+            
+            if(screenshotList_server != null && !screenshotList_server.isEmpty()){
+                screenshotList_server.clear();
+            }
+            
+            File dir = new File(outputDirectory_server);
+            IOFileFilter fileFilter = new WildcardFileFilter(Arrays.asList("screenshot*.jpg"));
+            screenshotList_server = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
+            
+            if(screenshotList_server == null || screenshotList_server.isEmpty()){
+                firstScreenshot_server = null;
+                return false;
+            }
+            
+            firstScreenshot_server = screenshotList_server.get(0).getName();
+            return true;
+        } else if(method == LogReader.USELOCAL){
+            if(outputDirectory_local == null){
+                throw new Exception("Invalid Directory");
+            }
+            
+            if(screenshotList_local != null && !screenshotList_local.isEmpty()){
+                screenshotList_local.clear();
+            }
+            
+            File dir = new File(outputDirectory_local);
+            IOFileFilter fileFilter = new WildcardFileFilter(Arrays.asList("screenshot*.jpg"));
+            screenshotList_local = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
+            
+            if(screenshotList_local == null || screenshotList_local.isEmpty()){
+                firstScreenshot_local = null;
+                return false;
+            }
+            
+            firstScreenshot_local = screenshotList_local.get(0).getName();
             return true;
         } else {
-            todayTradeFile_local = tradeFileList_local.get(0).getName();
-            return true;
-        }
-        
-    }
-    
-    public boolean loadScreenshotList() throws Exception{
-        if(outputDirectory_local == null){
-            throw new Exception("Invalid Directory");
-        }
-        
-        if(screenshotList_local != null && !screenshotList_local.isEmpty()){
-            screenshotList_local.clear();
-        }
-        
-        File dir = new File(outputDirectory_local);
-        IOFileFilter fileFilter = new WildcardFileFilter(Arrays.asList("screenshot*.jpg"));
-        screenshotList_local = (List<File>) FileUtils.listFiles(dir, fileFilter, null);
-        
-        if(screenshotList_local == null || screenshotList_local.isEmpty()){
-            firstScreenshot_local = null;
             return false;
         }
-        
-        firstScreenshot_local = screenshotList_local.get(0).getName();
-        return true;        
     }
     
     public String getTodayTwsSettingsFileName(){
@@ -686,7 +1074,7 @@ public class LogReader {
             if(file.getName().equals(this.selectedTwsLogFile_local)){
                 return new File(file.getPath());
             }
-        }        
+        }
         return null;
     }
     
@@ -695,7 +1083,7 @@ public class LogReader {
             if(file.getName().equals(this.selectedIbgLogFile_local)){
                 return new File(file.getPath());
             }
-        }        
+        }
         return null;
     }
     
@@ -955,7 +1343,7 @@ public class LogReader {
         java.awt.Desktop.getDesktop().open(currentLogFile);
     }
     
-    public void openScreenshots() throws Exception{        
+    public void openScreenshots() throws Exception{
         java.awt.Desktop.getDesktop().open(getSelectedScreenshot());
     }
 }

@@ -79,30 +79,30 @@ public class LogManager_local extends LogManager{
     // Get list of log file names read, used for displaying on the GUI combo box
     public String[] getLogFileListNames(){
         if(super.isTws() == true){
-            return super.getReader().getTwsLogFileListNames();
+            return super.getReader().getTwsLogFileListNames(LogReader.USELOCAL);
         } else {
-            return super.getReader().getIBGLogFilesListNames();
+            return super.getReader().getIBGLogFilesListNames(LogReader.USELOCAL);
         }
     }
     
     public String[] getSettingsFileListNames(){
         if(super.isTws() == true){
-            return super.getReader().getTwsSettingsFilesListNames();
+            return super.getReader().getTwsSettingsFilesListNames(LogReader.USELOCAL);
         } else {
-            return super.getReader().getIbgSettingsFilesListNames();
+            return super.getReader().getIbgSettingsFilesListNames(LogReader.USELOCAL);
         }
     }
     
     public String[] getTradeFileListNames(){
         if(super.isTws() == true){
-            return super.getReader().getTradeFileListNames();
+            return super.getReader().getTradeFileListNames(LogReader.USELOCAL);
         } else {
             return null;
         }
     }
     
     public String[] getScreenshotListNames(){
-        return super.getReader().getScreenshotListNames();
+        return super.getReader().getScreenshotListNames(LogReader.USELOCAL);
     }
     
     // Get the log file from today, used as the default choice in log combo boxes
