@@ -22,10 +22,10 @@ public class LogReader {
     // Name of selected log file from server download for analyze
     private String selectedTwsLogFile_server = new String();
     private String selectedIbgLogFile_server = new String();
-    private String selectedTwsSettingsFileserver = new String();
-    private String selectedIbgSettingsFileserver = new String();
-    private String selectedTradeFileserver = new String();
-    private String selectedScreenshotserver = new String();
+    private String selectedTwsSettingsFile_server = new String();
+    private String selectedIbgSettingsFile_server = new String();
+    private String selectedTradeFile_server = new String();
+    private String selectedScreenshot_server = new String();
     
     // Name of selected log file from import for analyze
     private String selectedTwsLogFile_local = new String();
@@ -109,6 +109,22 @@ public class LogReader {
                 zipLocation_server = dir;
             else if(method == LogReader.USELOCAL)
                 zipLocation_local = dir;
+        }
+    }
+    
+    public String getZipLocation(int method){
+        if(method == LogReader.USESERVER){
+            if(zipLocation_server == null){
+                return null;
+            }
+            return new String(zipLocation_server);
+        } else if (method == LogReader.USELOCAL){
+            if(zipLocation_local == null){
+                return null;
+            }
+            return new String(zipLocation_local);
+        } else {
+            return null;
         }
     }
     
@@ -982,65 +998,149 @@ public class LogReader {
         }
     }
     
-    public String getTodayTwsSettingsFileName(){
-        if(todayTwsSettingsFile_local == null)
+    public String getTodayTwsSettingsFileName(int method){
+        if(method == LogReader.USESERVER){
+            if(todayTwsSettingsFile_server == null)
+                return null;
+            return new String(todayTwsSettingsFile_server);
+        } else if (method == LogReader.USELOCAL){
+            if(todayTwsSettingsFile_local == null)
+                return null;
+            return new String(todayTwsSettingsFile_local);
+        } else {
             return null;
-        return new String(todayTwsSettingsFile_local);
+        }
     }
     
-    public String getTodayIbgSettingsFileName(){
-        if(todayIbgSettingsFile_local == null)
+    public String getTodayIbgSettingsFileName(int method){
+        if(method == LogReader.USESERVER){
+            if(todayIbgSettingsFile_server == null)
+                return null;
+            return new String(todayIbgSettingsFile_server);
+        } else if (method == LogReader.USELOCAL){
+            if(todayIbgSettingsFile_local == null)
+                return null;
+            return new String(todayIbgSettingsFile_local);
+        } else {
             return null;
-        return new String(todayIbgSettingsFile_local);
+        }
     }
     
-    public String getTodayTwsLogFileName(){
-        if(todayTwsLogFile_local == null)
+    public String getTodayTwsLogFileName(int method){
+        if(method == LogReader.USESERVER){
+            if(todayTwsLogFile_server == null)
+                return null;
+            return new String(todayTwsLogFile_server);
+        } else if (method == LogReader.USELOCAL){
+            if(todayTwsLogFile_local == null)
+                return null;
+            return new String(todayTwsLogFile_local);
+        } else {
             return null;
-        return new String(todayTwsLogFile_local);
+        }
     }
     
-    public String getTodayIbgLogFileName(){
-        if(todayIbgLogFile_local == null)
+    public String getTodayIbgLogFileName(int method){
+        if(method == LogReader.USESERVER){
+            if(todayIbgLogFile_server == null)
+                return null;
+            return new String(todayIbgLogFile_server);
+        } else if (method == LogReader.USELOCAL){
+            if(todayIbgLogFile_local == null)
+                return null;
+            return new String(todayIbgLogFile_local);
+        } else {
             return null;
-        return new String(todayIbgLogFile_local);
+        }
     }
     
-    public String getTodayTradeFileName(){
-        if(todayTradeFile_local == null)
+    public String getTodayTradeFileName(int method){
+        if(method == LogReader.USESERVER){
+            if(todayTradeFile_server == null)
+                return null;
+            return new String(todayTradeFile_server);
+        } else if (method == LogReader.USELOCAL){
+            if(todayTradeFile_local == null)
+                return null;
+            return new String(todayTradeFile_local);
+        } else {
             return null;
-        return new String(todayTradeFile_local);
+        }
     }
     
-    public String getFirstScreenshotName(){
-        if(firstScreenshot_local == null)
+    public String getFirstScreenshotName(int method){
+        if(method == LogReader.USESERVER){
+            if(firstScreenshot_server == null)
+                return null;
+            return new String(firstScreenshot_server);
+        } else if (method == LogReader.USELOCAL){
+            if(firstScreenshot_local == null)
+                return null;
+            return new String(firstScreenshot_local);
+        } else {
             return null;
-        return new String(firstScreenshot_local);
+        }
     }
     
     // Select file for analysis
-    public void selectTwsLogFile(String s){
-        selectedTwsLogFile_local = s;
+    public void selectTwsLogFile(int method, String s){
+        if(method == LogReader.USESERVER){
+            selectedTwsLogFile_server = s;
+        } else if (method == LogReader.USELOCAL){
+            selectedTwsLogFile_local = s;
+        } else {
+            return;
+        }
     }
     
-    public void selectIbgLogFile(String s){
-        selectedIbgLogFile_local = s;
+    public void selectIbgLogFile(int method, String s){
+        if(method == LogReader.USESERVER){
+            selectedIbgLogFile_server = s;
+        } else if (method == LogReader.USELOCAL){
+            selectedIbgLogFile_local = s;
+        } else {
+            return;
+        }
     }
     
-    public void selectTwsSettingsLogFile(String s){
-        selectedTwsSettingsFile_local = s;
+    public void selectTwsSettingsLogFile(int method, String s){
+        if(method == LogReader.USESERVER){
+            selectedTwsSettingsFile_server = s;
+        } else if (method == LogReader.USELOCAL){
+            selectedTwsSettingsFile_local = s;
+        } else {
+            return;
+        }
     }
     
-    public void selectIbgSettingsLogFile(String s){
-        selectedIbgSettingsFile_local = s;
+    public void selectIbgSettingsLogFile(int method, String s){
+        if(method == LogReader.USESERVER){
+            selectedIbgSettingsFile_server = s;
+        } else if (method == LogReader.USELOCAL){
+            selectedIbgSettingsFile_local = s;
+        } else {
+            return;
+        }
     }
     
-    public void selectTradeFile(String s){
-        selectedTradeFile_local = s;
+    public void selectTradeFile(int method, String s){
+        if(method == LogReader.USESERVER){
+            selectedTradeFile_server = s;
+        } else if (method == LogReader.USELOCAL){
+            selectedTradeFile_local = s;
+        } else {
+            return;
+        }
     }
     
-    public void selectScreenshot(String s){
-        selectedScreenshot_local = s;
+    public void selectScreenshot(int method, String s){
+        if(method == LogReader.USESERVER){
+            selectedScreenshot_server = s;
+        } else if (method == LogReader.USELOCAL){
+            selectedScreenshot_local = s;
+        } else {
+            return;
+        }
     }
     
     public void selectLogFileManual(String s){
@@ -1051,58 +1151,124 @@ public class LogReader {
         selectedSettingsFile_manual = s;
     }
     
-    private File getSelectedTwsSettingsFile(){
-        for(File file: twsSettingsFileList_local){
-            if(file.getName().equals(this.selectedTwsSettingsFile_local)){
-                return new File(file.getPath());
+    private File getSelectedTwsSettingsFile(int method){
+        if(method == LogReader.USESERVER){
+            for(File file: twsSettingsFileList_server){
+                if(file.getName().equals(this.selectedTwsSettingsFile_server)){
+                    return new File(file.getPath());
+                }
             }
+            return null;
+        } else if (method == LogReader.USELOCAL){
+            for(File file: twsSettingsFileList_local){
+                if(file.getName().equals(this.selectedTwsSettingsFile_local)){
+                    return new File(file.getPath());
+                }
+            }
+            return null;
+        } else {
+            return null;
         }
-        return null;
     }
     
-    private File getSelectedIbgSettingsFile(){
-        for(File file: ibgSettingsFileList_local){
-            if(file.getName().equals(this.selectedIbgSettingsFile_local)){
-                return new File(file.getPath());
+    private File getSelectedIbgSettingsFile(int method){
+        if(method == LogReader.USESERVER){
+            for(File file: ibgSettingsFileList_server){
+                if(file.getName().equals(this.selectedIbgSettingsFile_server)){
+                    return new File(file.getPath());
+                }
             }
+            return null;
+        } else if (method == LogReader.USELOCAL){
+            for(File file: ibgSettingsFileList_local){
+                if(file.getName().equals(this.selectedIbgSettingsFile_local)){
+                    return new File(file.getPath());
+                }
+            }
+            return null;
+        } else {
+            return null;
         }
-        return null;
     }
     
-    private File getSelectedTwsLogFile() throws Exception{
-        for(File file: twsLogFileList_local){
-            if(file.getName().equals(this.selectedTwsLogFile_local)){
-                return new File(file.getPath());
+    private File getSelectedTwsLogFile(int method) throws Exception{
+        if(method == LogReader.USESERVER){
+            for(File file: twsLogFileList_server){
+                if(file.getName().equals(this.selectedTwsLogFile_server)){
+                    return new File(file.getPath());
+                }
             }
+            return null;
+        } else if (method == LogReader.USELOCAL){
+            for(File file: twsLogFileList_local){
+                if(file.getName().equals(this.selectedTwsLogFile_local)){
+                    return new File(file.getPath());
+                }
+            }
+            return null;
+        } else {
+            return null;
         }
-        return null;
     }
     
-    private File getSelectedIbgLogFile() throws Exception{
-        for(File file: ibgLogFileList_local){
-            if(file.getName().equals(this.selectedIbgLogFile_local)){
-                return new File(file.getPath());
+    private File getSelectedIbgLogFile(int method) throws Exception{
+        if(method == LogReader.USESERVER){
+            for(File file: ibgLogFileList_server){
+                if(file.getName().equals(this.selectedIbgLogFile_server)){
+                    return new File(file.getPath());
+                }
             }
+            return null;
+        } else if (method == LogReader.USELOCAL){
+            for(File file: ibgLogFileList_local){
+                if(file.getName().equals(this.selectedIbgLogFile_local)){
+                    return new File(file.getPath());
+                }
+            }
+            return null;
+        } else {
+            return null;
         }
-        return null;
     }
     
-    private File getSelectedTradeFile() throws Exception{
-        for(File file: tradeFileList_local){
-            if(file.getName().equals(this.selectedTradeFile_local)){
-                return new File(file.getPath());
+    private File getSelectedTradeFile(int method) throws Exception{
+        if(method == LogReader.USESERVER){
+            for(File file: tradeFileList_server){
+                if(file.getName().equals(this.selectedTradeFile_server)){
+                    return new File(file.getPath());
+                }
             }
+            return null;
+        } else if (method == LogReader.USELOCAL){
+            for(File file: tradeFileList_local){
+                if(file.getName().equals(this.selectedTradeFile_local)){
+                    return new File(file.getPath());
+                }
+            }
+            return null;
+        } else {
+            return null;
         }
-        return null;
     }
     
-    private File getSelectedScreenshot() throws Exception{
-        for(File file: screenshotList_local){
-            if(file.getName().equals(this.selectedScreenshot_local)){
-                return new File(file.getPath());
+    private File getSelectedScreenshot(int method) throws Exception{
+        if(method == LogReader.USESERVER){
+            for(File file: screenshotList_server){
+                if(file.getName().equals(this.selectedScreenshot_server)){
+                    return new File(file.getPath());
+                }
             }
+            return null;
+        } else if (method == LogReader.USELOCAL){
+            for(File file: screenshotList_local){
+                if(file.getName().equals(this.selectedScreenshot_local)){
+                    return new File(file.getPath());
+                }
+            }
+            return null;
+        } else {
+            return null;
         }
-        return null;
     }
     
     private File getSelectedLogFileManual() throws Exception{
@@ -1119,7 +1285,7 @@ public class LogReader {
         return new File(selectedSettingsFile_manual);
     }
     
-    public void parseSettingsFile(int choice, boolean isTws, boolean useManual, HashMap<Integer, javax.swing.JTextPane> textPaneList) throws Exception{
+    public void parseSettingsFile(int method, int choice, boolean isTws, boolean useManual, HashMap<Integer, javax.swing.JTextPane> textPaneList) throws Exception{
         if(includeXml == true){
             
             File currentSettingsFile;
@@ -1127,9 +1293,9 @@ public class LogReader {
                 currentSettingsFile = this.getSelectedSettingsFileManual();
             } else {
                 if(isTws == true){
-                    currentSettingsFile = this.getSelectedTwsSettingsFile();
+                    currentSettingsFile = this.getSelectedTwsSettingsFile(method);
                 } else {
-                    currentSettingsFile = this.getSelectedIbgSettingsFile();
+                    currentSettingsFile = this.getSelectedIbgSettingsFile(method);
                 }
             }
             
@@ -1155,9 +1321,9 @@ public class LogReader {
         }
     }
     
-    public void parseTradeFile(int choice, HashMap<Integer, javax.swing.JTextPane> textPaneList) throws Exception{
+    public void parseTradeFile(int method, int choice, HashMap<Integer, javax.swing.JTextPane> textPaneList) throws Exception{
         if(includeTrd == true){
-            File currentTradeFile = this.getSelectedTradeFile();
+            File currentTradeFile = this.getSelectedTradeFile(method);
             
             if(currentTradeFile == null){
                 return;
@@ -1169,15 +1335,15 @@ public class LogReader {
         }
     }
     
-    public void parseTwsLogFileDeep(int choice, boolean isTws, boolean useManual, HashMap<Integer, javax.swing.JTextPane> textPaneList) throws Exception{
+    public void parseTwsLogFileDeep(int method, int choice, boolean isTws, boolean useManual, HashMap<Integer, javax.swing.JTextPane> textPaneList) throws Exception{
         File currentLogFile;
         if(useManual){
             currentLogFile = this.getSelectedLogFileManual();
         } else {
             if(isTws == true){
-                currentLogFile = this.getSelectedTwsLogFile();
+                currentLogFile = this.getSelectedTwsLogFile(method);
             } else {
-                currentLogFile = this.getSelectedIbgLogFile();
+                currentLogFile = this.getSelectedIbgLogFile(method);
             }
         }
         
@@ -1186,7 +1352,7 @@ public class LogReader {
                 if(autoCls == true){
                     clearTextPane(textPaneList.get(choice));
                 }
-                parseSettingsFile(choice, isTws, useManual, textPaneList);
+                parseSettingsFile(method, choice, isTws, useManual, textPaneList);
                 TwsLogParserDeep.parseTwsEnvInfo(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.LOGINSEQ:
@@ -1205,7 +1371,7 @@ public class LogReader {
                 if(autoCls == true){
                     clearTextPane(textPaneList.get(choice));
                 }
-                parseSettingsFile(choice, isTws, useManual, textPaneList);
+                parseSettingsFile(method, choice, isTws, useManual, textPaneList);
                 TwsLogParserDeep.parseTwsMktData(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.CONN:
@@ -1224,14 +1390,14 @@ public class LogReader {
                 if(autoCls == true){
                     clearTextPane(textPaneList.get(choice));
                 }
-                parseSettingsFile(choice, isTws, useManual, textPaneList);
+                parseSettingsFile(method, choice, isTws, useManual, textPaneList);
                 TwsLogParserDeep.parseTwsApi(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.ORDERSTRDS:
                 if(autoCls == true){
                     clearTextPane(textPaneList.get(choice));
                 }
-                parseTradeFile(choice, textPaneList);
+                parseTradeFile(method, choice, textPaneList);
                 TwsLogParserDeep.parseTwsOrderTrds(currentLogFile, textPaneList.get(choice));
                 break;
             default:
@@ -1239,15 +1405,15 @@ public class LogReader {
         }
     }
     
-    public void parseTwsLogFileShallow(int choice, boolean isTws, boolean useManual, HashMap<Integer, javax.swing.JTextPane> textPaneList) throws Exception{
+    public void parseTwsLogFileShallow(int method, int choice, boolean isTws, boolean useManual, HashMap<Integer, javax.swing.JTextPane> textPaneList) throws Exception{
         File currentLogFile;
         if(useManual){
             currentLogFile = this.getSelectedLogFileManual();
         } else {
             if(isTws == true){
-                currentLogFile = this.getSelectedTwsLogFile();
+                currentLogFile = this.getSelectedTwsLogFile(method);
             } else {
-                currentLogFile = this.getSelectedIbgLogFile();
+                currentLogFile = this.getSelectedIbgLogFile(method);
             }
         }
         
@@ -1256,7 +1422,7 @@ public class LogReader {
                 if(autoCls == true){
                     clearTextPane(textPaneList.get(choice));
                 }
-                parseSettingsFile(choice, isTws, useManual, textPaneList);
+                parseSettingsFile(method, choice, isTws, useManual, textPaneList);
                 TwsLogParserShallow.parseTwsEnvInfo(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.LOGINSEQ:
@@ -1275,7 +1441,7 @@ public class LogReader {
                 if(autoCls == true){
                     clearTextPane(textPaneList.get(choice));
                 }
-                parseSettingsFile(choice, isTws, useManual, textPaneList);
+                parseSettingsFile(method, choice, isTws, useManual, textPaneList);
                 TwsLogParserShallow.parseTwsMktData(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.CONN:
@@ -1294,14 +1460,14 @@ public class LogReader {
                 if(autoCls == true){
                     clearTextPane(textPaneList.get(choice));
                 }
-                parseSettingsFile(choice, isTws, useManual, textPaneList);
+                parseSettingsFile(method, choice, isTws, useManual, textPaneList);
                 TwsLogParserShallow.parseTwsApi(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.ORDERSTRDS:
                 if(autoCls == true){
                     clearTextPane(textPaneList.get(choice));
                 }
-                parseTradeFile(choice, textPaneList);
+                parseTradeFile(method, choice, textPaneList);
                 TwsLogParserShallow.parseTwsOrderTrds(currentLogFile, textPaneList.get(choice));
                 break;
             default:
@@ -1309,15 +1475,15 @@ public class LogReader {
         }
     }
     
-    public void regExSearch(boolean isTws, boolean useManual, String regEx, boolean isCaseSensitive, javax.swing.JTextPane textPane) throws Exception{
+    public void regExSearch(int method, boolean isTws, boolean useManual, String regEx, boolean isCaseSensitive, javax.swing.JTextPane textPane) throws Exception{
         File currentLogFile;
         if(useManual){
             currentLogFile = this.getSelectedLogFileManual();
         } else {
             if(isTws == true){
-                currentLogFile = this.getSelectedTwsLogFile();
+                currentLogFile = this.getSelectedTwsLogFile(method);
             } else {
-                currentLogFile = this.getSelectedIbgLogFile();
+                currentLogFile = this.getSelectedIbgLogFile(method);
             }
         }
         
@@ -1328,22 +1494,22 @@ public class LogReader {
         textPane.setText(null);
     }
     
-    public void openLogFileInNotePad(boolean isTws, boolean useManual) throws Exception{
+    public void openLogFileInNotePad(int method, boolean isTws, boolean useManual) throws Exception{
         File currentLogFile;
         if(useManual){
             currentLogFile = this.getSelectedLogFileManual();
         } else {
             if(isTws == true){
-                currentLogFile = this.getSelectedTwsLogFile();
+                currentLogFile = this.getSelectedTwsLogFile(method);
             } else {
-                currentLogFile = this.getSelectedIbgLogFile();
+                currentLogFile = this.getSelectedIbgLogFile(method);
             }
         }
         
         java.awt.Desktop.getDesktop().open(currentLogFile);
     }
     
-    public void openScreenshots() throws Exception{
-        java.awt.Desktop.getDesktop().open(getSelectedScreenshot());
+    public void openScreenshots(int method) throws Exception{
+        java.awt.Desktop.getDesktop().open(getSelectedScreenshot(method));
     }
 }

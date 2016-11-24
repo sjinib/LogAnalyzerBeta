@@ -26,8 +26,8 @@ public class LogManager_local extends LogManager{
         super();
     }   
     
-    // Invoke to extract_local file
-    public void extract_local(){
+    // Invoke to extract file
+    public void extract(){
         try {
             super.getReader().extractZip(LogReader.USELOCAL);
         } catch (Exception e){
@@ -108,30 +108,30 @@ public class LogManager_local extends LogManager{
     // Get the log file from today, used as the default choice in log combo boxes
     public String getTodayLogFileName(){
         if(super.isTws() == true){
-            return super.getReader().getTodayTwsLogFileName();
+            return super.getReader().getTodayTwsLogFileName(LogReader.USELOCAL);
         } else {
-            return super.getReader().getTodayIbgLogFileName();
+            return super.getReader().getTodayIbgLogFileName(LogReader.USELOCAL);
         }
     }
     
     public String getTodaySettingsFileName(){
         if(super.isTws() == true){
-            return super.getReader().getTodayTwsSettingsFileName();
+            return super.getReader().getTodayTwsSettingsFileName(LogReader.USELOCAL);
         } else {
-            return super.getReader().getTodayIbgSettingsFileName();
+            return super.getReader().getTodayIbgSettingsFileName(LogReader.USELOCAL);
         }
     }
     
     public String getTodayTradeFileName(){
         if(super.isTws() == true){
-            return super.getReader().getTodayTradeFileName();
+            return super.getReader().getTodayTradeFileName(LogReader.USELOCAL);
         } else {
             return null;
         }
     }
     
     public String getFirstScreenshotName(){
-        return super.getReader().getFirstScreenshotName();
+        return super.getReader().getFirstScreenshotName(LogReader.USELOCAL);
     }
     
     // Select file for analyzing. Triggered when selecting log file from GUI combo box
@@ -140,9 +140,9 @@ public class LogManager_local extends LogManager{
             super.getReader().selectLogFileManual(s);
         } else {
             if(super.isTws() == true){
-                super.getReader().selectTwsLogFile(s);
+                super.getReader().selectTwsLogFile(LogReader.USELOCAL, s);
             } else {
-                super.getReader().selectIbgLogFile(s);
+                super.getReader().selectIbgLogFile(LogReader.USELOCAL, s);
             }
         }
     }
@@ -152,26 +152,26 @@ public class LogManager_local extends LogManager{
             super.getReader().selectSettingsFileManual(s);
         } else {
             if(super.isTws() == true){
-                super.getReader().selectTwsSettingsLogFile(s);
+                super.getReader().selectTwsSettingsLogFile(LogReader.USELOCAL, s);
             } else {
-                super.getReader().selectIbgSettingsLogFile(s);
+                super.getReader().selectIbgSettingsLogFile(LogReader.USELOCAL, s);
             }
         }
     }
     
     public void selectTradeFile(String s){
         if(super.isTws() == true){
-            super.getReader().selectTradeFile(s);
+            super.getReader().selectTradeFile(LogReader.USELOCAL, s);
         }
     }
     
     public void selectScreenshot(String s){
-        super.getReader().selectScreenshot(s);
+        super.getReader().selectScreenshot(LogReader.USELOCAL, s);
     }
     
     public void openLogFileInNotePad(boolean useManual){
         try {
-            super.getReader().openLogFileInNotePad(super.isTws(), useManual);
+            super.getReader().openLogFileInNotePad(LogReader.USELOCAL, super.isTws(), useManual);
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -179,7 +179,7 @@ public class LogManager_local extends LogManager{
     
     public void openScreenshot(){
         try {
-            super.getReader().openScreenshots();
+            super.getReader().openScreenshots(LogReader.USELOCAL);
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -187,7 +187,7 @@ public class LogManager_local extends LogManager{
     
     public void regExSearch(boolean useManual, String regEx, boolean isCaseSensitive, javax.swing.JTextPane textPane){
         try {
-            super.getReader().regExSearch(super.isTws(), useManual, regEx, isCaseSensitive, textPane);
+            super.getReader().regExSearch(LogReader.USELOCAL, super.isTws(), useManual, regEx, isCaseSensitive, textPane);
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -198,10 +198,10 @@ public class LogManager_local extends LogManager{
         try {
             if(super.isDeepDiagnostic() == true){
                 //reader.parseSettingsFile(choice, isTWS, useManual, textPaneList);
-                super.getReader().parseTwsLogFileDeep(choice, super.isTws(), useManual, textPaneList);
+                super.getReader().parseTwsLogFileDeep(LogReader.USELOCAL, choice, super.isTws(), useManual, textPaneList);
             } else {
                 //reader.parseSettingsFile(choice, isTWS, useManual, textPaneList);
-                super.getReader().parseTwsLogFileShallow(choice, super.isTws(), useManual, textPaneList);
+                super.getReader().parseTwsLogFileShallow(LogReader.USELOCAL, choice, super.isTws(), useManual, textPaneList);
             }
         } catch (Exception e){
             e.printStackTrace();

@@ -13,8 +13,12 @@ import java.util.ArrayList;
 import javax.net.ssl.HttpsURLConnection;
 import java.net.URL;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.UnknownServiceException;
 
 public class LogManager_server extends LogManager{
@@ -60,28 +64,27 @@ public class LogManager_server extends LogManager{
     
     public void loadUserDiagnosticFileList(String username){
         
-                try{
-                    URL url = new URL("https://wit1.interactivebrokers.com/cgi-bin/tws/tws_error_reader.pl");
-                    HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-                    BufferedReader in = new BufferedReader(new InputStreamReader(
-                            connection.getInputStream()));
-                    
-                    String inputLine;
-                    while ((inputLine = in.readLine()) != null)
-                        if(inputLine.contains(">" + username)){
-                            String diagnosticFileName = inputLine.replaceAll("\\<.*?>","").replaceAll("\\s+", "");
-                            if(diagnosticFileName != null){
-                                userDiagnosticFileList.add(diagnosticFileName);
-                            }
-                        }
-                    in.close();
-                    
-                } catch (UnknownServiceException e){
-                    e.printStackTrace();
-                } catch (IOException e){
-                    e.printStackTrace();
+        try{
+            URL url = new URL("https://wit1.interactivebrokers.com/cgi-bin/tws/tws_error_reader.pl");
+            HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                    connection.getInputStream()));
+            
+            String inputLine;
+            while ((inputLine = in.readLine()) != null)
+                if(inputLine.contains(">" + username)){
+                    String diagnosticFileName = inputLine.replaceAll("\\<.*?>","").replaceAll("\\s+", "");
+                    if(diagnosticFileName != null){
+                        userDiagnosticFileList.add(diagnosticFileName);
+                    }
                 }
-
+            in.close();
+            
+        } catch (UnknownServiceException e){
+            e.printStackTrace();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
     }
     
     public String[] getUserDiagnosticFileList(){
@@ -96,8 +99,31 @@ public class LogManager_server extends LogManager{
         selectedUserDiagnosticFile = s;
     }
     
-    // Invoke to extract_local file
-    public void extract_local(){
+    public String getSelectedUserDiagnosticFile(){
+        if(selectedUserDiagnosticFile == null)
+                return null;
+            return new String(selectedUserDiagnosticFile);
+    }
+    
+    public boolean downloadDiagnosticFile(String zipLocation){
+        try{
+            URL downloadLink = new URL(new String("https://206.106.137.34/tws/data/" + selectedUserDiagnosticFile));
+            HttpURLConnection con = (HttpURLConnection)downloadLink.openConnection();
+            
+            con.setRequestMethod("GET");
+            InputStream input = con.getInputStream();
+            FileOutputStream output = new FileOutputStream(zipLocation);
+            CopyFile.copy(input, output, 1024);
+            this.getReader().setZipLocation(LogReader.USESERVER, zipLocation);
+            return true;
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    // Invoke to extract file
+    public void extract(){
         try {
             super.getReader().extractZip(LogReader.USESERVER);
         } catch (Exception e){
@@ -133,6 +159,10 @@ public class LogManager_server extends LogManager{
         if(outputDirectory != null){
             super.getReader().setOutputDirectory(LogReader.USESERVER, outputDirectory);
         }
+    }
+    
+    public String getZipLocation(){
+        return super.getReader().getZipLocation(LogReader.USESERVER);
     }
     
     // Check if the zipLocation is valid
@@ -178,30 +208,30 @@ public class LogManager_server extends LogManager{
     // Get the log file from today, used as the default choice in log combo boxes
     public String getTodayLogFileName(){
         if(super.isTws() == true){
-            return super.getReader().getTodayTwsLogFileName();
+            return super.getReader().getTodayTwsLogFileName(LogReader.USESERVER);
         } else {
-            return super.getReader().getTodayIbgLogFileName();
+            return super.getReader().getTodayIbgLogFileName(LogReader.USESERVER);
         }
     }
     
     public String getTodaySettingsFileName(){
         if(super.isTws() == true){
-            return super.getReader().getTodayTwsSettingsFileName();
+            return super.getReader().getTodayTwsSettingsFileName(LogReader.USESERVER);
         } else {
-            return super.getReader().getTodayIbgSettingsFileName();
+            return super.getReader().getTodayIbgSettingsFileName(LogReader.USESERVER);
         }
     }
     
     public String getTodayTradeFileName(){
         if(super.isTws() == true){
-            return super.getReader().getTodayTradeFileName();
+            return super.getReader().getTodayTradeFileName(LogReader.USESERVER);
         } else {
             return null;
         }
     }
     
     public String getFirstScreenshotName(){
-        return super.getReader().getFirstScreenshotName();
+        return super.getReader().getFirstScreenshotName(LogReader.USESERVER);
     }
     
     // Select file for analyzing. Triggered when selecting log file from GUI combo box
@@ -210,9 +240,9 @@ public class LogManager_server extends LogManager{
             super.getReader().selectLogFileManual(s);
         } else {
             if(super.isTws() == true){
-                super.getReader().selectTwsLogFile(s);
+                super.getReader().selectTwsLogFile(LogReader.USESERVER, s);
             } else {
-                super.getReader().selectIbgLogFile(s);
+                super.getReader().selectIbgLogFile(LogReader.USESERVER, s);
             }
         }
     }
@@ -222,26 +252,26 @@ public class LogManager_server extends LogManager{
             super.getReader().selectSettingsFileManual(s);
         } else {
             if(super.isTws() == true){
-                super.getReader().selectTwsSettingsLogFile(s);
+                super.getReader().selectTwsSettingsLogFile(LogReader.USESERVER, s);
             } else {
-                super.getReader().selectIbgSettingsLogFile(s);
+                super.getReader().selectIbgSettingsLogFile(LogReader.USESERVER, s);
             }
         }
     }
     
     public void selectTradeFile(String s){
         if(super.isTws() == true){
-            super.getReader().selectTradeFile(s);
+            super.getReader().selectTradeFile(LogReader.USESERVER, s);
         }
     }
     
     public void selectScreenshot(String s){
-        super.getReader().selectScreenshot(s);
+        super.getReader().selectScreenshot(LogReader.USESERVER, s);
     }
     
     public void openLogFileInNotePad(boolean useManual){
         try {
-            super.getReader().openLogFileInNotePad(super.isTws(), useManual);
+            super.getReader().openLogFileInNotePad(LogReader.USESERVER, super.isTws(), useManual);
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -249,7 +279,7 @@ public class LogManager_server extends LogManager{
     
     public void openScreenshot(){
         try {
-            super.getReader().openScreenshots();
+            super.getReader().openScreenshots(LogReader.USESERVER);
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -257,7 +287,7 @@ public class LogManager_server extends LogManager{
     
     public void regExSearch(boolean useManual, String regEx, boolean isCaseSensitive, javax.swing.JTextPane textPane){
         try {
-            super.getReader().regExSearch(super.isTws(), useManual, regEx, isCaseSensitive, textPane);
+            super.getReader().regExSearch(LogReader.USESERVER, super.isTws(), useManual, regEx, isCaseSensitive, textPane);
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -268,10 +298,10 @@ public class LogManager_server extends LogManager{
         try {
             if(super.isDeepDiagnostic() == true){
                 //reader.parseSettingsFile(choice, isTWS, useManual, textPaneList);
-                super.getReader().parseTwsLogFileDeep(choice, super.isTws(), useManual, textPaneList);
+                super.getReader().parseTwsLogFileDeep(LogReader.USESERVER, choice, super.isTws(), useManual, textPaneList);
             } else {
                 //reader.parseSettingsFile(choice, isTWS, useManual, textPaneList);
-                super.getReader().parseTwsLogFileShallow(choice, super.isTws(), useManual, textPaneList);
+                super.getReader().parseTwsLogFileShallow(LogReader.USESERVER, choice, super.isTws(), useManual, textPaneList);
             }
         } catch (Exception e){
             e.printStackTrace();
