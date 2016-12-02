@@ -245,7 +245,7 @@ public class LogReader {
     // Return String array of names of tws log list for tws log selector
     public String [] getTwsLogFileListNames(int method) {
         if(method == LogReader.USESERVER){
-            if(twsLogFileList_server == null){
+            if(twsLogFileList_server == null || twsLogFileList_server.isEmpty()){
                 try {
                     if(loadTwsLogFileList(method)){
                         String[] list = new String[twsLogFileList_server.size()];
@@ -267,7 +267,7 @@ public class LogReader {
                 return list;
             }
         } else if(method == LogReader.USELOCAL){
-            if(twsLogFileList_local == null){
+            if(twsLogFileList_local == null || twsLogFileList_local.isEmpty()){
                 try {
                     if(loadTwsLogFileList(method)){
                         String[] list = new String[twsLogFileList_local.size()];
@@ -345,7 +345,7 @@ public class LogReader {
     
     public String [] getTwsSettingsFilesListNames(int method) {
         if(method == LogReader.USESERVER){
-            if(twsSettingsFileList_server == null){
+            if(twsSettingsFileList_server == null || twsSettingsFileList_server.isEmpty()){
                 try {
                     if(loadTwsSettingsFileList(method)){
                         String[] list = new String[twsSettingsFileList_server.size()];
@@ -367,7 +367,7 @@ public class LogReader {
                 return list;
             }
         } else if(method == LogReader.USELOCAL){
-            if(twsSettingsFileList_local == null){
+            if(twsSettingsFileList_local == null || twsSettingsFileList_local.isEmpty()){
                 try {
                     if(loadTwsSettingsFileList(method)){
                         String[] list = new String[twsSettingsFileList_local.size()];
@@ -395,7 +395,7 @@ public class LogReader {
     
     public String [] getIbgSettingsFilesListNames(int method) {
         if(method == LogReader.USESERVER){
-            if(ibgSettingsFileList_server == null){
+            if(ibgSettingsFileList_server == null || ibgSettingsFileList_server.isEmpty()){
                 try {
                     if(loadIbgSettingsFileList(method)){
                         String[] list = new String[ibgSettingsFileList_server.size()];
@@ -417,7 +417,7 @@ public class LogReader {
                 return list;
             }
         } else if(method == LogReader.USELOCAL){
-            if(ibgSettingsFileList_local == null){
+            if(ibgSettingsFileList_local == null || ibgSettingsFileList_local.isEmpty()){
                 try {
                     if(loadIbgSettingsFileList(method)){
                         String[] list = new String[ibgSettingsFileList_local.size()];
@@ -445,7 +445,7 @@ public class LogReader {
     
     public String [] getTradeFileListNames(int method) {
         if(method == LogReader.USESERVER){
-            if(tradeFileList_server == null){
+            if(tradeFileList_server == null || tradeFileList_server.isEmpty()){
                 try {
                     if(loadTradeFileList(method)){
                         String[] list = new String[tradeFileList_server.size()];
@@ -467,7 +467,7 @@ public class LogReader {
                 return list;
             }
         } else if(method == LogReader.USELOCAL){
-            if(tradeFileList_local == null){
+            if(tradeFileList_local == null || tradeFileList_local.isEmpty()){
                 try {
                     if(loadTradeFileList(method)){
                         String[] list = new String[tradeFileList_local.size()];
@@ -495,7 +495,7 @@ public class LogReader {
     
     public String [] getScreenshotListNames(int method) {
         if(method == LogReader.USESERVER){
-            if(screenshotList_server == null){
+            if(screenshotList_server == null || screenshotList_server.isEmpty()){
                 try {
                     if(loadScreenshotList(method)){
                         String[] list = new String[screenshotList_server.size()];
@@ -517,7 +517,7 @@ public class LogReader {
                 return list;
             }
         } else if(method == LogReader.USELOCAL){
-            if(screenshotList_local == null){
+            if(screenshotList_local == null || screenshotList_local.isEmpty()){
                 try {
                     if(loadScreenshotList(method)){
                         String[] list = new String[screenshotList_local.size()];
@@ -1088,8 +1088,6 @@ public class LogReader {
             selectedTwsLogFile_server = s;
         } else if (method == LogReader.USELOCAL){
             selectedTwsLogFile_local = s;
-        } else {
-            return;
         }
     }
     
@@ -1098,8 +1096,6 @@ public class LogReader {
             selectedIbgLogFile_server = s;
         } else if (method == LogReader.USELOCAL){
             selectedIbgLogFile_local = s;
-        } else {
-            return;
         }
     }
     
@@ -1108,8 +1104,6 @@ public class LogReader {
             selectedTwsSettingsFile_server = s;
         } else if (method == LogReader.USELOCAL){
             selectedTwsSettingsFile_local = s;
-        } else {
-            return;
         }
     }
     
@@ -1335,6 +1329,22 @@ public class LogReader {
         }
     }
     
+    public boolean checkFileSizeForAll(int method, boolean isTws, boolean useManual) throws Exception{
+        File currentLogFile;
+        if(useManual){
+            currentLogFile = this.getSelectedLogFileManual();
+        } else {
+            if(isTws == true){
+                currentLogFile = this.getSelectedTwsLogFile(method);
+            } else {
+                currentLogFile = this.getSelectedIbgLogFile(method);
+            }
+        }
+        
+        long fileSize = currentLogFile.length()/1024/1024;
+        return (fileSize >= 5);
+    }
+    
     public void parseTwsLogFileDeep(int method, int choice, boolean isTws, boolean useManual, HashMap<Integer, javax.swing.JTextPane> textPaneList) throws Exception{
         File currentLogFile;
         if(useManual){
@@ -1511,5 +1521,57 @@ public class LogReader {
     
     public void openScreenshots(int method) throws Exception{
         java.awt.Desktop.getDesktop().open(getSelectedScreenshot(method));
+    }
+    
+    public void resetServer(){
+        selectedTwsLogFile_server = "";
+        selectedIbgLogFile_server = "";
+        selectedTwsSettingsFile_server = "";
+        selectedIbgSettingsFile_server = "";
+        selectedTradeFile_server = "";
+        selectedScreenshot_server = "";
+        
+        todayTwsLogFile_server = "";
+        todayIbgLogFile_server = "";
+        todayTwsSettingsFile_server = "";
+        todayIbgSettingsFile_server = "";
+        todayTradeFile_server = "";
+        firstScreenshot_server = "";
+        
+        zipLocation_server = null;
+        outputDirectory_server = null;
+        
+        twsLogFileList_server = null;
+        ibgLogFileList_server = null;
+        twsSettingsFileList_server = null;
+        ibgSettingsFileList_server = null;
+        tradeFileList_server = null;
+        screenshotList_server = null;
+    }
+    
+    public void resetLocal(){
+        selectedTwsLogFile_local = "";
+        selectedIbgLogFile_local = "";
+        selectedTwsSettingsFile_local = "";
+        selectedIbgSettingsFile_local = "";
+        selectedTradeFile_local = "";
+        selectedScreenshot_local = "";
+        
+        todayTwsLogFile_local = "";
+        todayIbgLogFile_local = "";
+        todayTwsSettingsFile_local = "";
+        todayIbgSettingsFile_local = "";
+        todayTradeFile_local = "";
+        firstScreenshot_local = "";
+        
+        zipLocation_local = null;
+        outputDirectory_local = null;
+        
+        twsLogFileList_local = null;
+        ibgLogFileList_local = null;
+        twsSettingsFileList_local = null;
+        ibgSettingsFileList_local = null;
+        tradeFileList_local = null;
+        screenshotList_local = null;
     }
 }

@@ -13,13 +13,19 @@ import java.util.ArrayList;
 import javax.net.ssl.HttpsURLConnection;
 import java.net.URL;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.UnknownServiceException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.Enumeration;
+import java.util.Properties;
+
 
 public class LogManager_server extends LogManager{
     //private final LogReader reader;
@@ -63,7 +69,6 @@ public class LogManager_server extends LogManager{
     }
     
     public void loadUserDiagnosticFileList(String username){
-        
         try{
             URL url = new URL("https://wit1.interactivebrokers.com/cgi-bin/tws/tws_error_reader.pl");
             HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
@@ -79,7 +84,6 @@ public class LogManager_server extends LogManager{
                     }
                 }
             in.close();
-            
         } catch (UnknownServiceException e){
             e.printStackTrace();
         } catch (IOException e){
@@ -174,6 +178,7 @@ public class LogManager_server extends LogManager{
         super.getReader().resetLogFileList(LogReader.USESERVER);
         super.getReader().resetSettingsFileList(LogReader.USESERVER);
         super.getReader().resetTradeFileList(LogReader.USESERVER);
+        super.getReader().resetScreenshotList(LogReader.USESERVER);
     }
     
     // Get list of log file names read, used for displaying on the GUI combo box
@@ -235,15 +240,11 @@ public class LogManager_server extends LogManager{
     }
     
     // Select file for analyzing. Triggered when selecting log file from GUI combo box
-    public void selectLogFile(String s, boolean useManual){
-        if(useManual){
-            super.getReader().selectLogFileManual(s);
+    public void selectLogFile(String s){
+        if(super.isTws() == true){
+            super.getReader().selectTwsLogFile(LogReader.USESERVER, s);
         } else {
-            if(super.isTws() == true){
-                super.getReader().selectTwsLogFile(LogReader.USESERVER, s);
-            } else {
-                super.getReader().selectIbgLogFile(LogReader.USESERVER, s);
-            }
+            super.getReader().selectIbgLogFile(LogReader.USESERVER, s);
         }
     }
     
@@ -285,26 +286,42 @@ public class LogManager_server extends LogManager{
         }
     }
     
-    public void regExSearch(boolean useManual, String regEx, boolean isCaseSensitive, javax.swing.JTextPane textPane){
+    public void regExSearch(String regEx, boolean isCaseSensitive, javax.swing.JTextPane textPane){
         try {
-            super.getReader().regExSearch(LogReader.USESERVER, super.isTws(), useManual, regEx, isCaseSensitive, textPane);
+            super.getReader().regExSearch(LogReader.USESERVER, super.isTws(), false, regEx, isCaseSensitive, textPane);
         } catch (Exception e){
             e.printStackTrace();
         }
     }
     
+    public boolean checkFileSizeForAll(){
+        try {
+            return super.getReader().checkFileSizeForAll(LogReader.USESERVER, super.isTws(), false);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
     // Start parsing log information, triggered when one of the analyze button is clicked.
-    public void startParse(int choice, boolean useManual, HashMap<Integer, javax.swing.JTextPane> textPaneList){
+    public void startParse(int choice, HashMap<Integer, javax.swing.JTextPane> textPaneList){
         try {
             if(super.isDeepDiagnostic() == true){
                 //reader.parseSettingsFile(choice, isTWS, useManual, textPaneList);
-                super.getReader().parseTwsLogFileDeep(LogReader.USESERVER, choice, super.isTws(), useManual, textPaneList);
+                super.getReader().parseTwsLogFileDeep(LogReader.USESERVER, choice, super.isTws(), false, textPaneList);
             } else {
                 //reader.parseSettingsFile(choice, isTWS, useManual, textPaneList);
-                super.getReader().parseTwsLogFileShallow(LogReader.USESERVER, choice, super.isTws(), useManual, textPaneList);
+                super.getReader().parseTwsLogFileShallow(LogReader.USESERVER, choice, super.isTws(), false, textPaneList);
             }
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+    
+    public void reset(){
+        super.getReader().resetServer();
+        
+        userDiagnosticFileList.clear();
+        selectedUserDiagnosticFile = "";
     }
 }

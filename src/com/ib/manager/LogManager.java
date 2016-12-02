@@ -6,16 +6,6 @@
 package com.ib.manager;
 
 import com.ib.reader.*;
-import java.net.Authenticator;
-import java.net.PasswordAuthentication;
-import java.util.HashMap;
-import java.util.ArrayList;
-import javax.net.ssl.HttpsURLConnection;
-import java.net.URL;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
-import java.net.UnknownServiceException;
 
 /**
  *

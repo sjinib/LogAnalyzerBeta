@@ -4,23 +4,12 @@
 package com.ib.manager;
 
 import com.ib.reader.*;
-import java.net.Authenticator;
-import java.net.PasswordAuthentication;
 import java.util.HashMap;
-import java.util.ArrayList;
-import javax.net.ssl.HttpsURLConnection;
-import java.net.URL;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
-import java.net.UnknownServiceException;
 
 public class LogManager_local extends LogManager{
     //private final LogReader reader;
     //private boolean isDeepDiagnostic = true; // True if use deep analysis
     //private boolean isTWS; // If the files being investigated are from TWS (true) or IBG (false)
-    private ArrayList<String> userDiagnosticFileList = new ArrayList<String>();
-    private String selectedUserDiagnosticFile = new String();
     
     public LogManager_local(){
         super();
@@ -74,6 +63,7 @@ public class LogManager_local extends LogManager{
         super.getReader().resetLogFileList(LogReader.USELOCAL);
         super.getReader().resetSettingsFileList(LogReader.USELOCAL);
         super.getReader().resetTradeFileList(LogReader.USELOCAL);
+        super.getReader().resetScreenshotList(LogReader.USELOCAL);
     }
     
     // Get list of log file names read, used for displaying on the GUI combo box
@@ -193,6 +183,15 @@ public class LogManager_local extends LogManager{
         }
     }
     
+    public boolean checkFileSizeForAll(boolean useManual){
+        try {
+            return super.getReader().checkFileSizeForAll(LogReader.USELOCAL, super.isTws(), useManual);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
     // Start parsing log information, triggered when one of the analyze button is clicked.
     public void startParse(int choice, boolean useManual, HashMap<Integer, javax.swing.JTextPane> textPaneList){
         try {
@@ -206,5 +205,9 @@ public class LogManager_local extends LogManager{
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+    
+    public void reset(){
+        super.getReader().resetLocal();
     }
 }
