@@ -19,13 +19,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.UnknownServiceException;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.util.Enumeration;
-import java.util.Properties;
-
 
 public class LogManager_server extends LogManager{
     //private final LogReader reader;
@@ -41,11 +34,7 @@ public class LogManager_server extends LogManager{
     }
     
     private void setProxy(){
-        System.getProperties().setProperty("proxySet", "true");
-        System.getProperties().setProperty("http.proxyHost", "192.9.168.225");
-        System.getProperties().setProperty("http.proxyPort", "3128");
-        System.getProperties().setProperty("https.proxyHost", "192.9.168.225");
-        System.getProperties().setProperty("https.proxyPort", "3128");
+        System.setProperty("java.net.useSystemProxies","true");
         
         Authenticator.setDefault (new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -58,17 +47,11 @@ public class LogManager_server extends LogManager{
         SimpleX509TrustManager.disableSSL();
     }
     
-    private void addUserDiagnosticFileList(String name){
-        if(name != null){
-            userDiagnosticFileList.add(name);
-        }
-    }
-    
     public void clearUserDiagnosticFileList(){
         userDiagnosticFileList.clear();
     }
     
-    public void loadUserDiagnosticFileList(String username){
+    public boolean loadUserDiagnosticFileList(String username){
         try{
             URL url = new URL("https://wit1.interactivebrokers.com/cgi-bin/tws/tws_error_reader.pl");
             HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
@@ -84,11 +67,14 @@ public class LogManager_server extends LogManager{
                     }
                 }
             in.close();
+            return userDiagnosticFileList.isEmpty() ? false : true;
         } catch (UnknownServiceException e){
             e.printStackTrace();
         } catch (IOException e){
             e.printStackTrace();
         }
+        
+        return false;
     }
     
     public String[] getUserDiagnosticFileList(){
@@ -140,7 +126,8 @@ public class LogManager_server extends LogManager{
     }
     
     public void setDeepDiagnostic(boolean isDeepDiag){
-        super.setDeepDiagnostic(isDeepDiag);
+        // Deprecated
+        //super.setDeepDiagnostic(isDeepDiag);
     }
     
     public void setAutoCls(boolean autoCls){

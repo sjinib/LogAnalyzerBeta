@@ -13,7 +13,12 @@ import java.util.HashMap;
 import com.ib.parser.Choices;
 import com.ib.reader.LogReader;
 import java.awt.event.KeyEvent;
+import java.net.URL;
+import java.util.List;
 import javax.swing.GroupLayout;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.SwingWorker;
 import javax.swing.text.*;
 
 /**
@@ -110,6 +115,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         browseZip1 = new javax.swing.JButton();
         currentLoadedDiagnosticFileLabel = new javax.swing.JLabel();
         resetBtn = new javax.swing.JButton();
+        loadingLabel = new javax.swing.JLabel();
         importDiagnosticPane = new javax.swing.JPanel();
         logComboBox2 = new javax.swing.JComboBox<>();
         importLabel = new javax.swing.JLabel();
@@ -316,6 +322,8 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             }
         });
 
+        loadingLabel.setText("Loading...");
+
         javax.swing.GroupLayout downloadDiagnosticPaneLayout = new javax.swing.GroupLayout(downloadDiagnosticPane);
         downloadDiagnosticPane.setLayout(downloadDiagnosticPaneLayout);
         downloadDiagnosticPaneLayout.setHorizontalGroup(
@@ -370,6 +378,8 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                         .addComponent(usernameText, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(loadUserBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(loadingLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(resetBtn)))
                 .addContainerGap())
@@ -386,7 +396,8 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                         .addGroup(downloadDiagnosticPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(usernameLabel)
                             .addComponent(usernameText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(loadUserBtn)))
+                            .addComponent(loadUserBtn)
+                            .addComponent(loadingLabel)))
                     .addComponent(resetBtn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(downloadDiagnosticPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1510,18 +1521,38 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_useManualFileBtnActionPerformed
     
+    class AnalyzeWorkTask extends SwingWorker<Boolean, Object>{
+        int choice;
+        
+        public AnalyzeWorkTask(int choice){
+            this.choice = choice;
+        }
+        
+        @Override
+        public Boolean doInBackground(){
+            if(useImportServerBtn.isSelected() && logReady_server){
+                serverManager.startParse(choice, textPaneList);
+                return true;
+            } else if(!useImportServerBtn.isSelected() && logReady_local){
+                localManager.startParse(choice, useManualFileBtn.isSelected(), textPaneList);
+                return true;
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(null, "No log file selected");
+                return false;
+            }
+        }
+        
+        @Override
+        public void done(){ }
+    }
+    
     private void analyzeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeBtnActionPerformed
         MainPane.setSelectedComponent(twsLogFilterPanel);
     }//GEN-LAST:event_analyzeBtnActionPerformed
     
     private void analyzeEnvBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeEnvBtnActionPerformed
-        if(useImportServerBtn.isSelected() && logReady_server){
-            serverManager.startParse(Choices.ENV, textPaneList);
-        } else if(!useImportServerBtn.isSelected() && logReady_local){
-            localManager.startParse(Choices.ENV, useManualFileBtn.isSelected(), textPaneList);
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(null, "No log file selected");
-        }
+        AnalyzeWorkTask m_task = new AnalyzeWorkTask(Choices.ENV);
+        m_task.execute();
     }//GEN-LAST:event_analyzeEnvBtnActionPerformed
     
     private void deepAnalysisCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deepAnalysisCheckActionPerformed
@@ -1535,73 +1566,38 @@ public class AnalyzerGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_deepAnalysisCheckActionPerformed
                                                     
     private void analyzeLoginSeqBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeLoginSeqBtnActionPerformed
-        if(useImportServerBtn.isSelected() && logReady_server){
-            serverManager.startParse(Choices.LOGINSEQ, textPaneList);
-        } else if(!useImportServerBtn.isSelected() && logReady_local){
-            localManager.startParse(Choices.LOGINSEQ, useManualFileBtn.isSelected(), textPaneList);
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(null, "No log file selected");
-        }        
+        AnalyzeWorkTask m_task = new AnalyzeWorkTask(Choices.LOGINSEQ);
+        m_task.execute(); 
     }//GEN-LAST:event_analyzeLoginSeqBtnActionPerformed
     
     private void analyzeConnBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeConnBtnActionPerformed
-        if(useImportServerBtn.isSelected() && logReady_server){
-            serverManager.startParse(Choices.CONN, textPaneList);
-        } else if(!useImportServerBtn.isSelected() && logReady_local){
-            localManager.startParse(Choices.CONN, useManualFileBtn.isSelected(), textPaneList);
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(null, "No log file selected");
-        }
+        AnalyzeWorkTask m_task = new AnalyzeWorkTask(Choices.CONN);
+        m_task.execute();
     }//GEN-LAST:event_analyzeConnBtnActionPerformed
     
     private void analyzeSysResBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeSysResBtnActionPerformed
-        if(useImportServerBtn.isSelected() && logReady_server){
-            serverManager.startParse(Choices.SYSRES, textPaneList);
-        } else if(!useImportServerBtn.isSelected() && logReady_local){
-            localManager.startParse(Choices.SYSRES, useManualFileBtn.isSelected(), textPaneList);
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(null, "No log file selected");
-        }
+        AnalyzeWorkTask m_task = new AnalyzeWorkTask(Choices.SYSRES);
+        m_task.execute();
     }//GEN-LAST:event_analyzeSysResBtnActionPerformed
     
     private void analyzeMktDataBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeMktDataBtnActionPerformed
-        if(useImportServerBtn.isSelected() && logReady_server){
-            serverManager.startParse(Choices.MKTDATA, textPaneList);
-        } else if(!useImportServerBtn.isSelected() && logReady_local){
-            localManager.startParse(Choices.MKTDATA, useManualFileBtn.isSelected(), textPaneList);
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(null, "No log file selected");
-        }
+        AnalyzeWorkTask m_task = new AnalyzeWorkTask(Choices.MKTDATA);
+        m_task.execute();
     }//GEN-LAST:event_analyzeMktDataBtnActionPerformed
     
     private void analyzeHtbpBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeHtbpBtnActionPerformed
-        if(useImportServerBtn.isSelected() && logReady_server){
-            serverManager.startParse(Choices.HTBP, textPaneList);
-        } else if(!useImportServerBtn.isSelected() && logReady_local){
-            localManager.startParse(Choices.HTBP, useManualFileBtn.isSelected(), textPaneList);
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(null, "No log file selected");
-        }
+        AnalyzeWorkTask m_task = new AnalyzeWorkTask(Choices.HTBP);
+        m_task.execute();
     }//GEN-LAST:event_analyzeHtbpBtnActionPerformed
     
     private void analyzeAPIBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeAPIBtnActionPerformed
-        if(useImportServerBtn.isSelected() && logReady_server){
-            serverManager.startParse(Choices.API, textPaneList);
-        } else if(!useImportServerBtn.isSelected() && logReady_local){
-            localManager.startParse(Choices.API, useManualFileBtn.isSelected(), textPaneList);
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(null, "No log file selected");
-        }
+        AnalyzeWorkTask m_task = new AnalyzeWorkTask(Choices.API);
+        m_task.execute();
     }//GEN-LAST:event_analyzeAPIBtnActionPerformed
     
     private void analyzeOrdTrdBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeOrdTrdBtnActionPerformed
-        if(useImportServerBtn.isSelected() && logReady_server){
-            serverManager.startParse(Choices.ORDERSTRDS, textPaneList);
-        } else if(!useImportServerBtn.isSelected() && logReady_local){
-            localManager.startParse(Choices.ORDERSTRDS, useManualFileBtn.isSelected(), textPaneList);
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(null, "No log file selected");
-        }
+        AnalyzeWorkTask m_task = new AnalyzeWorkTask(Choices.ORDERSTRDS);
+        m_task.execute();
     }//GEN-LAST:event_analyzeOrdTrdBtnActionPerformed
     
     private void analyzeAllBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeAllBtnActionPerformed
@@ -1612,6 +1608,16 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                     return;
             }
             
+            analyzeEnvBtnActionPerformed(null);
+            analyzeLoginSeqBtnActionPerformed(null);
+            analyzeConnBtnActionPerformed(null);
+            analyzeSysResBtnActionPerformed(null);
+            analyzeMktDataBtnActionPerformed(null);
+            analyzeHtbpBtnActionPerformed(null);
+            analyzeAPIBtnActionPerformed(null);
+            analyzeOrdTrdBtnActionPerformed(null);
+            
+            /*
             serverManager.startParse(Choices.ENV, textPaneList);
             serverManager.startParse(Choices.LOGINSEQ, textPaneList);
             serverManager.startParse(Choices.CONN, textPaneList);
@@ -1620,6 +1626,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             serverManager.startParse(Choices.API, textPaneList);
             serverManager.startParse(Choices.MKTDATA, textPaneList);
             serverManager.startParse(Choices.ORDERSTRDS, textPaneList);
+            */
         } else if(!useImportServerBtn.isSelected() && logReady_local){
             if(localManager.checkFileSizeForAll(useManualFileBtn.isSelected())){
                 int reply = javax.swing.JOptionPane.showConfirmDialog(null, "The selected log file is larger than 5 MB, do you want to proceed?");
@@ -1917,7 +1924,97 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_logComboBox2ActionPerformed
-
+    
+    class ExtractWorkerTast2 extends SwingWorker<Boolean, Integer>{
+        @Override
+        public Boolean doInBackground(){
+            // Initialize tws/ibg log combo box
+            logComboBox2.setSelectedItem(null);
+            logComboBox2.removeAllItems();
+            isTwsLogAdded_local = false;
+            isIbgLogAdded_local = false;
+            publish(5);
+            
+            // Iniatialize settings combo box
+            settingsComboBox2.setSelectedItem(null);
+            settingsComboBox2.removeAllItems();
+            isTwsSettingsAdded_local = false;
+            isIbgSettingsAdded_local = false;
+            publish(10);
+            
+            // Initialize trade combo box
+            tradeComboBox2.setSelectedItem(null);
+            tradeComboBox2.removeAllItems();
+            isTradeFileAdded_local = false;
+            publish(15);
+            
+            // Initialize screenshot combo box
+            if(useImportLocalBtn.isSelected()){
+                screenshotComboBox.setSelectedItem(null);
+                screenshotComboBox.removeAllItems();
+                isScreenshotAdded = false;
+            }
+            publish(20);
+            
+            localManager.resetAllFileList();
+            publish(30);
+            
+            localManager.extract();
+            isExtracted_local = true;
+            publish(70);
+            
+            if(twsRadio2.isSelected()){
+                // Populate and select log file for combo box
+                handleLogComboBox_tws(LogReader.USELOCAL);
+                publish(75);
+                
+                // Populate and select settings file for combo box
+                handleSettingsComboBox_tws(LogReader.USELOCAL);
+                publish(80);
+                
+                // Populate and select trade file for combo box
+                handleTradeComboBox(LogReader.USELOCAL);
+                publish(85);
+                
+                // Populate and select screenshot for combo box
+                handleScreenshotComboBox(LogReader.USELOCAL);
+                publish(90);
+            } else if(ibgRadio2.isSelected()){
+                // Populate and select log file for combo box
+                handleLogComboBox_ibg(LogReader.USELOCAL);
+                publish(76);
+                
+                // Populate and select settings file for combo box
+                handleSettingsComboBox_ibg(LogReader.USELOCAL);
+                publish(82);
+                
+                // Populate and select screenshot for combo box
+                handleScreenshotComboBox(LogReader.USELOCAL);
+                publish(90);
+            }
+            
+            if(autoClsCheck.isSelected()){
+                textPaneList.get(Choices.ENV).setText(null);
+                textPaneList.get(Choices.LOGINSEQ).setText(null);
+                textPaneList.get(Choices.CONN).setText(null);
+                textPaneList.get(Choices.SYSRES).setText(null);
+                textPaneList.get(Choices.HTBP).setText(null);
+                textPaneList.get(Choices.API).setText(null);
+                textPaneList.get(Choices.MKTDATA).setText(null);
+                textPaneList.get(Choices.ORDERSTRDS).setText(null);
+            }
+            publish(100);
+            
+            return true;
+        }
+        
+        public void process(List<Integer> chuncks){
+            for(Integer progress: chuncks){
+                extractProgressBar2.setValue(progress);
+            }
+        }
+    }
+    
     private void extractBtn2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_extractBtn2ActionPerformed
         // Trigger error if the file selected is not a .zip file
         if(!localManager.checkValidZipLocation()){
@@ -1931,79 +2028,16 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             if(reply == javax.swing.JOptionPane.YES_OPTION){
                 try{
                     FileUtils.cleanDirectory(directory); // Clear extract directory
-                    extractProgressBar2.setValue(20); /*Progress bar setting*/
                 } catch (IOException e){
                     e.printStackTrace();
                     javax.swing.JOptionPane.showMessageDialog(null, "Failed to clear directory");
-                    extractProgressBar2.setValue(0); /*Progress bar setting*/
                 }
 
                 extractDirectory2.setText(directory.toString());
                 localManager.setReaderLocation(null, extractDirectory2.getText());
-                // Initialize tws/ibg log combo box
-                logComboBox2.setSelectedItem(null);
-                logComboBox2.removeAllItems();
-                isTwsLogAdded_local = false;
-                isIbgLogAdded_local = false;
-
-                // Iniatialize settings combo box
-                settingsComboBox2.setSelectedItem(null);
-                settingsComboBox2.removeAllItems();
-                isTwsSettingsAdded_local = false;
-                isIbgSettingsAdded_local = false;
-
-                // Initialize trade combo box
-                tradeComboBox2.setSelectedItem(null);
-                tradeComboBox2.removeAllItems();
-                isTradeFileAdded_local = false;
                 
-                // Initialize screenshot combo box
-                screenshotComboBox.setSelectedItem(null);
-                screenshotComboBox.removeAllItems();
-                isScreenshotAdded = false;
-
-                localManager.resetAllFileList();
-                extractProgressBar2.setValue(30); /*Progress bar setting*/
-
-                localManager.extract();
-                isExtracted_local = true;
-                extractProgressBar2.setValue(70); /*Progress bar setting*/
-
-                if(twsRadio2.isSelected()){
-                    // Populate and select log file for combo box
-                    handleLogComboBox_tws(LogReader.USELOCAL);
-
-                    // Populate and select settings file for combo box
-                    handleSettingsComboBox_tws(LogReader.USELOCAL);
-
-                    // Populate and select trade file for combo box
-                    handleTradeComboBox(LogReader.USELOCAL);
-
-                    // Populate and select screenshot for combo box
-                    handleScreenshotComboBox(LogReader.USELOCAL);
-                } else if(ibgRadio2.isSelected()){
-                    // Populate and select log file for combo box
-                    handleLogComboBox_ibg(LogReader.USELOCAL);
-
-                    // Populate and select settings file for combo box
-                    handleSettingsComboBox_ibg(LogReader.USELOCAL);
-
-                    // Populate and select screenshot for combo box
-                    handleScreenshotComboBox(LogReader.USELOCAL);
-                }
-                extractProgressBar2.setValue(90); /*Progress bar setting*/
-
-                if(autoClsCheck.isSelected()){
-                    textPaneList.get(Choices.ENV).setText(null);
-                    textPaneList.get(Choices.LOGINSEQ).setText(null);
-                    textPaneList.get(Choices.CONN).setText(null);
-                    textPaneList.get(Choices.SYSRES).setText(null);
-                    textPaneList.get(Choices.HTBP).setText(null);
-                    textPaneList.get(Choices.API).setText(null);
-                    textPaneList.get(Choices.MKTDATA).setText(null);
-                    textPaneList.get(Choices.ORDERSTRDS).setText(null);
-                }
-                extractProgressBar2.setValue(100); /*Progress bar setting*/
+                ExtractWorkerTast2 m_task = new ExtractWorkerTast2();
+                m_task.execute();
 
                 // Have main window show extracted directory
                 if(useImportLocalBtn.isSelected()){
@@ -2021,70 +2055,9 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 directory.mkdir();
                 extractDirectory2.setText(directory.toString());
                 localManager.setReaderLocation(null, extractDirectory2.getText());
-                extractProgressBar2.setValue(20); /*Progress bar setting*/
-                // Initialize tws/ibg log combo box
-                logComboBox2.setSelectedItem(null);
-                logComboBox2.removeAllItems();
-                isTwsLogAdded_local = false; // initialize
-                isIbgLogAdded_local = false;
-
-                // Initialize settings file combo box
-                settingsComboBox2.setSelectedItem(null);
-                settingsComboBox2.removeAllItems();
-                isTwsSettingsAdded_local = false;
-                isIbgSettingsAdded_local = false;
-
-                // Initialize trade combo box
-                tradeComboBox2.setSelectedItem(null);
-                isTradeFileAdded_local = false;
                 
-                // Initialize screenshot combo box
-                screenshotComboBox.setSelectedItem(null);
-                screenshotComboBox.removeAllItems();
-                isScreenshotAdded = false;
-
-                localManager.resetAllFileList();
-                extractProgressBar2.setValue(30); /*Progress bar setting*/
-
-                localManager.extract();
-                isExtracted_local = true;
-                extractProgressBar2.setValue(70); /*Progress bar setting*/
-
-                if(twsRadio2.isSelected()){
-                    // Populate and select log file for combo box
-                    handleLogComboBox_tws(LogReader.USELOCAL);
-
-                    // Populate and select settings file for combo box
-                    handleSettingsComboBox_tws(LogReader.USELOCAL);
-
-                    // Populate and select trade file for combo box
-                    handleTradeComboBox(LogReader.USELOCAL);
-
-                    // Populate and select screenshot for combo box
-                    handleScreenshotComboBox(LogReader.USELOCAL);
-                } else if(ibgRadio2.isSelected()){
-                    // Populate and select log file for combo box
-                    handleLogComboBox_ibg(LogReader.USELOCAL);
-
-                    // Populate and select settings file for combo box
-                    handleSettingsComboBox_ibg(LogReader.USELOCAL);
-
-                    // Populate and select screenshot for combo box
-                    handleScreenshotComboBox(LogReader.USELOCAL);
-                }
-                extractProgressBar2.setValue(90); /*Progress bar setting*/
-
-                if(autoClsCheck.isSelected()){
-                    textPaneList.get(Choices.ENV).setText(null);
-                    textPaneList.get(Choices.LOGINSEQ).setText(null);
-                    textPaneList.get(Choices.CONN).setText(null);
-                    textPaneList.get(Choices.SYSRES).setText(null);
-                    textPaneList.get(Choices.HTBP).setText(null);
-                    textPaneList.get(Choices.API).setText(null);
-                    textPaneList.get(Choices.MKTDATA).setText(null);
-                    textPaneList.get(Choices.ORDERSTRDS).setText(null);
-                }
-                extractProgressBar2.setValue(100); /*Progress bar setting*/
+                ExtractWorkerTast2 m_task = new ExtractWorkerTast2();
+                m_task.execute();
 
                 // Have main window show extracted directory
                 if(useImportLocalBtn.isSelected()){
@@ -2098,19 +2071,57 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_extractBtn2ActionPerformed
-
+    
+    class LoadingWorkTask extends SwingWorker<Boolean, Object> {
+        private String username = null;
+        
+        public LoadingWorkTask(String username){
+            this.username = username;
+        }
+        
+        @Override
+        public Boolean doInBackground(){
+            serverManager.clearUserDiagnosticFileList();
+            
+            return serverManager.loadUserDiagnosticFileList(username);
+        }
+        
+        @Override
+        protected void done(){
+            try{
+                if(get()){
+                    handleUserDiagnosticFileBox();
+                    loadingLabel.setVisible(false);
+                } else {
+                    javax.swing.JOptionPane.showMessageDialog(null, "No diagnostic file has been found for the username: " + username);
+                    loadingLabel.setVisible(false);
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+    
     private void loadUserBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadUserBtnActionPerformed
         String username = usernameText.getText();
         if(username.length() < 8 || username.length() > 9){
             javax.swing.JOptionPane.showMessageDialog(null, "Please specify a valid username");
         } else {
-            serverManager.clearUserDiagnosticFileList();
+            // Loading circle
+            try{
+            loadingLabel.setText("");
+            URL image = this.getClass().getClassLoader().getResource("resources/loading.gif");
+            Icon icon = new ImageIcon(image);
+            loadingLabel.setIcon(icon);
+            loadingLabel.setVisible(true);
             
-            serverManager.loadUserDiagnosticFileList(username);
-            
-            handleUserDiagnosticFileBox();
+            LoadingWorkTask task = new LoadingWorkTask(usernameText.getText());
+            task.execute();
             
             isDownloaded_server = false;
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }//GEN-LAST:event_loadUserBtnActionPerformed
     
@@ -2270,7 +2281,96 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_downloadBtnActionPerformed
-
+    
+    class ExtractWorkerTast1 extends SwingWorker<Boolean, Integer>{
+        @Override
+        public Boolean doInBackground(){
+            // Initialize tws/ibg log combo box
+            logComboBox1.setSelectedItem(null);
+            logComboBox1.removeAllItems();
+            isTwsLogAdded_server = false; // initialize
+            isIbgLogAdded_server = false;
+            publish(5);
+            
+            // Initialize settings file combo box
+            settingsComboBox1.setSelectedItem(null);
+            settingsComboBox1.removeAllItems();
+            isTwsSettingsAdded_server = false;
+            isIbgSettingsAdded_server = false;
+            publish(10);
+            
+            // Initialize trade combo box
+            tradeComboBox1.setSelectedItem(null);
+            tradeComboBox1.removeAllItems();
+            isTradeFileAdded_server = false;
+            publish(15);
+            
+            // Initialize screenshot combo box
+            if(useImportServerBtn.isSelected()){
+                screenshotComboBox.setSelectedItem(null);
+                screenshotComboBox.removeAllItems();
+                isScreenshotAdded = false;
+            }
+            publish(20);
+            
+            serverManager.resetAllFileList();
+            publish(30);
+            
+            serverManager.extract();
+            isExtracted_server = true;
+            publish(70);
+            if(twsRadio1.isSelected()){
+                // Populate and select log file for combo box
+                handleLogComboBox_tws(LogReader.USESERVER);
+                publish(75);
+                
+                // Populate and select settings file for combo box
+                handleSettingsComboBox_tws(LogReader.USESERVER);
+                publish(80);
+                
+                // Populate and select trade file for combo box
+                handleTradeComboBox(LogReader.USESERVER);
+                publish(85);
+                
+                // Populate and select screenshot for combo box
+                handleScreenshotComboBox(LogReader.USESERVER);
+                publish(90);
+            } else if(ibgRadio1.isSelected()){
+                // Populate and select log file for combo box
+                handleLogComboBox_ibg(LogReader.USESERVER);
+                publish(76);
+                
+                // Populate and select settings file for combo box
+                handleSettingsComboBox_ibg(LogReader.USESERVER);
+                publish(82);
+                
+                // Populate and select screenshot for combo box
+                handleScreenshotComboBox(LogReader.USESERVER);
+                publish(90);
+            }
+            
+            if(autoClsCheck.isSelected()){
+                textPaneList.get(Choices.ENV).setText(null);
+                textPaneList.get(Choices.LOGINSEQ).setText(null);
+                textPaneList.get(Choices.CONN).setText(null);
+                textPaneList.get(Choices.SYSRES).setText(null);
+                textPaneList.get(Choices.HTBP).setText(null);
+                textPaneList.get(Choices.API).setText(null);
+                textPaneList.get(Choices.MKTDATA).setText(null);
+                textPaneList.get(Choices.ORDERSTRDS).setText(null);
+            }
+            publish(100);
+            
+            return true;            
+        }
+        
+        public void process(List<Integer> chuncks){
+            for(Integer progress: chuncks){
+                extractProgressBar1.setValue(progress);
+            }
+        }
+    }
+    
     private void extractBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_extractBtn1ActionPerformed
         // TODO add your handling code here:
         // Trigger error if the file selected is not a .zip file
@@ -2285,78 +2385,16 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             if(reply == javax.swing.JOptionPane.YES_OPTION){
                 try{
                     FileUtils.cleanDirectory(directory); // Clear extract directory
-                    extractProgressBar1.setValue(20); /*Progress bar setting*/
                 } catch (IOException e){
                     e.printStackTrace();
                     javax.swing.JOptionPane.showMessageDialog(null, "Failed to clear directory");
-                    extractProgressBar1.setValue(0); /*Progress bar setting*/
                 }
 
                 extractDirectory1.setText(directory.toString());
                 serverManager.setReaderLocation(null, extractDirectory1.getText());
-                // Initialize tws/ibg log combo box
-                logComboBox1.setSelectedItem(null);
-                logComboBox1.removeAllItems();
-                isTwsLogAdded_server = false;
-                isIbgLogAdded_server = false;
-
-                // Iniatialize settings combo box
-                settingsComboBox1.setSelectedItem(null);
-                settingsComboBox1.removeAllItems();
-                isTwsSettingsAdded_server = false;
-                isIbgSettingsAdded_server = false;
-
-                // Initialize trade combo box
-                tradeComboBox1.setSelectedItem(null);
-                tradeComboBox1.removeAllItems();
-                isTradeFileAdded_server = false;
                 
-                // Initialize screenshot combo box
-                screenshotComboBox.setSelectedItem(null);
-                screenshotComboBox.removeAllItems();
-                isScreenshotAdded = false;
-
-                serverManager.resetAllFileList();
-                extractProgressBar1.setValue(30); /*Progress bar setting*/
-
-                serverManager.extract();
-                isExtracted_server = true;
-                extractProgressBar1.setValue(70); /*Progress bar setting*/
-                if(twsRadio1.isSelected()){
-                    // Populate and select log file for combo box
-                    handleLogComboBox_tws(LogReader.USESERVER);
-
-                    // Populate and select settings file for combo box
-                    handleSettingsComboBox_tws(LogReader.USESERVER);
-
-                    // Populate and select trade file for combo box
-                    handleTradeComboBox(LogReader.USESERVER);
-
-                    // Populate and select screenshot for combo box
-                    handleScreenshotComboBox(LogReader.USESERVER);
-                } else if(ibgRadio1.isSelected()){
-                    // Populate and select log file for combo box
-                    handleLogComboBox_ibg(LogReader.USESERVER);
-
-                    // Populate and select settings file for combo box
-                    handleSettingsComboBox_ibg(LogReader.USESERVER);
-
-                    // Populate and select screenshot for combo box
-                    handleScreenshotComboBox(LogReader.USESERVER);
-                }
-                extractProgressBar1.setValue(90); /*Progress bar setting*/
-
-                if(autoClsCheck.isSelected()){
-                    textPaneList.get(Choices.ENV).setText(null);
-                    textPaneList.get(Choices.LOGINSEQ).setText(null);
-                    textPaneList.get(Choices.CONN).setText(null);
-                    textPaneList.get(Choices.SYSRES).setText(null);
-                    textPaneList.get(Choices.HTBP).setText(null);
-                    textPaneList.get(Choices.API).setText(null);
-                    textPaneList.get(Choices.MKTDATA).setText(null);
-                    textPaneList.get(Choices.ORDERSTRDS).setText(null);
-                }
-                extractProgressBar1.setValue(100); /*Progress bar setting*/
+                ExtractWorkerTast1 m_task = new ExtractWorkerTast1();
+                m_task.execute();
 
                 // Have main window show extracted directory
                 if(useImportServerBtn.isSelected()){
@@ -2372,71 +2410,12 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             int reply = javax.swing.JOptionPane.showConfirmDialog(null, "The directory " + extractDirectory1.getText() + " does not exist. Do you want to create it?");
             if(reply == javax.swing.JOptionPane.YES_OPTION){
                 directory.mkdir();
+                
                 extractDirectory1.setText(directory.toString());
                 serverManager.setReaderLocation(null, extractDirectory1.getText());
-                extractProgressBar1.setValue(20); /*Progress bar setting*/
-                // Initialize tws/ibg log combo box
-                logComboBox1.setSelectedItem(null);
-                logComboBox1.removeAllItems();
-                isTwsLogAdded_server = false; // initialize
-                isIbgLogAdded_server = false;
 
-                // Initialize settings file combo box
-                settingsComboBox1.setSelectedItem(null);
-                settingsComboBox1.removeAllItems();
-                isTwsSettingsAdded_server = false;
-                isIbgSettingsAdded_server = false;
-
-                // Initialize trade combo box
-                tradeComboBox1.setSelectedItem(null);
-                isTradeFileAdded_server = false;
-                
-                // Initialize screenshot combo box
-                screenshotComboBox.setSelectedItem(null);
-                screenshotComboBox.removeAllItems();
-                isScreenshotAdded = false;
-
-                serverManager.resetAllFileList();
-                extractProgressBar1.setValue(30); /*Progress bar setting*/
-
-                serverManager.extract();
-                isExtracted_server = true;
-                extractProgressBar1.setValue(70); /*Progress bar setting*/
-                if(twsRadio1.isSelected()){
-                    // Populate and select log file for combo box
-                    handleLogComboBox_tws(LogReader.USESERVER);
-
-                    // Populate and select settings file for combo box
-                    handleSettingsComboBox_tws(LogReader.USESERVER);
-
-                    // Populate and select trade file for combo box
-                    handleTradeComboBox(LogReader.USESERVER);
-
-                    // Populate and select screenshot for combo box
-                    handleScreenshotComboBox(LogReader.USESERVER);
-                } else if(ibgRadio1.isSelected()){
-                    // Populate and select log file for combo box
-                    handleLogComboBox_ibg(LogReader.USESERVER);
-
-                    // Populate and select settings file for combo box
-                    handleSettingsComboBox_ibg(LogReader.USESERVER);
-
-                    // Populate and select screenshot for combo box
-                    handleScreenshotComboBox(LogReader.USESERVER);
-                }
-                extractProgressBar1.setValue(90); /*Progress bar setting*/
-
-                if(autoClsCheck.isSelected()){
-                    textPaneList.get(Choices.ENV).setText(null);
-                    textPaneList.get(Choices.LOGINSEQ).setText(null);
-                    textPaneList.get(Choices.CONN).setText(null);
-                    textPaneList.get(Choices.SYSRES).setText(null);
-                    textPaneList.get(Choices.HTBP).setText(null);
-                    textPaneList.get(Choices.API).setText(null);
-                    textPaneList.get(Choices.MKTDATA).setText(null);
-                    textPaneList.get(Choices.ORDERSTRDS).setText(null);
-                }
-                extractProgressBar1.setValue(100); /*Progress bar setting*/
+                ExtractWorkerTast1 m_task = new ExtractWorkerTast1();
+                m_task.execute();
 
                 // Have main window show extracted directory
                 if(useImportServerBtn.isSelected()){
@@ -2670,6 +2649,8 @@ public class AnalyzerGUI extends javax.swing.JFrame {
     private void customInitComponents(){
         java.awt.Dimension dim = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width/2-this.getSize().width/2, 0);
+        
+        loadingLabel.setVisible(false);
         
         textPaneList.put(Choices.ENV, envTextPane);
         textPaneList.put(Choices.CONN, connTextPane);
@@ -3034,7 +3015,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
     }
     
     private void handleScreenshotComboBox(int method){
-        if(method == LogReader.USESERVER){
+        if(method == LogReader.USESERVER && useImportServerBtn.isSelected()){
             if(isExtracted_server == true){
                 screenshotComboBox.removeAllItems();
                 String[] list = serverManager.getScreenshotListNames();
@@ -3063,7 +3044,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 screenshotReady_server = false;
                 updateStatus();
             }
-        } else if (method == LogReader.USELOCAL){
+        } else if (method == LogReader.USELOCAL && useImportLocalBtn.isSelected()){
             if(isExtracted_local == true){
                 screenshotComboBox.removeAllItems();
                 String[] list = localManager.getScreenshotListNames();
@@ -3092,8 +3073,8 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 screenshotReady_local = false;
                 updateStatus();
             }
-        } else {
-            return;
+        } else if(useManualFileBtn.isSelected()){
+            screenshotComboBox.removeAllItems();
         }
     }
     
@@ -3380,6 +3361,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
     private javax.swing.JTextField loadDirectory1;
     private javax.swing.JTextField loadDirectory2;
     private javax.swing.JButton loadUserBtn;
+    private javax.swing.JLabel loadingLabel;
     private javax.swing.JComboBox<String> logComboBox1;
     private javax.swing.JComboBox<String> logComboBox2;
     private javax.swing.JTextField logDirectoryManual;
