@@ -273,7 +273,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
 
         extractDirectory1.setEditable(false);
         extractDirectory1.setText(System.getProperty("user.home").toString() + "\\Temp_ext");
-        extractDirectory1.setToolTipText("Select the uploaded diagnostic .zip file, or directly type in its path. (To manually select a single log file, please use \"Manually select TWS/IB Gateway log file\")");
+        extractDirectory1.setToolTipText("Select the directory where you want the diagnostic file to be extracted.");
         extractDirectory1.setMaximumSize(new java.awt.Dimension(300, 20));
         extractDirectory1.setPreferredSize(new java.awt.Dimension(100, 28));
 
@@ -295,7 +295,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
 
         loadDirectory1.setEditable(false);
         loadDirectory1.setText(System.getProperty("user.home").toString() + "\\Temp");
-        loadDirectory1.setToolTipText("Select the uploaded diagnostic .zip file, or directly type in its path. (To manually select a single log file, please use \"Manually select TWS/IB Gateway log file\")");
+        loadDirectory1.setToolTipText("Select the directory where the diagnostic file will be downloaded to.");
         loadDirectory1.setMaximumSize(new java.awt.Dimension(300, 20));
         loadDirectory1.setPreferredSize(new java.awt.Dimension(100, 28));
 
@@ -316,6 +316,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         currentLoadedDiagnosticFileLabel.setText("Current loaded file: ");
 
         resetBtn.setText("Reset");
+        resetBtn.setToolTipText("Click to rest application");
         resetBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 resetBtnActionPerformed(evt);
@@ -436,7 +437,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        importDiagnosticPane.setBorder(javax.swing.BorderFactory.createTitledBorder("Import downloaded diagnostic zip file"));
+        importDiagnosticPane.setBorder(javax.swing.BorderFactory.createTitledBorder("Import local diagnostic zip file"));
 
         logComboBox2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -747,6 +748,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         importMethodGroup.add(useImportServerBtn);
         useImportServerBtn.setSelected(true);
         useImportServerBtn.setText("Import diagnostic file from server");
+        useImportServerBtn.setToolTipText("Choose to analyze diagnostic file downloaded from server");
         useImportServerBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 useImportServerBtnActionPerformed(evt);
@@ -2257,7 +2259,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             }
         }        
     }//GEN-LAST:event_logComboBox1ActionPerformed
-
+    
     private void downloadBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downloadBtnActionPerformed
         // TODO add your handling code here:
         String zipLocation = new String(loadDirectory1.getText() + "\\" + serverManager.getSelectedUserDiagnosticFile());

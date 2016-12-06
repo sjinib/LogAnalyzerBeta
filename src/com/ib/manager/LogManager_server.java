@@ -69,9 +69,11 @@ public class LogManager_server extends LogManager{
             in.close();
             return userDiagnosticFileList.isEmpty() ? false : true;
         } catch (UnknownServiceException e){
-            e.printStackTrace();
+            //e.printStackTrace();
+            javax.swing.JOptionPane.showMessageDialog(null, e.getMessage());
         } catch (IOException e){
-            e.printStackTrace();
+            //e.printStackTrace();
+            javax.swing.JOptionPane.showMessageDialog(null, e.getMessage());
         }
         
         return false;
@@ -106,8 +108,13 @@ public class LogManager_server extends LogManager{
             CopyFile.copy(input, output, 1024);
             this.getReader().setZipLocation(LogReader.USESERVER, zipLocation);
             return true;
-        } catch (Exception e){
-            e.printStackTrace();
+        } catch (UnknownServiceException e){
+            //e.printStackTrace();
+            javax.swing.JOptionPane.showMessageDialog(null, e.getMessage());
+            return false;
+        } catch (IOException e){
+            //e.printStackTrace();
+            javax.swing.JOptionPane.showMessageDialog(null, e.getMessage());
             return false;
         }
     }
