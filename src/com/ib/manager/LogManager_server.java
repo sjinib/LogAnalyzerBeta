@@ -19,6 +19,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.UnknownServiceException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import org.jsoup.Jsoup;
+import org.jsoup.select.Elements;
+import org.jsoup.nodes.Element;
 
 public class LogManager_server extends LogManager{
     //private final LogReader reader;
@@ -51,32 +57,74 @@ public class LogManager_server extends LogManager{
         userDiagnosticFileList.clear();
     }
     
-    public boolean loadUserDiagnosticFileList(String username){
-        try{
-            URL url = new URL("https://wit1.interactivebrokers.com/cgi-bin/tws/tws_error_reader.pl");
-            HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-            BufferedReader in = new BufferedReader(new InputStreamReader(
-                    connection.getInputStream()));
-            
-            String inputLine;
-            while ((inputLine = in.readLine()) != null)
-                if(inputLine.contains(">" + username)){
-                    String diagnosticFileName = inputLine.replaceAll("\\<.*?>","").replaceAll("\\s+", "");
-                    if(diagnosticFileName != null){
+    public boolean loadUserDiagnosticFileList(String username, boolean todayOnly){
+        if(todayOnly){
+            try{
+                org.jsoup.nodes.Document doc = Jsoup.connect("https://wit1.interactivebrokers.com/cgi-bin/tws/tws_error_reader.pl")
+                        .timeout(10000)
+                        .get();
+                
+                Elements contents = doc.getElementsContainingOwnText(username);
+                String date = getTodayDate();
+                for(Element link: contents){
+                    String diagnosticFileName = link.getElementsByAttribute("name").text();
+                    //System.out.println(text);
+                    String[] sp = diagnosticFileName.split("\\.");
+                    //System.out.println(s[2]);
+                    if((sp[2].compareTo(date)) >= 0){
+                        //System.out.println(s[2]);
+                        if(diagnosticFileName == null){
+                            userDiagnosticFileList = new ArrayList<String>();
+                        }
                         userDiagnosticFileList.add(diagnosticFileName);
+                    } else {
+                        return userDiagnosticFileList.isEmpty() ? false : true;
                     }
                 }
-            in.close();
-            return userDiagnosticFileList.isEmpty() ? false : true;
-        } catch (UnknownServiceException e){
-            //e.printStackTrace();
-            javax.swing.JOptionPane.showMessageDialog(null, e.getMessage());
-        } catch (IOException e){
-            //e.printStackTrace();
-            javax.swing.JOptionPane.showMessageDialog(null, e.getMessage());
+                return userDiagnosticFileList.isEmpty() ? false : true;
+            } catch (UnknownServiceException e){
+                //e.printStackTrace();
+                javax.swing.JOptionPane.showMessageDialog(null, e.getMessage());
+            } catch (IOException e){
+                //e.printStackTrace();
+                javax.swing.JOptionPane.showMessageDialog(null, e.getMessage());
+            }
+        } else {
+            try{
+                URL url = new URL("https://wit1.interactivebrokers.com/cgi-bin/tws/tws_error_reader.pl");
+                HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+                BufferedReader in = new BufferedReader(new InputStreamReader(
+                        connection.getInputStream()));
+                
+                // Load all
+                String inputLine;
+                while ((inputLine = in.readLine()) != null)
+                    if(inputLine.contains(">" + username)){
+                        String diagnosticFileName = inputLine.replaceAll("\\<.*?>","").replaceAll("\\s+", "");
+                        if(diagnosticFileName == null){
+                            userDiagnosticFileList = new ArrayList<String>();
+                        }
+                        userDiagnosticFileList.add(diagnosticFileName);
+                    }
+                in.close();
+                return userDiagnosticFileList.isEmpty() ? false : true;
+            } catch (UnknownServiceException e){
+                //e.printStackTrace();
+                javax.swing.JOptionPane.showMessageDialog(null, e.getMessage());
+            } catch (IOException e){
+                //e.printStackTrace();
+                javax.swing.JOptionPane.showMessageDialog(null, e.getMessage());
+            }
         }
         
         return false;
+        
+    }
+    
+    private String getTodayDate(){
+        Date today = Calendar.getInstance().getTime();
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+        return format.format(today);
     }
     
     public String[] getUserDiagnosticFileList(){

@@ -1,0 +1,11 @@
+ - Spinning Circle
+ - Reset button
+ X Green highlight // Not possible with default look and feel
+Auto delete all analysis files
+ - Log size warning
+ - search box auto clear
+ - Click Enter auto click on button
+ X Download success auto disappear
+Load today only
+ - No Result when loading
+

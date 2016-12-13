@@ -116,6 +116,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         currentLoadedDiagnosticFileLabel = new javax.swing.JLabel();
         resetBtn = new javax.swing.JButton();
         loadingLabel = new javax.swing.JLabel();
+        todayOnlyCheckBox = new javax.swing.JCheckBox();
         importDiagnosticPane = new javax.swing.JPanel();
         logComboBox2 = new javax.swing.JComboBox<>();
         importLabel = new javax.swing.JLabel();
@@ -282,9 +283,9 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         usernameText.setToolTipText("The username for searching from Error Reports");
         usernameText.setMaximumSize(new java.awt.Dimension(300, 20));
         usernameText.setPreferredSize(new java.awt.Dimension(100, 28));
-        usernameText.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                usernameTextMouseClicked(evt);
+        usernameText.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                usernameTextFocusGained(evt);
             }
         });
         usernameText.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -325,6 +326,10 @@ public class AnalyzerGUI extends javax.swing.JFrame {
 
         loadingLabel.setText("Loading...");
 
+        todayOnlyCheckBox.setSelected(true);
+        todayOnlyCheckBox.setText("Today Only");
+        todayOnlyCheckBox.setToolTipText("Check to only load diagnostic files uploaded today");
+
         javax.swing.GroupLayout downloadDiagnosticPaneLayout = new javax.swing.GroupLayout(downloadDiagnosticPane);
         downloadDiagnosticPane.setLayout(downloadDiagnosticPaneLayout);
         downloadDiagnosticPaneLayout.setHorizontalGroup(
@@ -338,12 +343,6 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                                 .addComponent(chooseDiagnosticFileLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(userDiagnosticsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(downloadDiagnosticPaneLayout.createSequentialGroup()
-                                .addComponent(loadDirectory1, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(browseZip1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(downloadBtn))
                             .addGroup(downloadDiagnosticPaneLayout.createSequentialGroup()
                                 .addGroup(downloadDiagnosticPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, downloadDiagnosticPaneLayout.createSequentialGroup()
@@ -371,7 +370,13 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(ibgRadio1))
                             .addComponent(extractLabel1)
-                            .addComponent(currentLoadedDiagnosticFileLabel))
+                            .addComponent(currentLoadedDiagnosticFileLabel)
+                            .addGroup(downloadDiagnosticPaneLayout.createSequentialGroup()
+                                .addComponent(loadDirectory1, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(browseZip1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(downloadBtn)))
                         .addGap(0, 271, Short.MAX_VALUE))
                     .addGroup(downloadDiagnosticPaneLayout.createSequentialGroup()
                         .addComponent(usernameLabel)
@@ -379,6 +384,8 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                         .addComponent(usernameText, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(loadUserBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(todayOnlyCheckBox)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(loadingLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -398,6 +405,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                             .addComponent(usernameLabel)
                             .addComponent(usernameText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(loadUserBtn)
+                            .addComponent(todayOnlyCheckBox)
                             .addComponent(loadingLabel)))
                     .addComponent(resetBtn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -437,7 +445,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        importDiagnosticPane.setBorder(javax.swing.BorderFactory.createTitledBorder("Import local diagnostic zip file"));
+        importDiagnosticPane.setBorder(javax.swing.BorderFactory.createTitledBorder("Import Local Diagnostic Zip File"));
 
         logComboBox2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -608,7 +616,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        manualImportPane.setBorder(javax.swing.BorderFactory.createTitledBorder("Manually select TWS/IB Gateway log file"));
+        manualImportPane.setBorder(javax.swing.BorderFactory.createTitledBorder("Manually Select TWS/IB Gateway Fog File"));
 
         browseSettingsManual.setText("Browse");
         browseSettingsManual.addActionListener(new java.awt.event.ActionListener() {
@@ -629,7 +637,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         logDirectoryManual.setSelectionEnd(11);
         logDirectoryManual.setSelectionStart(11);
 
-        manualSettingsLabel.setText("Manually select settings file:");
+        manualSettingsLabel.setText("Settings file location:");
 
         browseLogManual.setText("Browse");
         browseLogManual.addActionListener(new java.awt.event.ActionListener() {
@@ -2085,7 +2093,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         public Boolean doInBackground(){
             serverManager.clearUserDiagnosticFileList();
             
-            return serverManager.loadUserDiagnosticFileList(username);
+            return serverManager.loadUserDiagnosticFileList(username, todayOnlyCheckBox.isSelected());
         }
         
         @Override
@@ -2126,90 +2134,6 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_loadUserBtnActionPerformed
-    
-    class LoadingThread extends Thread{
-        @Override
-        public void run(){
-            synchronized(this){
-                //serverManager.loadUserDiagnosticFileList("csdem098");
-                notify();
-            }
-        }
-    }
-    
-    private synchronized void loadingHandler(String username){
-            /*
-            System.out.println("Calling servermaneger loading");
-            Thread t = new Thread(new Runnable(){
-               public void run(){
-                   serverManager.loadUserDiagnosticFileList(username);
-                   displayFlag = true;
-                   notifyAll();
-               } 
-            });
-            t.start();
-            //serverManager.loadUserDiagnosticFileList(username);
-            */
-            //synchronized(this){serverManager.loadUserDiagnosticFileList(username);}
-    }
-    
-/*
-    private synchronized void loadingDisplay(boolean display, String username){
-        if(display){
-            System.out.println("Display == true");
-            while(!displayFlag){
-                try{
-                    wait();
-                    System.out.println("Waiting...");
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-            System.out.println("Set visible - true");
-            loadingLabel.setVisible(true);
-        } else {
-            System.out.println("Display == false");
-            while(displayFlag){
-                try{
-                    wait();
-                    System.out.println("Waiting...");
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-            System.out.println("Set visible - false");
-            loadingLabel.setVisible(false);
-            
-            System.out.println("Handling combo box");
-            //serverManager.loadUserDiagnosticFileList(username);
-        }
-        
-        
-        Thread t = new Thread(){
-            public void run(){
-                System.out.println("Starting thread for loading label");
-                Runnable runLoading = new Runnable(){
-                    public void run(){
-                        if(flag)
-                            loadingLabel.setVisible(true);
-                        else
-                            loadingLabel.setVisible(false);
-                    }
-                };
-                try{
-                    System.out.println("Setting loading label display");
-                    javax.swing.SwingUtilities.invokeAndWait(runLoading);
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-        };
-        
-        t.start();
-        
-    }
-    */
-    
     
     private void browseExtract1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseExtract1ActionPerformed
         // TODO add your handling code here:
@@ -2611,7 +2535,8 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         logComboBox1.removeAllItems();
         settingsComboBox1.removeAllItems();
         tradeComboBox1.removeAllItems();
-        twsRadio1.setSelected(true);
+        twsRadio1.setSelected(false);
+        ibgRadio1.setSelected(false);
         
         loadDirectory2.setText(System.getProperty("user.home").toString() + "\\Temp");
         extractDirectory2.setText(System.getProperty("user.home").toString() + "\\Temp_ext");
@@ -2620,7 +2545,8 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         logComboBox2.removeAllItems();
         settingsComboBox2.removeAllItems();
         tradeComboBox2.removeAllItems();
-        twsRadio2.setSelected(true);
+        twsRadio2.setSelected(false);
+        ibgRadio2.setSelected(false);
         
         updateStatus();
         
@@ -2628,13 +2554,13 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         serverManager.reset();
     }//GEN-LAST:event_resetBtnActionPerformed
 
-    private void usernameTextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_usernameTextMouseClicked
+    private void usernameTextFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_usernameTextFocusGained
         if(usernameText.getText().equals("Enter Username...")){
             usernameText.setText("");
         } else {
             usernameText.selectAll();
         }
-    }//GEN-LAST:event_usernameTextMouseClicked
+    }//GEN-LAST:event_usernameTextFocusGained
     
     private void handleUserDiagnosticFileBox(){
         userDiagnosticsComboBox.removeAllItems();
@@ -3387,6 +3313,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
     private javax.swing.JLabel statusLabel;
     private javax.swing.JPanel statusPanel;
     private javax.swing.JPanel textMainPane;
+    private javax.swing.JCheckBox todayOnlyCheckBox;
     private javax.swing.JComboBox<String> tradeComboBox1;
     private javax.swing.JComboBox<String> tradeComboBox2;
     private javax.swing.JLabel tradeFileStatus;

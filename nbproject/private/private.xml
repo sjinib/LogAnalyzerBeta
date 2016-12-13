@@ -4,8 +4,10 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/manager/LogManager_server.java</file>
-            <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/manager/LogManager.java</file>
+            <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/manager/CopyFile.java</file>
+            <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/analyzerGui/MagnifiedDisplayPane.java</file>
             <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/manager/LogManager_local.java</file>
+            <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/parser/Choices.java</file>
             <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/reader/LogReader.java</file>
             <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/analyzerGui/AnalyzerGUI.java</file>
         </group>

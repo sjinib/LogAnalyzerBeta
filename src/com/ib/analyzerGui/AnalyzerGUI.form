@@ -176,13 +176,6 @@
                                               <Component id="userDiagnosticsComboBox" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
-                                              <Component id="loadDirectory1" min="-2" pref="420" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="browseZip1" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="downloadBtn" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
                                               <Group type="103" groupAlignment="1" max="-2" attributes="0">
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <Group type="103" groupAlignment="0" attributes="0">
@@ -218,6 +211,13 @@
                                           </Group>
                                           <Component id="extractLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
                                           <Component id="currentLoadedDiagnosticFileLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <Component id="loadDirectory1" min="-2" pref="420" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="browseZip1" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="downloadBtn" min="-2" max="-2" attributes="0"/>
+                                          </Group>
                                       </Group>
                                       <EmptySpace min="0" pref="271" max="32767" attributes="0"/>
                                   </Group>
@@ -227,6 +227,8 @@
                                       <Component id="usernameText" min="-2" pref="200" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="loadUserBtn" linkSize="2" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="todayOnlyCheckBox" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="loadingLabel" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="32767" attributes="0"/>
@@ -247,6 +249,7 @@
                                           <Component id="usernameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                                           <Component id="usernameText" alignment="3" min="-2" max="-2" attributes="0"/>
                                           <Component id="loadUserBtn" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="todayOnlyCheckBox" alignment="3" min="-2" max="-2" attributes="0"/>
                                           <Component id="loadingLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
@@ -468,7 +471,7 @@
                         </Property>
                       </Properties>
                       <Events>
-                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="usernameTextMouseClicked"/>
+                        <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="usernameTextFocusGained"/>
                         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="usernameTextKeyPressed"/>
                       </Events>
                     </Component>
@@ -522,13 +525,20 @@
                         <Property name="text" type="java.lang.String" value="Loading..."/>
                       </Properties>
                     </Component>
+                    <Component class="javax.swing.JCheckBox" name="todayOnlyCheckBox">
+                      <Properties>
+                        <Property name="selected" type="boolean" value="true"/>
+                        <Property name="text" type="java.lang.String" value="Today Only"/>
+                        <Property name="toolTipText" type="java.lang.String" value="Check to only load diagnostic files uploaded today"/>
+                      </Properties>
+                    </Component>
                   </SubComponents>
                 </Container>
                 <Container class="javax.swing.JPanel" name="importDiagnosticPane">
                   <Properties>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                        <TitledBorder title="Import local diagnostic zip file"/>
+                        <TitledBorder title="Import Local Diagnostic Zip File"/>
                       </Border>
                     </Property>
                   </Properties>
@@ -800,7 +810,7 @@
                   <Properties>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                        <TitledBorder title="Manually select TWS/IB Gateway log file"/>
+                        <TitledBorder title="Manually Select TWS/IB Gateway Fog File"/>
                       </Border>
                     </Property>
                   </Properties>
@@ -884,7 +894,7 @@
                     </Component>
                     <Component class="javax.swing.JLabel" name="manualSettingsLabel">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Manually select settings file:"/>
+                        <Property name="text" type="java.lang.String" value="Settings file location:"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JButton" name="browseLogManual">
