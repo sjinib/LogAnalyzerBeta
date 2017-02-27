@@ -193,7 +193,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         configurePane.setBorder(javax.swing.BorderFactory.createTitledBorder("Log File Configuration"));
         configurePane.setPreferredSize(new java.awt.Dimension(827, 800));
 
-        downloadDiagnosticPane.setBorder(javax.swing.BorderFactory.createTitledBorder("Download Diagnostic File From Server"));
+        downloadDiagnosticPane.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Download Diagnostic File From Server"));
 
         userDiagnosticsComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -273,7 +273,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         extractLabel1.setText("Extraction Progress:");
 
         extractDirectory1.setEditable(false);
-        extractDirectory1.setText(System.getProperty("user.home").toString() + "\\Temp_ext");
+        extractDirectory1.setText(System.getProperty("java.io.tmpdir"));
         extractDirectory1.setToolTipText("Select the directory where you want the diagnostic file to be extracted.");
         extractDirectory1.setMaximumSize(new java.awt.Dimension(300, 20));
         extractDirectory1.setPreferredSize(new java.awt.Dimension(100, 28));
@@ -295,7 +295,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         });
 
         loadDirectory1.setEditable(false);
-        loadDirectory1.setText(System.getProperty("user.home").toString() + "\\Temp");
+        loadDirectory1.setText(System.getProperty("java.io.tmpdir"));
         loadDirectory1.setToolTipText("Select the directory where the diagnostic file will be downloaded to.");
         loadDirectory1.setMaximumSize(new java.awt.Dimension(300, 20));
         loadDirectory1.setPreferredSize(new java.awt.Dimension(100, 28));
@@ -377,7 +377,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                                 .addComponent(browseZip1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(downloadBtn)))
-                        .addGap(0, 271, Short.MAX_VALUE))
+                        .addGap(0, 273, Short.MAX_VALUE))
                     .addGroup(downloadDiagnosticPaneLayout.createSequentialGroup()
                         .addComponent(usernameLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -445,7 +445,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        importDiagnosticPane.setBorder(javax.swing.BorderFactory.createTitledBorder("Import Local Diagnostic Zip File"));
+        importDiagnosticPane.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Import Local Diagnostic Zip File"));
 
         logComboBox2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -456,7 +456,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         importLabel.setText("Diagnostic zip file location:");
 
         extractDirectory2.setEditable(false);
-        extractDirectory2.setText(System.getProperty("user.home").toString() + "\\Temp_ext");
+        extractDirectory2.setText(System.getProperty("java.io.tmpdir"));
         extractDirectory2.setToolTipText("Select the directory where you want to extract the .zip file");
         extractDirectory2.setMaximumSize(new java.awt.Dimension(300, 20));
         extractDirectory2.setPreferredSize(new java.awt.Dimension(100, 28));
@@ -479,7 +479,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         });
 
         loadDirectory2.setEditable(false);
-        loadDirectory2.setText(System.getProperty("user.home").toString() + "\\Temp");
+        loadDirectory2.setText(System.getProperty("java.io.tmpdir"));
         loadDirectory2.setToolTipText("Select the uploaded diagnostic .zip file, or directly type in its path. (To manually select a single log file, please use \"Manually select TWS/IB Gateway log file\")");
         loadDirectory2.setMaximumSize(new java.awt.Dimension(300, 20));
         loadDirectory2.setPreferredSize(new java.awt.Dimension(100, 28));
@@ -574,7 +574,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                                 .addGroup(importDiagnosticPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(tradeComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(tradeLabel2))))))
-                .addContainerGap(293, Short.MAX_VALUE))
+                .addContainerGap(295, Short.MAX_VALUE))
         );
 
         importDiagnosticPaneLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {extractDirectory2, loadDirectory2});
@@ -616,7 +616,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        manualImportPane.setBorder(javax.swing.BorderFactory.createTitledBorder("Manually Select TWS/IB Gateway Fog File"));
+        manualImportPane.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Manually Select TWS/IB Gateway Log File"));
 
         browseSettingsManual.setText("Browse");
         browseSettingsManual.addActionListener(new java.awt.event.ActionListener() {
@@ -665,7 +665,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                         .addGroup(manualImportPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(browseSettingsManual)
                             .addComponent(browseLogManual))))
-                .addContainerGap(366, Short.MAX_VALUE))
+                .addContainerGap(368, Short.MAX_VALUE))
         );
         manualImportPaneLayout.setVerticalGroup(
             manualImportPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -706,7 +706,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 .addComponent(importDiagnosticPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(manualImportPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(67, Short.MAX_VALUE))
+                .addContainerGap(73, Short.MAX_VALUE))
         );
 
         statusPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Status"));
@@ -751,7 +751,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         screenshotStatus.setForeground(new java.awt.Color(153, 153, 153));
         screenshotStatus.setText("Screenshot");
 
-        jLabel1.setText("Choose Import Method:");
+        jLabel1.setText("Source of Diagnostic Files:");
 
         importMethodGroup.add(useImportServerBtn);
         useImportServerBtn.setSelected(true);
@@ -798,7 +798,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 .addComponent(useImportLocalBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(useManualFileBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(statusLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(logFileStatus)
@@ -2114,11 +2114,9 @@ public class AnalyzerGUI extends javax.swing.JFrame {
     
     private void loadUserBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadUserBtnActionPerformed
         String username = usernameText.getText();
-        if(username.length() < 8 || username.length() > 9){
-            javax.swing.JOptionPane.showMessageDialog(null, "Please specify a valid username");
-        } else {
-            // Loading circle
-            try{
+        
+        // Loading circle
+        try{
             loadingLabel.setText("");
             URL image = this.getClass().getClassLoader().getResource("resources/loading.gif");
             Icon icon = new ImageIcon(image);
@@ -2129,10 +2127,10 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             task.execute();
             
             isDownloaded_server = false;
-            } catch (Exception e){
-                e.printStackTrace();
-            }
+        } catch (Exception e){
+            e.printStackTrace();
         }
+        
     }//GEN-LAST:event_loadUserBtnActionPerformed
     
     private void browseExtract1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseExtract1ActionPerformed
@@ -2588,6 +2586,10 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         textPaneList.put(Choices.API, apiTextPane);
         textPaneList.put(Choices.MKTDATA, mktDataTextPane);
         textPaneList.put(Choices.ORDERSTRDS, ordTrdTextPane);
+        
+        useImportServerBtn.setForeground(Color.GREEN.darker());
+        downloadDiagnosticPane.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(Color.GREEN.darker(), 2, true), "Download Diagnostic File From Server"));
+            
     }
     
     private void handleLogComboBox_tws(int method){
@@ -3062,6 +3064,14 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 screenshotComboBox.setEnabled(true);
                 openScreenshotBtn.setEnabled(true);
             }
+            
+            useImportServerBtn.setForeground(Color.GREEN.darker());
+            useImportLocalBtn.setForeground(Color.BLACK);
+            useManualFileBtn.setForeground(Color.BLACK);
+            downloadDiagnosticPane.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(Color.GREEN.darker(), 2, true), "Download Diagnostic File From Server"));
+            importDiagnosticPane.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Import Local Diagnostic Zip File"));
+            manualImportPane.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Manually Select TWS/IB Gateway Log File"));
+
         } else if (useImportLocalBtn.isSelected()){
             //Log File Status
             if(logReady_local){
@@ -3117,6 +3127,14 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 screenshotComboBox.setEnabled(true);
                 openScreenshotBtn.setEnabled(true);
             }
+            
+            useImportServerBtn.setForeground(Color.BLACK);
+            useImportLocalBtn.setForeground(Color.GREEN.darker());
+            useManualFileBtn.setForeground(Color.BLACK);
+            downloadDiagnosticPane.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Download Diagnostic File From Server"));
+            importDiagnosticPane.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(Color.GREEN.darker(), 2, true), "Import Local Diagnostic Zip File"));
+            manualImportPane.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Manually Select TWS/IB Gateway Log File"));
+
         } else if (useManualFileBtn.isSelected()){
             // Log File Status
             if(logReady_local){
@@ -3154,6 +3172,14 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             screenshotStatus.setForeground(Color.RED);
             screenshotComboBox.setEnabled(false);
             openScreenshotBtn.setEnabled(false);
+            
+            useImportServerBtn.setForeground(Color.BLACK);
+            useImportLocalBtn.setForeground(Color.BLACK);
+            useManualFileBtn.setForeground(Color.GREEN.darker());
+            downloadDiagnosticPane.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Download Diagnostic File From Server"));
+            importDiagnosticPane.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Import Local Diagnostic Zip File"));
+            manualImportPane.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(Color.GREEN.darker(), 2, true), "Manually Select TWS/IB Gateway Log File"));
+
         }
     }
     
