@@ -6,13 +6,16 @@
 package com.ib.manager;
 
 import java.security.cert.X509Certificate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.net.ssl.*;
 /**
  *
  * @author Siteng Jin
  */
-class SimpleX509TrustManager implements X509TrustManager
-{
+class SimpleX509TrustManager implements X509TrustManager{
+    private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    
     public java.security.cert.X509Certificate[] getAcceptedIssuers() {
         return null;
     }
@@ -43,5 +46,6 @@ class SimpleX509TrustManager implements X509TrustManager
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
         } catch (Exception e) {
             e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }}
 }

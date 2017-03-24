@@ -5,15 +5,49 @@ package com.ib.manager;
 
 import com.ib.reader.*;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.prefs.Preferences;
 
 public class LogManager_local extends LogManager{
     //private final LogReader reader;
     //private boolean isDeepDiagnostic = true; // True if use deep analysis
     //private boolean isTWS; // If the files being investigated are from TWS (true) or IBG (false)
+    public final static String LOADDIRECTORYPREFLOCAL = "LOGANALYZER_LOAD_DIR_LOCAL";
+    public final static String EXTRACTDIRECTORYPREFLOCAL = "LOGANALYZER_EXTRACT_DIR_LOCAL";
+    
+    private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     
     public LogManager_local(){
         super();
     }   
+    
+    /*
+    @Override
+    public void setLoadDirectoryPref(String loadDirectory){
+        Preferences prefs = super.getPref();
+        prefs.put(LOADDIRECTORYPREFLOCAL, loadDirectory);
+    }
+    
+    @Override
+    public String getLoadDirectoryPref(){
+        Preferences prefs = super.getPref();
+        return prefs.get(LOADDIRECTORYPREFLOCAL, "");
+    }
+    
+    
+    @Override
+    public void setExtractDirectoryPref(String extractDirectory){
+    Preferences prefs = super.getPref();
+    prefs.put(EXTRACTDIRECTORYPREFLOCAL, extractDirectory);
+    }
+    
+    @Override
+    public String getExtractDirectoryPref(){
+    Preferences prefs = super.getPref();
+    return prefs.get(EXTRACTDIRECTORYPREFLOCAL, "");
+    }
+    */
     
     // Invoke to extract file
     public void extract(){
@@ -21,6 +55,7 @@ public class LogManager_local extends LogManager{
             super.getReader().extractZip(LogReader.USELOCAL);
         } catch (Exception e){
             e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
     
@@ -164,6 +199,7 @@ public class LogManager_local extends LogManager{
             super.getReader().openLogFileInNotePad(LogReader.USELOCAL, super.isTws(), useManual);
         } catch (Exception e){
             e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
     
@@ -172,6 +208,7 @@ public class LogManager_local extends LogManager{
             super.getReader().openScreenshots(LogReader.USELOCAL);
         } catch (Exception e){
             e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
     
@@ -180,6 +217,7 @@ public class LogManager_local extends LogManager{
             super.getReader().regExSearch(LogReader.USELOCAL, super.isTws(), useManual, regEx, isCaseSensitive, textPane);
         } catch (Exception e){
             e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
     
@@ -188,6 +226,7 @@ public class LogManager_local extends LogManager{
             return super.getReader().checkFileSizeForAll(LogReader.USELOCAL, super.isTws(), useManual);
         } catch (Exception e){
             e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return false;
     }
@@ -204,6 +243,7 @@ public class LogManager_local extends LogManager{
             }
         } catch (Exception e){
             e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
     

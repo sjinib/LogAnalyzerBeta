@@ -6,6 +6,7 @@
 package com.ib.manager;
 
 import com.ib.reader.*;
+import java.util.prefs.Preferences;
 
 /**
  *
@@ -14,10 +15,13 @@ import com.ib.reader.*;
 public abstract class LogManager {
     private final LogReader reader;
     private boolean isDeepDiagnostic = true; // True if use deep analysis
-    private boolean isTWS; // If the files being investigated are from TWS (true) or IBG (false)
+    private boolean isTWS = true; // If the files being investigated are from TWS (true) or IBG (false)
+    
+    private Preferences prefs;
     
     public LogManager(){
         reader = new LogReader();
+        prefs = Preferences.userNodeForPackage(this.getClass());
     }
     
     public LogReader getReader(){
@@ -38,5 +42,17 @@ public abstract class LogManager {
     
     public void setDeepDiagnostic(boolean isDeepDiag){
         isDeepDiagnostic = isDeepDiag;
+    }
+    
+    public void setLoadDirectoryPref(String loadDirectory){}
+    
+    public String getLoadDirectoryPref(){return null;}
+    
+    public void setExtractDirectoryPref(String extractDirectory){}
+    
+    public String getExtractDirectoryPref(){return null;}
+    
+    public Preferences getPref(){
+        return prefs;
     }
 }

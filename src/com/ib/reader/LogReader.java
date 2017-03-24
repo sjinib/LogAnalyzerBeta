@@ -5,16 +5,16 @@ package com.ib.reader;
 
 import com.ib.parser.*;
 import com.ib.message.*;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;
-import org.w3c.dom.Document;
 import java.io.File;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LogReader {
     public final static int USESERVER = 1;
@@ -87,6 +87,8 @@ public class LogReader {
     private boolean autoCls = true; // Auto clear display pane after extraction
     private boolean includeXml = true; // Include settings xml examination
     private boolean includeTrd = false; // Include .trd file exmanination
+    
+    private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     
     public LogReader(){
         mdSettingsMessage = new MarketDataSettingsMessage();
@@ -231,6 +233,8 @@ public class LogReader {
     
     // Extract file at zipLocation_local to outputDirectory_local
     public void extractZip(int method) throws Exception{
+        LOGGER.info((new Date()).toString() + " - " + "Extracting diagnostic file...");
+        
         if(method == LogReader.USESERVER){
             if(zipLocation_server != null && outputDirectory_server != null){
                 ExtractZip.unZipIt(zipLocation_server, outputDirectory_server);
@@ -257,6 +261,7 @@ public class LogReader {
                         return null;
                 } catch (Exception e){
                     e.printStackTrace();
+                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
                     return null;
                 }
             } else {
@@ -279,6 +284,7 @@ public class LogReader {
                         return null;
                 } catch (Exception e){
                     e.printStackTrace();
+                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
                     return null;
                 }
             } else {
@@ -307,6 +313,7 @@ public class LogReader {
                         return null;
                 } catch (Exception e){
                     e.printStackTrace();
+                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
                     return null;
                 }
             } else {
@@ -329,6 +336,7 @@ public class LogReader {
                         return null;
                 } catch (Exception e){
                     e.printStackTrace();
+                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
                     return null;
                 }
             } else {
@@ -357,6 +365,7 @@ public class LogReader {
                         return null;
                 } catch (Exception e){
                     e.printStackTrace();
+                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
                     return null;
                 }
             } else {
@@ -379,6 +388,7 @@ public class LogReader {
                         return null;
                 } catch (Exception e){
                     e.printStackTrace();
+                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
                     return null;
                 }
             } else {
@@ -407,6 +417,7 @@ public class LogReader {
                         return null;
                 } catch (Exception e){
                     e.printStackTrace();
+                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
                     return null;
                 }
             } else {
@@ -429,6 +440,7 @@ public class LogReader {
                         return null;
                 } catch (Exception e){
                     e.printStackTrace();
+                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
                     return null;
                 }
             } else {
@@ -457,6 +469,7 @@ public class LogReader {
                         return null;
                 } catch (Exception e){
                     e.printStackTrace();
+                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
                     return null;
                 }
             } else {
@@ -479,6 +492,7 @@ public class LogReader {
                         return null;
                 } catch (Exception e){
                     e.printStackTrace();
+                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
                     return null;
                 }
             } else {
@@ -507,6 +521,7 @@ public class LogReader {
                         return null;
                 } catch (Exception e){
                     e.printStackTrace();
+                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
                     return null;
                 }
             } else {
@@ -529,6 +544,7 @@ public class LogReader {
                         return null;
                 } catch (Exception e){
                     e.printStackTrace();
+                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
                     return null;
                 }
             } else {
@@ -1342,7 +1358,7 @@ public class LogReader {
         }
         
         long fileSize = currentLogFile.length()/1024/1024;
-        return (fileSize >= 5);
+        return (fileSize >= 50);
     }
     
     public void parseTwsLogFileDeep(int method, int choice, boolean isTws, boolean useManual, HashMap<Integer, javax.swing.JTextPane> textPaneList) throws Exception{

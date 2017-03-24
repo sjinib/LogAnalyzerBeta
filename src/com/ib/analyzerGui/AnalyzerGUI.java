@@ -5,6 +5,7 @@
 package com.ib.analyzerGui;
 
 import com.ib.manager.*;
+import com.util.logger.MyLogger;
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
@@ -14,10 +15,19 @@ import com.ib.parser.Choices;
 import com.ib.reader.LogReader;
 import java.awt.event.KeyEvent;
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.Box;
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 import javax.swing.text.*;
 
@@ -26,12 +36,14 @@ import javax.swing.text.*;
  * @author sitengjin
  */
 public class AnalyzerGUI extends javax.swing.JFrame {
-    private LogManager_server serverManager = new LogManager_server();
-    private LogManager_local localManager = new LogManager_local();
+    private LogManager_server serverManager;
+    private LogManager_local localManager;
     
     // Server side confirguation status
     private File diagnosticFile_server;
     private boolean isDownloaded_server = false;
+    private boolean canStartExtract = false;
+    private Object downloadExtractLock = new Object();
     private boolean isExtracted_server = false; //determine if to use extracted log or manual selected log
     
     private boolean isTwsLogAdded_server = false;
@@ -65,13 +77,20 @@ public class AnalyzerGUI extends javax.swing.JFrame {
     
     private HashMap<Integer, javax.swing.JTextPane> textPaneList = new HashMap<Integer, javax.swing.JTextPane>();
     
+    private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    
     /**
      * Creates new form demoFrame
      */
     public AnalyzerGUI() {
+        setupLogger();
+        
+        serverManager = new LogManager_server();
+        localManager = new LogManager_local();
+        
         initComponents(); // Default initializer called by NetBeans
         customInitTextPaneComponents(); // Initializing contents for display panes
-        customInitComponents(); 
+        customInitComponents();
     }
     
     /**
@@ -111,17 +130,17 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         extractDirectory1 = new javax.swing.JTextField();
         usernameText = new javax.swing.JTextField();
         loadDirectory1 = new javax.swing.JTextField();
-        downloadBtn = new javax.swing.JButton();
         browseZip1 = new javax.swing.JButton();
-        currentLoadedDiagnosticFileLabel = new javax.swing.JLabel();
+        extractLocationLabel1 = new javax.swing.JLabel();
         resetBtn = new javax.swing.JButton();
         loadingLabel = new javax.swing.JLabel();
         todayOnlyCheckBox = new javax.swing.JCheckBox();
+        zipLocationLabel1 = new javax.swing.JLabel();
         importDiagnosticPane = new javax.swing.JPanel();
         logComboBox2 = new javax.swing.JComboBox<>();
-        importLabel = new javax.swing.JLabel();
+        zipLocationLabel2 = new javax.swing.JLabel();
         extractDirectory2 = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
+        extractLocationLabel2 = new javax.swing.JLabel();
         extractLabel2 = new javax.swing.JLabel();
         browseExtract2 = new javax.swing.JButton();
         settingsComboBox2 = new javax.swing.JComboBox<>();
@@ -166,7 +185,6 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         analyzeOrdTrdBtn = new javax.swing.JButton();
         clearAllBtn = new javax.swing.JButton();
         autoClsCheck = new javax.swing.JCheckBox();
-        deepAnalysisCheck = new javax.swing.JCheckBox();
         includeXmlCheck = new javax.swing.JCheckBox();
         includeTrdFileCheck = new javax.swing.JCheckBox();
         openLogFileBtn = new javax.swing.JButton();
@@ -175,13 +193,24 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         regExSearchBtn = new javax.swing.JButton();
         screenshotComboBox = new javax.swing.JComboBox<>();
         openScreenshotBtn = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        logComboBoxCopy = new javax.swing.JComboBox<>();
+        jLabel4 = new javax.swing.JLabel();
+        settingsComboBoxCopy = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
+        tradeComboBoxCopy = new javax.swing.JComboBox<>();
+        jLabel6 = new javax.swing.JLabel();
         textMainPane = new javax.swing.JPanel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        menu = new javax.swing.JMenu();
+        proxyMenuItem = new javax.swing.JMenuItem();
 
         directoryChooser.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Log Analyzer");
         setName("mainPanel"); // NOI18N
+        setPreferredSize(new java.awt.Dimension(1200, 900));
         setSize(new java.awt.Dimension(0, 0));
 
         MainPane.setName(""); // NOI18N
@@ -194,6 +223,11 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         configurePane.setPreferredSize(new java.awt.Dimension(827, 800));
 
         downloadDiagnosticPane.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Download Diagnostic File From Server"));
+        downloadDiagnosticPane.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                downloadDiagnosticPaneMouseClicked(evt);
+            }
+        });
 
         userDiagnosticsComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -217,7 +251,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
 
         twsIbgLogLabel1.setText("TWS/IB Gateway log:");
 
-        extractBtn1.setText("Extract");
+        extractBtn1.setText("Download and Extract");
         extractBtn1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 extractBtn1ActionPerformed(evt);
@@ -248,8 +282,14 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 loadUserBtnActionPerformed(evt);
             }
         });
+        loadUserBtn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                loadUserBtnKeyPressed(evt);
+            }
+        });
 
         twsIbgGroup1.add(twsRadio1);
+        twsRadio1.setSelected(true);
         twsRadio1.setText("TWS");
         twsRadio1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -273,7 +313,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         extractLabel1.setText("Extraction Progress:");
 
         extractDirectory1.setEditable(false);
-        extractDirectory1.setText(System.getProperty("java.io.tmpdir"));
+        extractDirectory1.setText(serverManager.getExtractDirectoryPref().isEmpty() ? System.getProperty("java.io.tmpdir") : serverManager.getExtractDirectoryPref());
         extractDirectory1.setToolTipText("Select the directory where you want the diagnostic file to be extracted.");
         extractDirectory1.setMaximumSize(new java.awt.Dimension(300, 20));
         extractDirectory1.setPreferredSize(new java.awt.Dimension(100, 28));
@@ -295,17 +335,10 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         });
 
         loadDirectory1.setEditable(false);
-        loadDirectory1.setText(System.getProperty("java.io.tmpdir"));
+        loadDirectory1.setText(serverManager.getLoadDirectoryPref().isEmpty() ? System.getProperty("java.io.tmpdir") : serverManager.getLoadDirectoryPref());
         loadDirectory1.setToolTipText("Select the directory where the diagnostic file will be downloaded to.");
         loadDirectory1.setMaximumSize(new java.awt.Dimension(300, 20));
         loadDirectory1.setPreferredSize(new java.awt.Dimension(100, 28));
-
-        downloadBtn.setText("Download");
-        downloadBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                downloadBtnActionPerformed(evt);
-            }
-        });
 
         browseZip1.setText("Browse");
         browseZip1.addActionListener(new java.awt.event.ActionListener() {
@@ -314,7 +347,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             }
         });
 
-        currentLoadedDiagnosticFileLabel.setText("Current loaded file: ");
+        extractLocationLabel1.setText("Extracted folder location:");
 
         resetBtn.setText("Reset");
         resetBtn.setToolTipText("Click to rest application");
@@ -330,6 +363,8 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         todayOnlyCheckBox.setText("Today Only");
         todayOnlyCheckBox.setToolTipText("Check to only load diagnostic files uploaded today");
 
+        zipLocationLabel1.setText("Diagnostic zip file location:");
+
         javax.swing.GroupLayout downloadDiagnosticPaneLayout = new javax.swing.GroupLayout(downloadDiagnosticPane);
         downloadDiagnosticPane.setLayout(downloadDiagnosticPaneLayout);
         downloadDiagnosticPaneLayout.setHorizontalGroup(
@@ -337,47 +372,6 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             .addGroup(downloadDiagnosticPaneLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(downloadDiagnosticPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(downloadDiagnosticPaneLayout.createSequentialGroup()
-                        .addGroup(downloadDiagnosticPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(downloadDiagnosticPaneLayout.createSequentialGroup()
-                                .addComponent(chooseDiagnosticFileLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(userDiagnosticsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(downloadDiagnosticPaneLayout.createSequentialGroup()
-                                .addGroup(downloadDiagnosticPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, downloadDiagnosticPaneLayout.createSequentialGroup()
-                                        .addGroup(downloadDiagnosticPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(twsIbgLogLabel1)
-                                            .addComponent(logComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(104, 104, 104)
-                                        .addGroup(downloadDiagnosticPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(settingsLabel1)
-                                            .addComponent(settingsComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(85, 85, 85)
-                                        .addGroup(downloadDiagnosticPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(tradeComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(tradeLabel1)))
-                                    .addGroup(downloadDiagnosticPaneLayout.createSequentialGroup()
-                                        .addComponent(extractDirectory1, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(browseExtract1)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(extractBtn1))
-                            .addGroup(downloadDiagnosticPaneLayout.createSequentialGroup()
-                                .addComponent(extractProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(twsRadio1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(ibgRadio1))
-                            .addComponent(extractLabel1)
-                            .addComponent(currentLoadedDiagnosticFileLabel)
-                            .addGroup(downloadDiagnosticPaneLayout.createSequentialGroup()
-                                .addComponent(loadDirectory1, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(browseZip1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(downloadBtn)))
-                        .addGap(0, 273, Short.MAX_VALUE))
                     .addGroup(downloadDiagnosticPaneLayout.createSequentialGroup()
                         .addComponent(usernameLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -389,11 +383,49 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(loadingLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(resetBtn)))
+                        .addComponent(resetBtn))
+                    .addGroup(downloadDiagnosticPaneLayout.createSequentialGroup()
+                        .addGroup(downloadDiagnosticPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(downloadDiagnosticPaneLayout.createSequentialGroup()
+                                .addComponent(chooseDiagnosticFileLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(userDiagnosticsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(downloadDiagnosticPaneLayout.createSequentialGroup()
+                                .addComponent(extractProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(twsRadio1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(ibgRadio1))
+                            .addComponent(extractLabel1)
+                            .addComponent(extractLocationLabel1)
+                            .addGroup(downloadDiagnosticPaneLayout.createSequentialGroup()
+                                .addComponent(loadDirectory1, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(browseZip1))
+                            .addGroup(downloadDiagnosticPaneLayout.createSequentialGroup()
+                                .addGroup(downloadDiagnosticPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(twsIbgLogLabel1)
+                                    .addComponent(logComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(104, 104, 104)
+                                .addGroup(downloadDiagnosticPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(settingsLabel1)
+                                    .addComponent(settingsComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(85, 85, 85)
+                                .addGroup(downloadDiagnosticPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(tradeComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tradeLabel1)))
+                            .addGroup(downloadDiagnosticPaneLayout.createSequentialGroup()
+                                .addComponent(extractDirectory1, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(browseExtract1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(extractBtn1))
+                            .addComponent(zipLocationLabel1))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
-        downloadDiagnosticPaneLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {browseExtract1, extractBtn1, loadUserBtn});
+        downloadDiagnosticPaneLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {browseExtract1, browseZip1, loadUserBtn});
 
         downloadDiagnosticPaneLayout.setVerticalGroup(
             downloadDiagnosticPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -413,12 +445,13 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                     .addComponent(chooseDiagnosticFileLabel)
                     .addComponent(userDiagnosticsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(zipLocationLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(downloadDiagnosticPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(loadDirectory1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(downloadBtn)
                     .addComponent(browseZip1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(currentLoadedDiagnosticFileLabel)
+                .addComponent(extractLocationLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(downloadDiagnosticPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(browseExtract1)
@@ -446,6 +479,11 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         );
 
         importDiagnosticPane.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Import Local Diagnostic Zip File"));
+        importDiagnosticPane.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                importDiagnosticPaneMouseClicked(evt);
+            }
+        });
 
         logComboBox2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -453,7 +491,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             }
         });
 
-        importLabel.setText("Diagnostic zip file location:");
+        zipLocationLabel2.setText("Diagnostic zip file location:");
 
         extractDirectory2.setEditable(false);
         extractDirectory2.setText(System.getProperty("java.io.tmpdir"));
@@ -461,7 +499,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         extractDirectory2.setMaximumSize(new java.awt.Dimension(300, 20));
         extractDirectory2.setPreferredSize(new java.awt.Dimension(100, 28));
 
-        jLabel3.setText("Extract zip file to location:");
+        extractLocationLabel2.setText("Extracted folder location:");
 
         extractLabel2.setText("Extraction Progress:");
 
@@ -485,6 +523,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         loadDirectory2.setPreferredSize(new java.awt.Dimension(100, 28));
 
         twsIbgGroup2.add(twsRadio2);
+        twsRadio2.setSelected(true);
         twsRadio2.setText("TWS");
         twsRadio2.setToolTipText("Select to analyze TWS log file");
         twsRadio2.addActionListener(new java.awt.event.ActionListener() {
@@ -553,7 +592,6 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                     .addGroup(importDiagnosticPaneLayout.createSequentialGroup()
                         .addGap(4, 4, 4)
                         .addGroup(importDiagnosticPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
                             .addGroup(importDiagnosticPaneLayout.createSequentialGroup()
                                 .addComponent(extractProgressBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
@@ -561,7 +599,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(ibgRadio2))
                             .addComponent(extractLabel2)
-                            .addComponent(importLabel)
+                            .addComponent(zipLocationLabel2)
                             .addGroup(importDiagnosticPaneLayout.createSequentialGroup()
                                 .addGroup(importDiagnosticPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(twsIbgLogLabel2)
@@ -573,7 +611,8 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                                 .addGap(85, 85, 85)
                                 .addGroup(importDiagnosticPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(tradeComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(tradeLabel2))))))
+                                    .addComponent(tradeLabel2)))
+                            .addComponent(extractLocationLabel2))))
                 .addContainerGap(295, Short.MAX_VALUE))
         );
 
@@ -583,13 +622,13 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             importDiagnosticPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(importDiagnosticPaneLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(importLabel)
+                .addComponent(zipLocationLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(importDiagnosticPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(loadDirectory2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(browseZip2))
                 .addGap(6, 6, 6)
-                .addComponent(jLabel3)
+                .addComponent(extractLocationLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(importDiagnosticPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(extractDirectory2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -617,6 +656,11 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         );
 
         manualImportPane.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true), "Manually Select TWS/IB Gateway Log File"));
+        manualImportPane.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                manualImportPaneMouseClicked(evt);
+            }
+        });
 
         browseSettingsManual.setText("Browse");
         browseSettingsManual.addActionListener(new java.awt.event.ActionListener() {
@@ -706,7 +750,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 .addComponent(importDiagnosticPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(manualImportPane, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(73, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         statusPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Status"));
@@ -829,7 +873,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(configurePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(statusPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(configurePane, javax.swing.GroupLayout.DEFAULT_SIZE, 778, Short.MAX_VALUE))
+                    .addComponent(configurePane, javax.swing.GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -941,16 +985,6 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             }
         });
 
-        deepAnalysisCheck.setSelected(true);
-        deepAnalysisCheck.setText("Deep Analysis");
-        deepAnalysisCheck.setToolTipText("This feature has been deprecated. All analysis is defaulted to use \"Deep\" analysis.");
-        deepAnalysisCheck.setEnabled(false);
-        deepAnalysisCheck.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deepAnalysisCheckActionPerformed(evt);
-            }
-        });
-
         includeXmlCheck.setSelected(true);
         includeXmlCheck.setText("Include Tws.xml in analysis");
         includeXmlCheck.setToolTipText("Select to include settings xml file analysis");
@@ -1008,60 +1042,102 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setText("TWS/IB Gateway Log:");
+
+        logComboBoxCopy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logComboBoxCopyActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("Settings File:");
+
+        settingsComboBoxCopy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                settingsComboBoxCopyActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setText("Trade File:");
+
+        tradeComboBoxCopy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tradeComboBoxCopyActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel6.setText("Note: Double click on a specific panel to expand it to a floating window");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(autoClsCheck)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(autoClsCheck)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(includeXmlCheck)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(includeTrdFileCheck)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(openLogFileBtn))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(analyzeAllBtn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(analyzeEnvBtn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(analyzeLoginSeqBtn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(analyzeSysResBtn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(analyzeMktDataBtn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(analyzeConnBtn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(analyzeHtbpBtn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(analyzeAPIBtn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(analyzeOrdTrdBtn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(clearAllBtn)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(screenshotComboBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(openScreenshotBtn, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGap(30, 30, 30)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(matchCaseCheck)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(regExSearchBtn))
+                            .addComponent(regExText, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(deepAnalysisCheck)
+                        .addComponent(logComboBoxCopy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(includeXmlCheck)
+                        .addComponent(settingsComboBoxCopy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(includeTrdFileCheck)
+                        .addComponent(tradeComboBoxCopy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(openLogFileBtn))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(analyzeAllBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(analyzeEnvBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(analyzeLoginSeqBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(analyzeSysResBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(analyzeMktDataBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(analyzeConnBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(analyzeHtbpBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(analyzeAPIBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(analyzeOrdTrdBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(clearAllBtn)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(screenshotComboBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(openScreenshotBtn, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addGap(30, 30, 30)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(matchCaseCheck)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(regExSearchBtn))
-                    .addComponent(regExText, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel6)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(8, 8, 8)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(analyzeAllBtn)
                     .addComponent(analyzeEnvBtn)
@@ -1078,13 +1154,22 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(autoClsCheck)
-                    .addComponent(deepAnalysisCheck)
                     .addComponent(includeXmlCheck)
                     .addComponent(includeTrdFileCheck)
                     .addComponent(openLogFileBtn)
                     .addComponent(matchCaseCheck)
                     .addComponent(regExSearchBtn)
-                    .addComponent(openScreenshotBtn)))
+                    .addComponent(openScreenshotBtn))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5)
+                    .addComponent(logComboBoxCopy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(settingsComboBoxCopy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tradeComboBoxCopy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout textMainPaneLayout = new javax.swing.GroupLayout(textMainPane);
@@ -1095,7 +1180,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         );
         textMainPaneLayout.setVerticalGroup(
             textMainPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 720, Short.MAX_VALUE)
+            .addGap(0, 665, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout twsLogFilterPanelLayout = new javax.swing.GroupLayout(twsLogFilterPanel);
@@ -1116,6 +1201,20 @@ public class AnalyzerGUI extends javax.swing.JFrame {
 
         MainPane.addTab("Log Filter", twsLogFilterPanel);
 
+        menu.setText("Settings");
+
+        proxyMenuItem.setText("Proxy");
+        proxyMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                proxyMenuItemActionPerformed(evt);
+            }
+        });
+        menu.add(proxyMenuItem);
+
+        jMenuBar1.add(menu);
+
+        setJMenuBar(jMenuBar1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -1129,7 +1228,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(MainPane, javax.swing.GroupLayout.DEFAULT_SIZE, 828, Short.MAX_VALUE)
+                .addComponent(MainPane, javax.swing.GroupLayout.DEFAULT_SIZE, 807, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1442,6 +1541,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             logReady_local = false;
             updateStatus();
         }
+        handleLogComboBoxCopy();
         
         // Settings section
         if(settingsComboBox2.getSelectedItem() != null){
@@ -1455,6 +1555,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             settingsReady_local = false;
             updateStatus();
         }
+        handleSettingsComboBoxCopy();
         
         // Trading section
         if(tradeComboBox2.getSelectedItem() != null){
@@ -1468,6 +1569,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             trdReady_local = false;
             updateStatus();
         }
+        handleTradeComboBoxCopy();
         
         // Screenshot section
         // Screenshot section
@@ -1510,6 +1612,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             logReady_local = false;
             updateStatus();
         }
+        handleLogComboBoxCopy();
         
         // Settings section
         if(!settingsDirectoryManual.getText().isEmpty()){
@@ -1522,6 +1625,9 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             settingsReady_local = false;
             updateStatus();
         }
+        handleSettingsComboBoxCopy();
+        
+        handleTradeComboBoxCopy();
         
         // Have main window show extracted directory
         if(logDirectoryManual.getText().isEmpty()){
@@ -1559,241 +1665,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
     private void analyzeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeBtnActionPerformed
         MainPane.setSelectedComponent(twsLogFilterPanel);
     }//GEN-LAST:event_analyzeBtnActionPerformed
-    
-    private void analyzeEnvBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeEnvBtnActionPerformed
-        AnalyzeWorkTask m_task = new AnalyzeWorkTask(Choices.ENV);
-        m_task.execute();
-    }//GEN-LAST:event_analyzeEnvBtnActionPerformed
-    
-    private void deepAnalysisCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deepAnalysisCheckActionPerformed
-        /* //Deprecated
-        if(deepAnalysisCheck.isSelected()){
-            localManager.setDeepDiagnostic(true);
-        } else {
-            localManager.setDeepDiagnostic(false);
-        }
-        */
-    }//GEN-LAST:event_deepAnalysisCheckActionPerformed
-                                                    
-    private void analyzeLoginSeqBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeLoginSeqBtnActionPerformed
-        AnalyzeWorkTask m_task = new AnalyzeWorkTask(Choices.LOGINSEQ);
-        m_task.execute(); 
-    }//GEN-LAST:event_analyzeLoginSeqBtnActionPerformed
-    
-    private void analyzeConnBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeConnBtnActionPerformed
-        AnalyzeWorkTask m_task = new AnalyzeWorkTask(Choices.CONN);
-        m_task.execute();
-    }//GEN-LAST:event_analyzeConnBtnActionPerformed
-    
-    private void analyzeSysResBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeSysResBtnActionPerformed
-        AnalyzeWorkTask m_task = new AnalyzeWorkTask(Choices.SYSRES);
-        m_task.execute();
-    }//GEN-LAST:event_analyzeSysResBtnActionPerformed
-    
-    private void analyzeMktDataBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeMktDataBtnActionPerformed
-        AnalyzeWorkTask m_task = new AnalyzeWorkTask(Choices.MKTDATA);
-        m_task.execute();
-    }//GEN-LAST:event_analyzeMktDataBtnActionPerformed
-    
-    private void analyzeHtbpBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeHtbpBtnActionPerformed
-        AnalyzeWorkTask m_task = new AnalyzeWorkTask(Choices.HTBP);
-        m_task.execute();
-    }//GEN-LAST:event_analyzeHtbpBtnActionPerformed
-    
-    private void analyzeAPIBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeAPIBtnActionPerformed
-        AnalyzeWorkTask m_task = new AnalyzeWorkTask(Choices.API);
-        m_task.execute();
-    }//GEN-LAST:event_analyzeAPIBtnActionPerformed
-    
-    private void analyzeOrdTrdBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeOrdTrdBtnActionPerformed
-        AnalyzeWorkTask m_task = new AnalyzeWorkTask(Choices.ORDERSTRDS);
-        m_task.execute();
-    }//GEN-LAST:event_analyzeOrdTrdBtnActionPerformed
-    
-    private void analyzeAllBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeAllBtnActionPerformed
-        if(useImportServerBtn.isSelected() && logReady_server){
-            if(serverManager.checkFileSizeForAll()){
-                int reply = javax.swing.JOptionPane.showConfirmDialog(null, "The selected log file is larger than 5 MB, do you want to proceed?");
-                if(reply == javax.swing.JOptionPane.NO_OPTION)
-                    return;
-            }
-            
-            analyzeEnvBtnActionPerformed(null);
-            analyzeLoginSeqBtnActionPerformed(null);
-            analyzeConnBtnActionPerformed(null);
-            analyzeSysResBtnActionPerformed(null);
-            analyzeMktDataBtnActionPerformed(null);
-            analyzeHtbpBtnActionPerformed(null);
-            analyzeAPIBtnActionPerformed(null);
-            analyzeOrdTrdBtnActionPerformed(null);
-            
-            /*
-            serverManager.startParse(Choices.ENV, textPaneList);
-            serverManager.startParse(Choices.LOGINSEQ, textPaneList);
-            serverManager.startParse(Choices.CONN, textPaneList);
-            serverManager.startParse(Choices.SYSRES, textPaneList);
-            serverManager.startParse(Choices.HTBP, textPaneList);
-            serverManager.startParse(Choices.API, textPaneList);
-            serverManager.startParse(Choices.MKTDATA, textPaneList);
-            serverManager.startParse(Choices.ORDERSTRDS, textPaneList);
-            */
-        } else if(!useImportServerBtn.isSelected() && logReady_local){
-            if(localManager.checkFileSizeForAll(useManualFileBtn.isSelected())){
-                int reply = javax.swing.JOptionPane.showConfirmDialog(null, "The selected log file is larger than 5 MB, do you want to proceed?");
-                if(reply == javax.swing.JOptionPane.NO_OPTION)
-                    return;
-            }
-            
-            localManager.startParse(Choices.ENV, useManualFileBtn.isSelected(), textPaneList);
-            localManager.startParse(Choices.LOGINSEQ, useManualFileBtn.isSelected(), textPaneList);
-            localManager.startParse(Choices.CONN, useManualFileBtn.isSelected(), textPaneList);
-            localManager.startParse(Choices.SYSRES, useManualFileBtn.isSelected(), textPaneList);
-            localManager.startParse(Choices.HTBP, useManualFileBtn.isSelected(), textPaneList);
-            localManager.startParse(Choices.API, useManualFileBtn.isSelected(), textPaneList);
-            localManager.startParse(Choices.MKTDATA, useManualFileBtn.isSelected(), textPaneList);
-            localManager.startParse(Choices.ORDERSTRDS, useManualFileBtn.isSelected(), textPaneList);
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(null, "No log file selected");
-        }
-    }//GEN-LAST:event_analyzeAllBtnActionPerformed
-    
-    private void clearAllBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearAllBtnActionPerformed
-        textPaneList.get(Choices.ENV).setText(null);
-        textPaneList.get(Choices.LOGINSEQ).setText(null);
-        textPaneList.get(Choices.CONN).setText(null);
-        textPaneList.get(Choices.SYSRES).setText(null);
-        textPaneList.get(Choices.HTBP).setText(null);
-        textPaneList.get(Choices.API).setText(null);
-        textPaneList.get(Choices.MKTDATA).setText(null);
-        textPaneList.get(Choices.ORDERSTRDS).setText(null);
-    }//GEN-LAST:event_clearAllBtnActionPerformed
-
-    private void includeXmlCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_includeXmlCheckActionPerformed
-        if(useImportServerBtn.isSelected()){
-            if(includeXmlCheck.isSelected()){
-                serverManager.setIncludeXml(true);
-            } else {
-                serverManager.setIncludeXml(false);
-            }
-        } else {
-            if(includeXmlCheck.isSelected()){
-                localManager.setIncludeXml(true);
-            } else {
-                localManager.setIncludeXml(false);
-            }
-        }
-    }//GEN-LAST:event_includeXmlCheckActionPerformed
-
-    private void includeTrdFileCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_includeTrdFileCheckActionPerformed
-        if(useImportServerBtn.isSelected()){
-            if(includeTrdFileCheck.isSelected()){
-                serverManager.setIncludeTrd(true);
-            } else {
-                serverManager.setIncludeTrd(false);
-            }
-        } else {
-            if(includeTrdFileCheck.isSelected()){
-                localManager.setIncludeTrd(true);
-            } else {
-                localManager.setIncludeTrd(false);
-            }
-        }
-    }//GEN-LAST:event_includeTrdFileCheckActionPerformed
-
-    private void autoClsCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_autoClsCheckActionPerformed
-        if(useImportServerBtn.isSelected()){
-            if(autoClsCheck.isSelected()){
-                serverManager.setAutoCls(true);
-            } else {
-                serverManager.setAutoCls(false);
-            }
-        } else {
-            if(autoClsCheck.isSelected()){
-                localManager.setAutoCls(true);
-            } else {
-                localManager.setAutoCls(false);
-            }
-        }
-    }//GEN-LAST:event_autoClsCheckActionPerformed
-
-    private void openLogFileBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openLogFileBtnActionPerformed
-        if(useImportServerBtn.isSelected() && logReady_server){
-            serverManager.openLogFileInNotePad(useManualFileBtn.isSelected());
-        } else if(!useImportServerBtn.isSelected() && logReady_local){
-            localManager.openLogFileInNotePad(useManualFileBtn.isSelected());
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(null, "No log file selected");
-        }
-    }//GEN-LAST:event_openLogFileBtnActionPerformed
-
-    private void regExSearchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regExSearchBtnActionPerformed
-        if(useImportServerBtn.isSelected() && logReady_server){
-            if(!regExText.getText().isEmpty()){
-                
-                javax.swing.JTextPane regExTextPane = new javax.swing.JTextPane();
-                regExTextPane.setName("Regular Expression Search");
-                regExTextPane.setEditable(false);
-                
-                javax.swing.JScrollPane regExScrollPane = new javax.swing.JScrollPane(regExTextPane);
-                regExScrollPane.setViewportView(regExTextPane);
-                regExScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "Regular Expression Search", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0)));
-                
-                serverManager.regExSearch(regExText.getText(), matchCaseCheck.isSelected(), regExTextPane);
-                
-                java.awt.EventQueue.invokeLater(new Runnable() {
-                    public void run() {
-                        javax.swing.JFrame magnifiedDisplayPane = new MagnifiedDisplayPane(regExTextPane, regExScrollPane);
-                        magnifiedDisplayPane.setVisible(true);
-                    }
-                });
-            }
-        } else if(!useImportServerBtn.isSelected() && logReady_local){
-            if(!regExText.getText().isEmpty()){
-                
-                javax.swing.JTextPane regExTextPane = new javax.swing.JTextPane();
-                regExTextPane.setName("Regular Expression Search");
-                regExTextPane.setEditable(false);
-                
-                javax.swing.JScrollPane regExScrollPane = new javax.swing.JScrollPane(regExTextPane);
-                regExScrollPane.setViewportView(regExTextPane);
-                regExScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "Regular Expression Search", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0)));
-                
-                localManager.regExSearch(useManualFileBtn.isSelected(), regExText.getText(), matchCaseCheck.isSelected(), regExTextPane);
-                
-                java.awt.EventQueue.invokeLater(new Runnable() {
-                    public void run() {
-                        javax.swing.JFrame magnifiedDisplayPane = new MagnifiedDisplayPane(regExTextPane, regExScrollPane);
-                        magnifiedDisplayPane.setVisible(true);
-                    }
-                });
-            }
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(null, "No log file selected");
-        }
-    }//GEN-LAST:event_regExSearchBtnActionPerformed
-
-    private void openScreenshotBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openScreenshotBtnActionPerformed
-        if(useImportServerBtn.isSelected() && screenshotReady_server){
-            serverManager.openScreenshot();
-        } else if(!useImportServerBtn.isSelected() && screenshotReady_local){
-            localManager.openScreenshot();
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(null, "No screenshot selected");
-        }
-    }//GEN-LAST:event_openScreenshotBtnActionPerformed
-
-    private void screenshotComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_screenshotComboBoxActionPerformed
-        if(useImportServerBtn.isSelected() && screenshotReady_server){
-            if(screenshotComboBox.getSelectedItem() != null){
-                serverManager.selectScreenshot(screenshotComboBox.getSelectedItem().toString());
-            }
-        } else if(!useImportServerBtn.isSelected() && screenshotReady_local){
-            if(screenshotComboBox.getSelectedItem() != null){
-                localManager.selectScreenshot(screenshotComboBox.getSelectedItem().toString());
-            }
-        }
-    }//GEN-LAST:event_screenshotComboBoxActionPerformed
-
+                                                                                            
     private void tradeComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tradeComboBox2ActionPerformed
         if(tradeComboBox2.getSelectedItem() != null){
             localManager.selectTradeFile(tradeComboBox2.getSelectedItem().toString());
@@ -1802,6 +1674,8 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             if(useImportLocalBtn.isSelected()){
                 trdReady_local = true;
                 updateStatus();
+                
+                tradeComboBoxCopy.setSelectedItem(tradeComboBox2.getSelectedItem());
             }
         }
     }//GEN-LAST:event_tradeComboBox2ActionPerformed
@@ -1866,6 +1740,8 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             File directory = directoryChooser.getSelectedFile();
             extractDirectory2.setText(directory.getAbsolutePath());
             localManager.setReaderLocation(null, extractDirectory2.getText());
+            
+            //localManager.setExtractDirectoryPref(extractDirectory2.getText());
         } else if (returnVal == javax.swing.JFileChooser.CANCEL_OPTION){
         } else {
             javax.swing.JOptionPane.showMessageDialog(null, "Failed to find directory.");
@@ -1881,9 +1757,16 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 return;
             }
             loadDirectory2.setText(diagnosticFile_local.getAbsolutePath());
-            extractDirectory2.setText(diagnosticFile_local.getAbsolutePath() + "_ext");
-            localManager.setReaderLocation(loadDirectory2.getText(), extractDirectory2.getText());
-            extractProgressBar2.setValue(0);
+            extractDirectory2.setText(diagnosticFile_local.getAbsolutePath().substring(
+                    0, diagnosticFile_local.getAbsolutePath().lastIndexOf("\\")));
+            
+            String diagnosticFileName = diagnosticFile_local.getAbsolutePath().substring(
+                    diagnosticFile_local.getAbsolutePath().lastIndexOf("\\")+1, diagnosticFile_local.getAbsolutePath().lastIndexOf(".zip"));
+            
+            localManager.setReaderLocation(loadDirectory2.getText(), extractDirectory2.getText() + "\\" + diagnosticFileName);
+            
+            //localManager.setLoadDirectoryPref(loadDirectory2.getText());
+            //localManager.setExtractDirectoryPref(extractDirectory1.getText());
         } else if (returnVal == javax.swing.JFileChooser.CANCEL_OPTION){
         } else {
             javax.swing.JOptionPane.showMessageDialog(null, "Failed to find file.");
@@ -1918,6 +1801,8 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             if(useImportLocalBtn.isSelected()){
                 settingsReady_local = true;
                 updateStatus();
+                
+                settingsComboBoxCopy.setSelectedItem(settingsComboBox2.getSelectedItem());
             }
         }
     }//GEN-LAST:event_settingsComboBox2ActionPerformed
@@ -1931,6 +1816,8 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             if(useImportLocalBtn.isSelected()){
                 logReady_local = true;
                 updateStatus();
+                
+                logComboBoxCopy.setSelectedItem(logComboBox2.getSelectedItem());
             }
         }
     }//GEN-LAST:event_logComboBox2ActionPerformed
@@ -2018,6 +1905,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             return true;
         }
         
+        @Override
         public void process(List<Integer> chuncks){
             for(Integer progress: chuncks){
                 extractProgressBar2.setValue(progress);
@@ -2031,8 +1919,11 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             javax.swing.JOptionPane.showMessageDialog(null, "Please choose a valid .zip diagnostic file");
             return;
         }
-
-        File directory = new File(extractDirectory2.getText());
+        
+        String diagnosticFileName = diagnosticFile_local.getAbsolutePath().substring(
+                    diagnosticFile_local.getAbsolutePath().lastIndexOf("\\")+1, diagnosticFile_local.getAbsolutePath().lastIndexOf(".zip"));
+        File directory = new File(extractDirectory2.getText() + "\\" + diagnosticFileName);
+          
         if(directory.isDirectory()){ // If the output directory selected already exist
             int reply = javax.swing.JOptionPane.showConfirmDialog(null, "The directory already exists. Do you want to clear the " + extractDirectory2.getText() + " folder first?");
             if(reply == javax.swing.JOptionPane.YES_OPTION){
@@ -2041,10 +1932,11 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 } catch (IOException e){
                     e.printStackTrace();
                     javax.swing.JOptionPane.showMessageDialog(null, "Failed to clear directory");
+                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
                 }
 
-                extractDirectory2.setText(directory.toString());
-                localManager.setReaderLocation(null, extractDirectory2.getText());
+                //extractDirectory2.setText(directory.toString());
+                localManager.setReaderLocation(null, extractDirectory2.getText() + "\\" + diagnosticFileName);
                 
                 ExtractWorkerTast2 m_task = new ExtractWorkerTast2();
                 m_task.execute();
@@ -2055,7 +1947,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 }
             } else {
                 javax.swing.JOptionPane.showMessageDialog(null, "Please choose a valid directory");
-                extractDirectory2.setText(System.getProperty("user.home").toString() + "\\Temp");
+                //extractDirectory2.setText(System.getProperty("java.io.tmpdir"));
                 extractProgressBar2.setValue(0); /*Progress bar setting*/
             }
         }
@@ -2063,8 +1955,8 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             int reply = javax.swing.JOptionPane.showConfirmDialog(null, "The directory " + extractDirectory2.getText() + " does not exist. Do you want to create it?");
             if(reply == javax.swing.JOptionPane.YES_OPTION){
                 directory.mkdir();
-                extractDirectory2.setText(directory.toString());
-                localManager.setReaderLocation(null, extractDirectory2.getText());
+                //extractDirectory2.setText(directory.toString());
+                localManager.setReaderLocation(null, extractDirectory2.getText() + "\\" + diagnosticFileName);
                 
                 ExtractWorkerTast2 m_task = new ExtractWorkerTast2();
                 m_task.execute();
@@ -2076,7 +1968,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             }
             else {
                 javax.swing.JOptionPane.showMessageDialog(null, "Failed to load directory. Please find a different directory.");
-                extractDirectory2.setText(System.getProperty("user.home").toString() + "\\Temp");
+                //extractDirectory2.setText(System.getProperty("java.io.tmpdir"));
                 extractProgressBar2.setValue(0); /*Progress bar setting*/
             }
         }
@@ -2108,11 +2000,13 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 }
             } catch (Exception e){
                 e.printStackTrace();
+                LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
         }
     }
     
     private void loadUserBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadUserBtnActionPerformed
+        LOGGER.info((new Date()).toString() + " - " + "Loading username list...");
         String username = usernameText.getText();
         
         // Loading circle
@@ -2129,6 +2023,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             isDownloaded_server = false;
         } catch (Exception e){
             e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         
     }//GEN-LAST:event_loadUserBtnActionPerformed
@@ -2139,7 +2034,12 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         if (returnVal == javax.swing.JFileChooser.APPROVE_OPTION) {
             File directory = directoryChooser.getSelectedFile();
             extractDirectory1.setText(directory.getAbsolutePath());
-            serverManager.setReaderLocation(null, extractDirectory1.getText());
+            
+            String diagnosticFileName = serverManager.getSelectedUserDiagnosticFile();
+            String diagnosticFileNameNoZip = diagnosticFileName.substring(0, diagnosticFileName.lastIndexOf(".zip"));
+            serverManager.setReaderLocation(null, extractDirectory1.getText() + "\\" + diagnosticFileNameNoZip);
+            
+            //serverManager.setExtractDirectoryPref(extractDirectory1.getText());
         } else if (returnVal == javax.swing.JFileChooser.CANCEL_OPTION){
         } else {
             javax.swing.JOptionPane.showMessageDialog(null, "Failed to find directory.");
@@ -2156,7 +2056,15 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 return;
             }
             loadDirectory1.setText(diagnosticFile_server.getAbsolutePath());
-            extractDirectory1.setText(diagnosticFile_server.getAbsolutePath() + "_ext");
+            extractDirectory1.setText(diagnosticFile_server.getAbsolutePath());
+            
+            String diagnosticFileName = serverManager.getSelectedUserDiagnosticFile();
+                    
+            String diagnosticFileNameNoZip = diagnosticFileName.substring(0, diagnosticFileName.lastIndexOf(".zip"));
+            serverManager.setReaderLocation(loadDirectory1.getText(), extractDirectory1.getText() + "\\" + diagnosticFileNameNoZip);
+            
+            serverManager.setLoadDirectoryPref(loadDirectory1.getText());
+            serverManager.setExtractDirectoryPref(extractDirectory1.getText());
         } else if (returnVal == javax.swing.JFileChooser.CANCEL_OPTION){
         } else {
             javax.swing.JOptionPane.showMessageDialog(null, "Failed to find directory.");
@@ -2173,61 +2081,148 @@ public class AnalyzerGUI extends javax.swing.JFrame {
     private void logComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logComboBox1ActionPerformed
         if(logComboBox1.getSelectedItem() != null){
             serverManager.selectLogFile(logComboBox1.getSelectedItem().toString());
-
+            
             // Set Status
             if(useImportServerBtn.isSelected()){
                 logReady_server = true;
                 updateStatus();
+                
+                logComboBoxCopy.setSelectedItem(logComboBox1.getSelectedItem());
             }
         }        
     }//GEN-LAST:event_logComboBox1ActionPerformed
     
-    private void downloadBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downloadBtnActionPerformed
-        // TODO add your handling code here:
-        String zipLocation = new String(loadDirectory1.getText() + "\\" + serverManager.getSelectedUserDiagnosticFile());
-        File directory = new File(zipLocation);
-        if(directory.exists() && directory.isFile()){
-            int reply = javax.swing.JOptionPane.showConfirmDialog(null, "The file already exists in the directory. Do you want to download and replace the existing " + serverManager.getSelectedUserDiagnosticFile() + " ?");
-            if(reply == javax.swing.JOptionPane.YES_OPTION){
-                if(serverManager.downloadDiagnosticFile(zipLocation)){
-                    currentLoadedDiagnosticFileLabel.setText("Current loaded file: 【" + zipLocation + "】");
-                    extractDirectory1.setText(zipLocation + "_ext");
-                    extractProgressBar1.setValue(0);
-                    isDownloaded_server = true;
-                }
-            }
-        } else {
-            if(serverManager.downloadDiagnosticFile(zipLocation)){
-                currentLoadedDiagnosticFileLabel.setText("Current loaded file: 【" + zipLocation + "】");
-                extractDirectory1.setText(zipLocation + "_ext");
-                extractProgressBar1.setValue(0);
-                isDownloaded_server = true;
-            }
+    class DownloadWorkerTask1 extends SwingWorker<Boolean, Integer>{
+        private String zipLocation;
+        
+        public DownloadWorkerTask1(String location){
+            this.zipLocation = location;
         }
-    }//GEN-LAST:event_downloadBtnActionPerformed
-    
-    class ExtractWorkerTast1 extends SwingWorker<Boolean, Integer>{
+        
         @Override
         public Boolean doInBackground(){
+            synchronized(downloadExtractLock){
+                if(serverManager.downloadDiagnosticFile(zipLocation)){
+                    isDownloaded_server = true;
+                    publish(30);
+                    LOGGER.info((new Date()).toString() + " - " + "DownloadWorker: Publish 30");
+                    canStartExtract = true;
+                    downloadExtractLock.notifyAll();
+                    return true;
+                } else {
+                    canStartExtract = false;
+                    downloadExtractLock.notifyAll();
+                    return false;
+                }
+            }
+        }
+        
+        @Override
+        public void done(){ }
+        
+        @Override
+        public void process(List<Integer> chuncks){
+            for(Integer progress: chuncks){
+                extractProgressBar1.setValue(progress);
+            }
+        }
+    }
+    
+    class ExtractWorkerTast1 extends SwingWorker<Boolean, Integer>{
+        private javax.swing.JFrame mainFrameRef;
+        
+        public ExtractWorkerTast1(javax.swing.JFrame mainFrameRef){
+            this.mainFrameRef = mainFrameRef;
+        }
+        
+        @Override
+        public Boolean doInBackground(){
+            synchronized(downloadExtractLock){
+                while(!canStartExtract){
+                    try{
+                        downloadExtractLock.wait();
+                        LOGGER.info((new Date()).toString() + " - " + "ExtractWorker: Waiting for DownloadWorker to be finished.");
+                    } catch (Exception e){
+                        e.printStackTrace();
+                        LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                    }
+                }
+            }
+            LOGGER.info((new Date()).toString() + " - " + "ExtractWorker: DownloadWorker finished, start extraction.");
+            
+            String diagnosticFileName = serverManager.getSelectedUserDiagnosticFile();
+            String diagnosticFileNameNoZip = diagnosticFileName = diagnosticFileName.substring(0, diagnosticFileName.lastIndexOf(".zip"));
+            File extractDirectory = new File(extractDirectory1.getText() + "\\" + diagnosticFileNameNoZip);
+            if(extractDirectory.isDirectory()){ // If the output directory selected already exist
+                int reply = javax.swing.JOptionPane.showConfirmDialog(null, "The extract directory already exists. Do you want to clear the " + extractDirectory1.getText() + " folder first?");
+                if(reply == javax.swing.JOptionPane.YES_OPTION){
+                    try{
+                        FileUtils.cleanDirectory(extractDirectory); // Clear extract directory
+                    } catch (IOException e){
+                        e.printStackTrace();
+                        javax.swing.JOptionPane.showMessageDialog(null, "Failed to clear directory");
+                        LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                    }
+                    
+                    //extractDirectory1.setText(extractDirectory.toString());
+                    serverManager.setReaderLocation(null, extractDirectory1.getText() + "\\" + diagnosticFileName);
+                    
+                    extractionWork();
+                    
+                    // Have main window show extracted directory
+                    if(useImportServerBtn.isSelected()){
+                        mainFrameRef.setTitle("Log Analyzer - " + extractDirectory1.getText());
+                    }
+                } else {
+                    javax.swing.JOptionPane.showMessageDialog(null, "Please choose a valid directory");
+                    //extractDirectory1.setText(System.getProperty("java.io.tmpdir"));
+                    extractProgressBar1.setValue(0); /*Progress bar setting*/
+                }
+            }
+            else {
+                int reply = javax.swing.JOptionPane.showConfirmDialog(null, "The directory " + extractDirectory1.getText() + " does not exist. Do you want to create it?");
+                if(reply == javax.swing.JOptionPane.YES_OPTION){
+                    extractDirectory.mkdir();
+                    
+                    //extractDirectory1.setText(extractDirectory.toString());
+                    serverManager.setReaderLocation(null, extractDirectory1.getText() + "\\" + diagnosticFileName);
+                    
+                    extractionWork();
+                    
+                    // Have main window show extracted directory
+                    if(useImportServerBtn.isSelected()){
+                        mainFrameRef.setTitle("Log Analyzer - " + extractDirectory1.getText());
+                    }
+                }
+                else {
+                    javax.swing.JOptionPane.showMessageDialog(null, "Failed to load directory. Please find a different directory.");
+                    //extractDirectory1.setText(System.getProperty("java.io.tmpdir"));
+                    extractProgressBar1.setValue(0); /*Progress bar setting*/
+                }
+            }
+            
+            return true;
+        }
+        
+        private void extractionWork(){
             // Initialize tws/ibg log combo box
             logComboBox1.setSelectedItem(null);
             logComboBox1.removeAllItems();
             isTwsLogAdded_server = false; // initialize
             isIbgLogAdded_server = false;
-            publish(5);
             
             // Initialize settings file combo box
             settingsComboBox1.setSelectedItem(null);
             settingsComboBox1.removeAllItems();
             isTwsSettingsAdded_server = false;
             isIbgSettingsAdded_server = false;
-            publish(10);
             
             // Initialize trade combo box
             tradeComboBox1.setSelectedItem(null);
             tradeComboBox1.removeAllItems();
             isTradeFileAdded_server = false;
-            publish(15);
+            publish(45);
+            LOGGER.info((new Date()).toString() + " - " + "ExtractWorker: Publish 45");
             
             // Initialize screenshot combo box
             if(useImportServerBtn.isSelected()){
@@ -2235,14 +2230,14 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 screenshotComboBox.removeAllItems();
                 isScreenshotAdded = false;
             }
-            publish(20);
             
             serverManager.resetAllFileList();
-            publish(30);
+            publish(55);
             
             serverManager.extract();
             isExtracted_server = true;
             publish(70);
+            LOGGER.info((new Date()).toString() + " - " + "ExtractWorker: Publish 70");
             if(twsRadio1.isSelected()){
                 // Populate and select log file for combo box
                 handleLogComboBox_tws(LogReader.USESERVER);
@@ -2259,6 +2254,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 // Populate and select screenshot for combo box
                 handleScreenshotComboBox(LogReader.USESERVER);
                 publish(90);
+                LOGGER.info((new Date()).toString() + " - " + "ExtractWorker: Publish 90");
             } else if(ibgRadio1.isSelected()){
                 // Populate and select log file for combo box
                 handleLogComboBox_ibg(LogReader.USESERVER);
@@ -2271,6 +2267,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 // Populate and select screenshot for combo box
                 handleScreenshotComboBox(LogReader.USESERVER);
                 publish(90);
+                LOGGER.info((new Date()).toString() + " - " + "ExtractWorker: Publish 90");
             }
             
             if(autoClsCheck.isSelected()){
@@ -2284,10 +2281,10 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 textPaneList.get(Choices.ORDERSTRDS).setText(null);
             }
             publish(100);
-            
-            return true;            
+            LOGGER.info((new Date()).toString() + " - " + "ExtractWorker: Publish 100");
         }
         
+        @Override
         public void process(List<Integer> chuncks){
             for(Integer progress: chuncks){
                 extractProgressBar1.setValue(progress);
@@ -2302,56 +2299,32 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         //    javax.swing.JOptionPane.showMessageDialog(null, "Please choose a valid .zip diagnostic file");
         //    return;
         //}
-
-        File directory = new File(extractDirectory1.getText());
-        if(directory.isDirectory()){ // If the output directory selected already exist
-            int reply = javax.swing.JOptionPane.showConfirmDialog(null, "The directory already exists. Do you want to clear the " + extractDirectory2.getText() + " folder first?");
-            if(reply == javax.swing.JOptionPane.YES_OPTION){
-                try{
-                    FileUtils.cleanDirectory(directory); // Clear extract directory
-                } catch (IOException e){
-                    e.printStackTrace();
-                    javax.swing.JOptionPane.showMessageDialog(null, "Failed to clear directory");
-                }
-
-                extractDirectory1.setText(directory.toString());
-                serverManager.setReaderLocation(null, extractDirectory1.getText());
-                
-                ExtractWorkerTast1 m_task = new ExtractWorkerTast1();
-                m_task.execute();
-
-                // Have main window show extracted directory
-                if(useImportServerBtn.isSelected()){
-                    this.setTitle("Log Analyzer - " + extractDirectory1.getText());
-                }
-            } else {
-                javax.swing.JOptionPane.showMessageDialog(null, "Please choose a valid directory");
-                extractDirectory1.setText(System.getProperty("user.home").toString() + "\\Temp");
-                extractProgressBar1.setValue(0); /*Progress bar setting*/
-            }
+        if(userDiagnosticsComboBox.getSelectedItem() == null){
+            javax.swing.JOptionPane.showMessageDialog(null, "No user fiagnostic file is selected.");
+            return;
         }
-        else {
-            int reply = javax.swing.JOptionPane.showConfirmDialog(null, "The directory " + extractDirectory1.getText() + " does not exist. Do you want to create it?");
+        
+        String zipLocation = new String(loadDirectory1.getText() + "\\" + serverManager.getSelectedUserDiagnosticFile());
+        File zipDirectory = new File(zipLocation);
+        if(zipDirectory.exists() && zipDirectory.isFile()){
+            int reply = javax.swing.JOptionPane.showConfirmDialog(null, "The file trying to download already exists in the directory. Do you want to re-download and replace the existing " + serverManager.getSelectedUserDiagnosticFile() + " ?");
             if(reply == javax.swing.JOptionPane.YES_OPTION){
-                directory.mkdir();
+                extractLocationLabel1.setText("Current loaded file: 【" + zipLocation + "】");
+                //extractDirectory1.setText(zipLocation.substring(0, zipLocation.lastIndexOf(".zip")));
                 
-                extractDirectory1.setText(directory.toString());
-                serverManager.setReaderLocation(null, extractDirectory1.getText());
-
-                ExtractWorkerTast1 m_task = new ExtractWorkerTast1();
-                m_task.execute();
-
-                // Have main window show extracted directory
-                if(useImportServerBtn.isSelected()){
-                    this.setTitle("Log Analyzer - " + extractDirectory1.getText());
-                }
+                DownloadWorkerTask1 m_downloadWorker = new DownloadWorkerTask1(zipLocation);
+                m_downloadWorker.execute();
             }
-            else {
-                javax.swing.JOptionPane.showMessageDialog(null, "Failed to load directory. Please find a different directory.");
-                extractDirectory1.setText(System.getProperty("user.home").toString() + "\\Temp");
-                extractProgressBar1.setValue(0); /*Progress bar setting*/
-            }
+        } else {
+            extractLocationLabel1.setText("Current loaded file: 【" + zipLocation + "】");
+            //extractDirectory1.setText(zipLocation.substring(0, zipLocation.lastIndexOf(".zip")));
+            
+            DownloadWorkerTask1 m_downloadWorker = new DownloadWorkerTask1(zipLocation);
+            m_downloadWorker.execute();
         }
+        
+        ExtractWorkerTast1 m_task = new ExtractWorkerTast1(this);
+        m_task.execute();
     }//GEN-LAST:event_extractBtn1ActionPerformed
 
     private void twsRadio1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_twsRadio1ActionPerformed
@@ -2391,11 +2364,13 @@ public class AnalyzerGUI extends javax.swing.JFrame {
     private void settingsComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsComboBox1ActionPerformed
         if(settingsComboBox1.getSelectedItem() != null){
             serverManager.selectSettingsFile(settingsComboBox1.getSelectedItem().toString(), false);
-
+            
             // Set Status
             if(useImportServerBtn.isSelected()){
                 settingsReady_server = true;
                 updateStatus();
+                
+                settingsComboBoxCopy.setSelectedItem(settingsComboBox1.getSelectedItem());
             }
         }
     }//GEN-LAST:event_settingsComboBox1ActionPerformed
@@ -2403,11 +2378,13 @@ public class AnalyzerGUI extends javax.swing.JFrame {
     private void tradeComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tradeComboBox1ActionPerformed
         if(tradeComboBox1.getSelectedItem() != null){
             serverManager.selectTradeFile(tradeComboBox1.getSelectedItem().toString());
-
+            
             // Set Status
             if(useImportServerBtn.isSelected()){
                 trdReady_server = true;
                 updateStatus();
+                
+                tradeComboBoxCopy.setSelectedItem(tradeComboBox1.getSelectedItem());
             }
         }
     }//GEN-LAST:event_tradeComboBox1ActionPerformed
@@ -2425,6 +2402,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             logReady_server = false;
             updateStatus();
         }
+        handleLogComboBoxCopy();
         
         // Settings section
         if(settingsComboBox1.getSelectedItem() != null){
@@ -2438,6 +2416,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             settingsReady_server = false;
             updateStatus();
         }
+        handleSettingsComboBoxCopy();
         
         // Trading section
         if(tradeComboBox1.getSelectedItem() != null){
@@ -2451,6 +2430,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             trdReady_server = false;
             updateStatus();
         }
+        handleSettingsComboBoxCopy();
         
         // Screenshot section
         // Reload screenshot for server manager
@@ -2477,14 +2457,6 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             this.setTitle("Log Analyzer - " + extractDirectory1.getText());
         }
     }//GEN-LAST:event_useImportServerBtnActionPerformed
-
-    private void regExTextFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_regExTextFocusGained
-        if(regExText.getText().equals("RegEx Search...")){
-            regExText.setText("");
-        } else {
-            regExText.selectAll();
-        }
-    }//GEN-LAST:event_regExTextFocusGained
 
     private void usernameTextKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usernameTextKeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
@@ -2526,25 +2498,31 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         
         usernameText.setText("Enter Username...");
         userDiagnosticsComboBox.removeAllItems();
-        loadDirectory1.setText(System.getProperty("user.home").toString() + "\\Temp");
-        currentLoadedDiagnosticFileLabel.setText("Current loaded file:");
-        extractDirectory1.setText(System.getProperty("user.home").toString() + "\\Temp_ext");
+        loadDirectory1.setText(System.getProperty("java.io.tmpdir"));
+        extractLocationLabel1.setText("Current loaded file:");
+        extractDirectory1.setText(System.getProperty("java.io.tmpdir"));
         extractProgressBar1.setValue(0);
         logComboBox1.removeAllItems();
         settingsComboBox1.removeAllItems();
         tradeComboBox1.removeAllItems();
-        twsRadio1.setSelected(false);
+        twsRadio1.setSelected(true);
         ibgRadio1.setSelected(false);
         
-        loadDirectory2.setText(System.getProperty("user.home").toString() + "\\Temp");
-        extractDirectory2.setText(System.getProperty("user.home").toString() + "\\Temp_ext");
+        loadDirectory2.setText(System.getProperty("java.io.tmpdir"));
+        extractDirectory2.setText(System.getProperty("java.io.tmpdir"));
         extractProgressBar2.setValue(0);
         extractProgressBar2.setValue(0);
         logComboBox2.removeAllItems();
         settingsComboBox2.removeAllItems();
         tradeComboBox2.removeAllItems();
-        twsRadio2.setSelected(false);
+        twsRadio2.setSelected(true);
         ibgRadio2.setSelected(false);
+        
+        logComboBoxCopy.removeAllItems();
+        settingsComboBoxCopy.removeAllItems();
+        tradeComboBoxCopy.removeAllItems();
+        
+        useImportServerBtn.setSelected(true);
         
         updateStatus();
         
@@ -2559,6 +2537,337 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             usernameText.selectAll();
         }
     }//GEN-LAST:event_usernameTextFocusGained
+
+    private void openScreenshotBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openScreenshotBtnActionPerformed
+        if(useImportServerBtn.isSelected() && screenshotReady_server){
+            serverManager.openScreenshot();
+        } else if(!useImportServerBtn.isSelected() && screenshotReady_local){
+            localManager.openScreenshot();
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(null, "No screenshot selected");
+        }
+    }//GEN-LAST:event_openScreenshotBtnActionPerformed
+
+    private void screenshotComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_screenshotComboBoxActionPerformed
+        if(useImportServerBtn.isSelected() && screenshotReady_server){
+            if(screenshotComboBox.getSelectedItem() != null){
+                serverManager.selectScreenshot(screenshotComboBox.getSelectedItem().toString());
+            }
+        } else if(!useImportServerBtn.isSelected() && screenshotReady_local){
+            if(screenshotComboBox.getSelectedItem() != null){
+                localManager.selectScreenshot(screenshotComboBox.getSelectedItem().toString());
+            }
+        }
+    }//GEN-LAST:event_screenshotComboBoxActionPerformed
+
+    private void regExSearchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regExSearchBtnActionPerformed
+        if(useImportServerBtn.isSelected() && logReady_server){
+            if(!regExText.getText().isEmpty()){
+
+                javax.swing.JTextPane regExTextPane = new javax.swing.JTextPane();
+                regExTextPane.setName("Regular Expression Search");
+                regExTextPane.setEditable(false);
+
+                javax.swing.JScrollPane regExScrollPane = new javax.swing.JScrollPane(regExTextPane);
+                regExScrollPane.setViewportView(regExTextPane);
+                regExScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "Regular Expression Search", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0)));
+
+                serverManager.regExSearch(regExText.getText(), matchCaseCheck.isSelected(), regExTextPane);
+
+                java.awt.EventQueue.invokeLater(new Runnable() {
+                    public void run() {
+                        javax.swing.JFrame magnifiedDisplayPane = new MagnifiedDisplayPane(regExTextPane, regExScrollPane);
+                        magnifiedDisplayPane.setVisible(true);
+                    }
+                });
+            }
+        } else if(!useImportServerBtn.isSelected() && logReady_local){
+            if(!regExText.getText().isEmpty()){
+
+                javax.swing.JTextPane regExTextPane = new javax.swing.JTextPane();
+                regExTextPane.setName("Regular Expression Search");
+                regExTextPane.setEditable(false);
+
+                javax.swing.JScrollPane regExScrollPane = new javax.swing.JScrollPane(regExTextPane);
+                regExScrollPane.setViewportView(regExTextPane);
+                regExScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "Regular Expression Search", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 0)));
+
+                localManager.regExSearch(useManualFileBtn.isSelected(), regExText.getText(), matchCaseCheck.isSelected(), regExTextPane);
+
+                java.awt.EventQueue.invokeLater(new Runnable() {
+                    public void run() {
+                        javax.swing.JFrame magnifiedDisplayPane = new MagnifiedDisplayPane(regExTextPane, regExScrollPane);
+                        magnifiedDisplayPane.setVisible(true);
+                    }
+                });
+            }
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(null, "No log file selected");
+        }
+    }//GEN-LAST:event_regExSearchBtnActionPerformed
+
+    private void regExTextFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_regExTextFocusGained
+        if(regExText.getText().equals("RegEx Search...")){
+            regExText.setText("");
+        } else {
+            regExText.selectAll();
+        }
+    }//GEN-LAST:event_regExTextFocusGained
+
+    private void openLogFileBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openLogFileBtnActionPerformed
+        if(useImportServerBtn.isSelected() && logReady_server){
+            serverManager.openLogFileInNotePad(useManualFileBtn.isSelected());
+        } else if(!useImportServerBtn.isSelected() && logReady_local){
+            localManager.openLogFileInNotePad(useManualFileBtn.isSelected());
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(null, "No log file selected");
+        }
+    }//GEN-LAST:event_openLogFileBtnActionPerformed
+
+    private void includeTrdFileCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_includeTrdFileCheckActionPerformed
+        if(useImportServerBtn.isSelected()){
+            if(includeTrdFileCheck.isSelected()){
+                serverManager.setIncludeTrd(true);
+            } else {
+                serverManager.setIncludeTrd(false);
+            }
+        } else {
+            if(includeTrdFileCheck.isSelected()){
+                localManager.setIncludeTrd(true);
+            } else {
+                localManager.setIncludeTrd(false);
+            }
+        }
+    }//GEN-LAST:event_includeTrdFileCheckActionPerformed
+
+    private void includeXmlCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_includeXmlCheckActionPerformed
+        if(useImportServerBtn.isSelected()){
+            if(includeXmlCheck.isSelected()){
+                serverManager.setIncludeXml(true);
+            } else {
+                serverManager.setIncludeXml(false);
+            }
+        } else {
+            if(includeXmlCheck.isSelected()){
+                localManager.setIncludeXml(true);
+            } else {
+                localManager.setIncludeXml(false);
+            }
+        }
+    }//GEN-LAST:event_includeXmlCheckActionPerformed
+
+    private void autoClsCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_autoClsCheckActionPerformed
+        if(useImportServerBtn.isSelected()){
+            if(autoClsCheck.isSelected()){
+                serverManager.setAutoCls(true);
+            } else {
+                serverManager.setAutoCls(false);
+            }
+        } else {
+            if(autoClsCheck.isSelected()){
+                localManager.setAutoCls(true);
+            } else {
+                localManager.setAutoCls(false);
+            }
+        }
+    }//GEN-LAST:event_autoClsCheckActionPerformed
+
+    private void clearAllBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearAllBtnActionPerformed
+        textPaneList.get(Choices.ENV).setText(null);
+        textPaneList.get(Choices.LOGINSEQ).setText(null);
+        textPaneList.get(Choices.CONN).setText(null);
+        textPaneList.get(Choices.SYSRES).setText(null);
+        textPaneList.get(Choices.HTBP).setText(null);
+        textPaneList.get(Choices.API).setText(null);
+        textPaneList.get(Choices.MKTDATA).setText(null);
+        textPaneList.get(Choices.ORDERSTRDS).setText(null);
+    }//GEN-LAST:event_clearAllBtnActionPerformed
+
+    private void analyzeOrdTrdBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeOrdTrdBtnActionPerformed
+        AnalyzeWorkTask m_task = new AnalyzeWorkTask(Choices.ORDERSTRDS);
+        m_task.execute();
+    }//GEN-LAST:event_analyzeOrdTrdBtnActionPerformed
+
+    private void analyzeAPIBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeAPIBtnActionPerformed
+        AnalyzeWorkTask m_task = new AnalyzeWorkTask(Choices.API);
+        m_task.execute();
+    }//GEN-LAST:event_analyzeAPIBtnActionPerformed
+
+    private void analyzeHtbpBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeHtbpBtnActionPerformed
+        AnalyzeWorkTask m_task = new AnalyzeWorkTask(Choices.HTBP);
+        m_task.execute();
+    }//GEN-LAST:event_analyzeHtbpBtnActionPerformed
+
+    private void analyzeConnBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeConnBtnActionPerformed
+        AnalyzeWorkTask m_task = new AnalyzeWorkTask(Choices.CONN);
+        m_task.execute();
+    }//GEN-LAST:event_analyzeConnBtnActionPerformed
+
+    private void analyzeMktDataBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeMktDataBtnActionPerformed
+        AnalyzeWorkTask m_task = new AnalyzeWorkTask(Choices.MKTDATA);
+        m_task.execute();
+    }//GEN-LAST:event_analyzeMktDataBtnActionPerformed
+
+    private void analyzeSysResBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeSysResBtnActionPerformed
+        AnalyzeWorkTask m_task = new AnalyzeWorkTask(Choices.SYSRES);
+        m_task.execute();
+    }//GEN-LAST:event_analyzeSysResBtnActionPerformed
+
+    private void analyzeLoginSeqBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeLoginSeqBtnActionPerformed
+        AnalyzeWorkTask m_task = new AnalyzeWorkTask(Choices.LOGINSEQ);
+        m_task.execute();
+    }//GEN-LAST:event_analyzeLoginSeqBtnActionPerformed
+
+    private void analyzeEnvBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeEnvBtnActionPerformed
+        AnalyzeWorkTask m_task = new AnalyzeWorkTask(Choices.ENV);
+        m_task.execute();
+    }//GEN-LAST:event_analyzeEnvBtnActionPerformed
+
+    private void analyzeAllBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_analyzeAllBtnActionPerformed
+        if(useImportServerBtn.isSelected() && logReady_server){
+            if(serverManager.checkFileSizeForAll()){
+                int reply = javax.swing.JOptionPane.showConfirmDialog(null, "The selected log file is larger than 50 MB, running analyzer for 'All' topics may take long time. Do you want to proceed?");
+                if(reply == javax.swing.JOptionPane.NO_OPTION)
+                return;
+            }
+
+            analyzeEnvBtnActionPerformed(null);
+            analyzeLoginSeqBtnActionPerformed(null);
+            analyzeConnBtnActionPerformed(null);
+            analyzeSysResBtnActionPerformed(null);
+            analyzeMktDataBtnActionPerformed(null);
+            analyzeHtbpBtnActionPerformed(null);
+            analyzeAPIBtnActionPerformed(null);
+            analyzeOrdTrdBtnActionPerformed(null);
+
+            /*
+            serverManager.startParse(Choices.ENV, textPaneList);
+            serverManager.startParse(Choices.LOGINSEQ, textPaneList);
+            serverManager.startParse(Choices.CONN, textPaneList);
+            serverManager.startParse(Choices.SYSRES, textPaneList);
+            serverManager.startParse(Choices.HTBP, textPaneList);
+            serverManager.startParse(Choices.API, textPaneList);
+            serverManager.startParse(Choices.MKTDATA, textPaneList);
+            serverManager.startParse(Choices.ORDERSTRDS, textPaneList);
+            */
+        } else if(!useImportServerBtn.isSelected() && logReady_local){
+            if(localManager.checkFileSizeForAll(useManualFileBtn.isSelected())){
+                int reply = javax.swing.JOptionPane.showConfirmDialog(null, "The selected log file is larger than 5 MB, do you want to proceed?");
+                if(reply == javax.swing.JOptionPane.NO_OPTION)
+                return;
+            }
+
+            localManager.startParse(Choices.ENV, useManualFileBtn.isSelected(), textPaneList);
+            localManager.startParse(Choices.LOGINSEQ, useManualFileBtn.isSelected(), textPaneList);
+            localManager.startParse(Choices.CONN, useManualFileBtn.isSelected(), textPaneList);
+            localManager.startParse(Choices.SYSRES, useManualFileBtn.isSelected(), textPaneList);
+            localManager.startParse(Choices.HTBP, useManualFileBtn.isSelected(), textPaneList);
+            localManager.startParse(Choices.API, useManualFileBtn.isSelected(), textPaneList);
+            localManager.startParse(Choices.MKTDATA, useManualFileBtn.isSelected(), textPaneList);
+            localManager.startParse(Choices.ORDERSTRDS, useManualFileBtn.isSelected(), textPaneList);
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(null, "No log file selected");
+        }
+    }//GEN-LAST:event_analyzeAllBtnActionPerformed
+
+    private void logComboBoxCopyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logComboBoxCopyActionPerformed
+        if(useImportServerBtn.isSelected()){
+            logComboBox1.setSelectedItem(logComboBoxCopy.getSelectedItem());
+        } else if(useImportLocalBtn.isSelected()){
+            logComboBox2.setSelectedItem(logComboBoxCopy.getSelectedItem());
+        }
+    }//GEN-LAST:event_logComboBoxCopyActionPerformed
+
+    private void settingsComboBoxCopyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsComboBoxCopyActionPerformed
+        if(useImportServerBtn.isSelected()){
+            settingsComboBox1.setSelectedItem(settingsComboBoxCopy.getSelectedItem());
+        } else if(useImportLocalBtn.isSelected()){
+            settingsComboBox2.setSelectedItem(settingsComboBoxCopy.getSelectedItem());
+        }
+    }//GEN-LAST:event_settingsComboBoxCopyActionPerformed
+
+    private void tradeComboBoxCopyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tradeComboBoxCopyActionPerformed
+        if(useImportServerBtn.isSelected()){
+            tradeComboBox1.setSelectedItem(tradeComboBoxCopy.getSelectedItem());
+        } else if(useImportLocalBtn.isSelected()){
+            tradeComboBox2.setSelectedItem(tradeComboBoxCopy.getSelectedItem());
+        }
+    }//GEN-LAST:event_tradeComboBoxCopyActionPerformed
+
+    private void downloadDiagnosticPaneMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_downloadDiagnosticPaneMouseClicked
+        useImportServerBtn.setSelected(true);
+        useImportServerBtnActionPerformed(null);
+    }//GEN-LAST:event_downloadDiagnosticPaneMouseClicked
+
+    private void importDiagnosticPaneMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_importDiagnosticPaneMouseClicked
+        useImportLocalBtn.setSelected(true);
+        useImportLocalBtnActionPerformed(null);
+    }//GEN-LAST:event_importDiagnosticPaneMouseClicked
+
+    private void manualImportPaneMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_manualImportPaneMouseClicked
+        useManualFileBtn.setSelected(true);
+        useManualFileBtnActionPerformed(null);
+    }//GEN-LAST:event_manualImportPaneMouseClicked
+
+    private void proxyMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_proxyMenuItemActionPerformed
+        JTextField proxyField = new JTextField(15);
+        JTextField portField = new JTextField(10);
+        JCheckBox useSystemProxyCheckBox = new JCheckBox("Use System Proxy Settings");
+        
+        useSystemProxyCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                if(useSystemProxyCheckBox.isSelected()){
+                    proxyField.setEnabled(false);
+                    portField.setEnabled(false);
+                } else {
+                    proxyField.setEnabled(true);
+                    portField.setEnabled(true);
+                }
+            }
+        });
+        
+        JPanel proxyPanel = new JPanel();
+        proxyPanel.add(new JLabel("Proxy Host:"));
+        proxyPanel.add(proxyField);
+        proxyPanel.add(Box.createHorizontalStrut(15));
+        proxyPanel.add(new JLabel("Port:"));
+        proxyPanel.add(portField);
+        proxyPanel.add(useSystemProxyCheckBox);
+        
+        String[] proxyPrefs = serverManager.getProxyPreference();
+        String useCustomProxyPref = proxyPrefs[0];
+        String proxy = proxyPrefs[1];
+        String port = proxyPrefs[2];
+        
+        if(useCustomProxyPref.equalsIgnoreCase("TRUE")){
+            useSystemProxyCheckBox.setSelected(false);
+            proxyField.setText(proxy);
+            portField.setText(port);
+        } else {
+            useSystemProxyCheckBox.setSelected(true);
+            proxyField.setEnabled(false);
+            portField.setEnabled(false);
+        }
+        
+        int result = JOptionPane.showConfirmDialog(null, proxyPanel, "Please enter proxy settings", JOptionPane.OK_CANCEL_OPTION);
+        if(result == JOptionPane.OK_OPTION){
+            if(useSystemProxyCheckBox.isSelected()){
+                serverManager.setupProxyPreference(false, "", "");
+                
+                if(useCustomProxyPref.equalsIgnoreCase("TRUE")){
+                    JOptionPane.showMessageDialog(null, "Please restart the application to reflect the change.");
+                }
+            } else {
+                serverManager.setupProxyPreference(true, proxyField.getText(), portField.getText());
+            }
+        }
+    }//GEN-LAST:event_proxyMenuItemActionPerformed
+    
+    private void loadUserBtnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_loadUserBtnKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            loadUserBtnActionPerformed(null);
+        }
+    }//GEN-LAST:event_loadUserBtnKeyPressed
     
     private void handleUserDiagnosticFileBox(){
         userDiagnosticsComboBox.removeAllItems();
@@ -2592,6 +2901,15 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             
     }
     
+    private void setupLogger(){
+        try{
+            MyLogger.setup();
+        } catch (Exception e){
+            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        }
+    }
+    
     private void handleLogComboBox_tws(int method){
         if(method == LogReader.USESERVER){
             if(isExtracted_server && !isTwsLogAdded_server){
@@ -2608,6 +2926,9 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                         logReady_server = false;
                         updateStatus();
                     }
+                    
+                    handleLogComboBoxCopy();
+                    
                     return;
                 }
                 
@@ -2625,6 +2946,9 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 logReady_server = false;
                 updateStatus();
             }
+            
+            handleLogComboBoxCopy();
+            
         } else if (method == LogReader.USELOCAL){
             if(isExtracted_local && !isTwsLogAdded_local){
                 if(isIbgLogAdded_local){
@@ -2640,6 +2964,9 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                         logReady_local = false;
                         updateStatus();
                     }
+                    
+                    handleLogComboBoxCopy();
+                    
                     return;
                 }
                 
@@ -2657,6 +2984,9 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 logReady_local = false;
                 updateStatus();
             }
+            
+            handleLogComboBoxCopy();
+            
         } else {
             return;
         }
@@ -2678,6 +3008,9 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                         settingsReady_server = false;
                         updateStatus();
                     }
+                    
+                    handleSettingsComboBoxCopy();
+                    
                     return;
                 }
                 
@@ -2695,6 +3028,9 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 settingsReady_server = false;
                 updateStatus();
             }
+            
+            handleSettingsComboBoxCopy();
+            
         } else if (method == LogReader.USELOCAL){
             if(isExtracted_local && !isTwsSettingsAdded_local){
                 if(isIbgSettingsAdded_local){
@@ -2710,6 +3046,9 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                         settingsReady_local = false;
                         updateStatus();
                     }
+                    
+                    handleSettingsComboBoxCopy();
+                    
                     return;
                 }
                 
@@ -2727,6 +3066,9 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 settingsReady_local = false;
                 updateStatus();
             }
+            
+            handleSettingsComboBoxCopy();
+            
         } else {
             return;
         }
@@ -2748,6 +3090,9 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                         logReady_server = false;
                         updateStatus();
                     }
+                    
+                    handleLogComboBoxCopy();
+                    
                     return;
                 }
                 
@@ -2765,6 +3110,9 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 logReady_server = false;
                 updateStatus();
             }
+            
+            handleLogComboBoxCopy();
+            
         } else if (method == LogReader.USELOCAL){
             if(isExtracted_local && !isIbgLogAdded_local){
                 if(isTwsLogAdded_local){
@@ -2780,6 +3128,9 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                         logReady_local = false;
                         updateStatus();
                     }
+                    
+                    handleLogComboBoxCopy();
+                    
                     return;
                 }
                 
@@ -2797,6 +3148,9 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 logReady_local = false;
                 updateStatus();
             }
+            
+            handleLogComboBoxCopy();
+            
         } else {
             return;
         }
@@ -2818,6 +3172,9 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                         settingsReady_server = false;
                         updateStatus();
                     }
+                    
+                    handleSettingsComboBoxCopy();
+                    
                     return;
                 }
                 
@@ -2835,6 +3192,9 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 settingsReady_server = false;
                 updateStatus();
             }
+            
+            handleSettingsComboBoxCopy();
+            
         } else if (method == LogReader.USELOCAL){
             if(isExtracted_local && !isIbgSettingsAdded_local){
                 if(isTwsSettingsAdded_local){
@@ -2850,6 +3210,9 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                         settingsReady_local = false;
                         updateStatus();
                     }
+                    
+                    handleSettingsComboBoxCopy();
+                    
                     return;
                 }
                 
@@ -2867,6 +3230,9 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 settingsReady_local = false;
                 updateStatus();
             }
+            
+            handleSettingsComboBoxCopy();
+            
         } else {
             return;
         }
@@ -2877,6 +3243,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             if(!serverManager.isTws()){
                 tradeComboBox1.removeAllItems();
                 isTradeFileAdded_server = false;
+                handleTradeComboBoxCopy();
                 return;
             }
             if(isExtracted_server && !isTradeFileAdded_server){
@@ -2889,6 +3256,9 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                         trdReady_server = false;
                         updateStatus();
                     }
+                    
+                    handleTradeComboBoxCopy();
+                    
                     return;
                 }
                 
@@ -2906,10 +3276,14 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 trdReady_server = false;
                 updateStatus();
             }
+            
+            handleTradeComboBoxCopy();
+            
         } else if (method == LogReader.USELOCAL){
             if(!localManager.isTws()){
                 tradeComboBox2.removeAllItems();
                 isTradeFileAdded_local = false;
+                handleTradeComboBoxCopy();
                 return;
             }
             if(isExtracted_local && !isTradeFileAdded_local){
@@ -2922,6 +3296,9 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                         trdReady_local = false;
                         updateStatus();
                     }
+                    
+                    handleTradeComboBoxCopy();
+                    
                     return;
                 }
                 
@@ -2939,6 +3316,9 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 trdReady_local = false;
                 updateStatus();
             }
+            
+            handleTradeComboBoxCopy();
+            
         } else {
             return;
         }
@@ -3005,6 +3385,82 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             }
         } else if(useManualFileBtn.isSelected()){
             screenshotComboBox.removeAllItems();
+        }
+    }
+    
+    private void handleLogComboBoxCopy(){
+        if(useImportServerBtn.isSelected()){
+            logComboBoxCopy.removeAllItems();
+            int size = logComboBox1.getModel().getSize();
+            for(int i = 0; i < size; i++){
+                logComboBoxCopy.addItem(logComboBox1.getItemAt(i));
+            }
+            logComboBoxCopy.setSelectedItem(serverManager.getTodayLogFileName());
+            logComboBoxCopy.setEnabled(true);
+        } else if(useImportLocalBtn.isSelected()){
+            logComboBoxCopy.removeAllItems();
+            int size = logComboBox2.getModel().getSize();
+            for(int i = 0; i < size; i++){
+                logComboBoxCopy.addItem(logComboBox2.getItemAt(i));
+            }
+            logComboBoxCopy.setSelectedItem(localManager.getTodayLogFileName());
+            logComboBoxCopy.setEnabled(true);
+        } else if(useManualFileBtn.isSelected()){
+            logComboBoxCopy.removeAllItems();
+            logComboBoxCopy.setEnabled(false);
+        }
+    }
+    
+    private void handleSettingsComboBoxCopy(){
+        if(useImportServerBtn.isSelected()){
+            settingsComboBoxCopy.removeAllItems();
+            int size = settingsComboBox1.getModel().getSize();
+            for(int i = 0; i < size; i++){
+                settingsComboBoxCopy.addItem(settingsComboBox1.getItemAt(i));
+            }
+            settingsComboBoxCopy.setSelectedItem(serverManager.getTodaySettingsFileName());
+            settingsComboBoxCopy.setEnabled(true);
+        } else if(useImportLocalBtn.isSelected()){
+            settingsComboBoxCopy.removeAllItems();
+            int size = settingsComboBox2.getModel().getSize();
+            for(int i = 0; i < size; i++){
+                settingsComboBoxCopy.addItem(settingsComboBox2.getItemAt(i));
+            }
+            settingsComboBoxCopy.setSelectedItem(localManager.getTodaySettingsFileName());
+            settingsComboBoxCopy.setEnabled(true);
+        } else if(useManualFileBtn.isSelected()){
+            settingsComboBoxCopy.removeAllItems();
+            settingsComboBoxCopy.setEnabled(false);
+        }
+    }
+    
+    private void handleTradeComboBoxCopy(){
+        if(useImportServerBtn.isSelected()){
+            tradeComboBoxCopy.setEnabled(true);
+            tradeComboBoxCopy.removeAllItems();
+            if(!serverManager.isTws()){
+                return;
+            }
+            int size = tradeComboBox1.getModel().getSize();
+            for(int i = 0; i < size; i++){
+                tradeComboBoxCopy.addItem(tradeComboBox1.getItemAt(i));
+            }
+            tradeComboBoxCopy.setSelectedItem(serverManager.getTodayTradeFileName());
+        } else if(useImportLocalBtn.isSelected()){
+            tradeComboBoxCopy.setEnabled(true);
+            tradeComboBoxCopy.removeAllItems();
+            if(!localManager.isTws()){
+                tradeComboBoxCopy.setEnabled(true);
+                return;
+            }
+            int size = tradeComboBox2.getModel().getSize();
+            for(int i = 0; i < size; i++){
+                tradeComboBoxCopy.addItem(tradeComboBox2.getItemAt(i));
+            }
+            tradeComboBoxCopy.setSelectedItem(localManager.getTodayTradeFileName());
+        } else if(useManualFileBtn.isSelected()){
+            tradeComboBoxCopy.removeAllItems();
+            tradeComboBoxCopy.setEnabled(false);
         }
     }
     
@@ -3260,6 +3716,8 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 AnalyzerGUI mainFrame = new AnalyzerGUI();
                 
                 mainFrame.setVisible(true);
+                
+                LOGGER.info((new Date()).toString() + " - " + "======================Log Analyzer Start======================");
             }
         });
     }
@@ -3287,10 +3745,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
     private javax.swing.JButton clearAllBtn;
     private javax.swing.JPanel configurePane;
     private javax.swing.JPanel configurePanel;
-    private javax.swing.JLabel currentLoadedDiagnosticFileLabel;
-    private javax.swing.JCheckBox deepAnalysisCheck;
     private javax.swing.JFileChooser directoryChooser;
-    private javax.swing.JButton downloadBtn;
     private javax.swing.JPanel downloadDiagnosticPane;
     private javax.swing.JButton extractBtn1;
     private javax.swing.JButton extractBtn2;
@@ -3298,19 +3753,24 @@ public class AnalyzerGUI extends javax.swing.JFrame {
     private javax.swing.JTextField extractDirectory2;
     private javax.swing.JLabel extractLabel1;
     private javax.swing.JLabel extractLabel2;
+    private javax.swing.JLabel extractLocationLabel1;
+    private javax.swing.JLabel extractLocationLabel2;
     private javax.swing.JProgressBar extractProgressBar1;
     private javax.swing.JProgressBar extractProgressBar2;
     private javax.swing.JFileChooser fileChooser;
     private javax.swing.JRadioButton ibgRadio1;
     private javax.swing.JRadioButton ibgRadio2;
     private javax.swing.JPanel importDiagnosticPane;
-    private javax.swing.JLabel importLabel;
     private javax.swing.ButtonGroup importMethodGroup;
     private javax.swing.JCheckBox includeTrdFileCheck;
     private javax.swing.JCheckBox includeXmlCheck;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField loadDirectory1;
     private javax.swing.JTextField loadDirectory2;
@@ -3318,13 +3778,16 @@ public class AnalyzerGUI extends javax.swing.JFrame {
     private javax.swing.JLabel loadingLabel;
     private javax.swing.JComboBox<String> logComboBox1;
     private javax.swing.JComboBox<String> logComboBox2;
+    private javax.swing.JComboBox<String> logComboBoxCopy;
     private javax.swing.JTextField logDirectoryManual;
     private javax.swing.JLabel logFileStatus;
     private javax.swing.JPanel manualImportPane;
     private javax.swing.JLabel manualSettingsLabel;
     private javax.swing.JCheckBox matchCaseCheck;
+    private javax.swing.JMenu menu;
     private javax.swing.JButton openLogFileBtn;
     private javax.swing.JButton openScreenshotBtn;
+    private javax.swing.JMenuItem proxyMenuItem;
     private javax.swing.JButton regExSearchBtn;
     private javax.swing.JTextField regExText;
     private javax.swing.JButton resetBtn;
@@ -3332,6 +3795,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
     private javax.swing.JLabel screenshotStatus;
     private javax.swing.JComboBox<String> settingsComboBox1;
     private javax.swing.JComboBox<String> settingsComboBox2;
+    private javax.swing.JComboBox<String> settingsComboBoxCopy;
     private javax.swing.JTextField settingsDirectoryManual;
     private javax.swing.JLabel settingsFileStatus;
     private javax.swing.JLabel settingsLabel1;
@@ -3342,6 +3806,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
     private javax.swing.JCheckBox todayOnlyCheckBox;
     private javax.swing.JComboBox<String> tradeComboBox1;
     private javax.swing.JComboBox<String> tradeComboBox2;
+    private javax.swing.JComboBox<String> tradeComboBoxCopy;
     private javax.swing.JLabel tradeFileStatus;
     private javax.swing.JLabel tradeLabel1;
     private javax.swing.JLabel tradeLabel2;
@@ -3358,6 +3823,8 @@ public class AnalyzerGUI extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> userDiagnosticsComboBox;
     private javax.swing.JLabel usernameLabel;
     private javax.swing.JTextField usernameText;
+    private javax.swing.JLabel zipLocationLabel1;
+    private javax.swing.JLabel zipLocationLabel2;
     // End of variables declaration//GEN-END:variables
     private javax.swing.JPanel logDisplayPane1;
     private javax.swing.JPanel logDisplayPane2;

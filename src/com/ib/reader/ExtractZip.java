@@ -35,7 +35,7 @@ public class ExtractZip {
             destDir.mkdir();
         }
         else {
-        	FileUtils.cleanDirectory(destDir);
+            FileUtils.cleanDirectory(destDir);
         }
         ZipInputStream zipIn = new ZipInputStream(new FileInputStream(zipFilePath));
         ZipEntry entry = zipIn.getNextEntry();
