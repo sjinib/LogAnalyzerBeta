@@ -1,6 +1,5 @@
 package com.ib.message;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class EnvSettingsMessage extends SettingsMessage {

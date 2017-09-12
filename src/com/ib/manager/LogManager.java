@@ -52,6 +52,12 @@ public abstract class LogManager {
     
     public String getExtractDirectoryPref(){return null;}
     
+    public void openLogFileInNotePad(boolean useManual){}
+    
+    public void showInFolder(){}
+    
+    public void openScreenshot(){}
+    
     public Preferences getPref(){
         return prefs;
     }

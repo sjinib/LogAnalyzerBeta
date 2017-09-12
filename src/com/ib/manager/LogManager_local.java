@@ -5,22 +5,28 @@ package com.ib.manager;
 
 import com.ib.reader.*;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.prefs.Preferences;
+import org.apache.log4j.Logger;
 
 public class LogManager_local extends LogManager{
+    private static final Logger LOG = Logger.getLogger(LogManager_local.class);
+    
+    private static LogManager_local _instance = null;
     //private final LogReader reader;
     //private boolean isDeepDiagnostic = true; // True if use deep analysis
     //private boolean isTWS; // If the files being investigated are from TWS (true) or IBG (false)
     public final static String LOADDIRECTORYPREFLOCAL = "LOGANALYZER_LOAD_DIR_LOCAL";
     public final static String EXTRACTDIRECTORYPREFLOCAL = "LOGANALYZER_EXTRACT_DIR_LOCAL";
     
-    private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-    
     public LogManager_local(){
         super();
-    }   
+    }  
+    
+    public static LogManager_local getInstance(){
+        if(_instance == null){
+            _instance = new LogManager_local();
+        }
+        return _instance;
+    }
     
     /*
     @Override
@@ -54,8 +60,7 @@ public class LogManager_local extends LogManager{
         try {
             super.getReader().extractZip(LogReader.USELOCAL);
         } catch (Exception e){
-            e.printStackTrace();
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
     }
     
@@ -65,18 +70,6 @@ public class LogManager_local extends LogManager{
     
     public void setDeepDiagnostic(boolean isDeepDiag){
         super.setDeepDiagnostic(isDeepDiag);
-    }
-    
-    public void setAutoCls(boolean autoCls){
-        super.getReader().setAutoCls(autoCls);
-    }
-    
-    public void setIncludeXml(boolean includeXml){
-        super.getReader().setIncludeXml(includeXml);
-    }
-    
-    public void setIncludeTrd(boolean includeTrd){
-        super.getReader().setIncludeTrd(includeTrd);
     }
     
     // Set location of zipLocation and outputDirectory
@@ -194,21 +187,30 @@ public class LogManager_local extends LogManager{
         super.getReader().selectScreenshot(LogReader.USELOCAL, s);
     }
     
+    @Override
     public void openLogFileInNotePad(boolean useManual){
         try {
             super.getReader().openLogFileInNotePad(LogReader.USELOCAL, super.isTws(), useManual);
         } catch (Exception e){
-            e.printStackTrace();
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
     }
     
+    @Override
+    public void showInFolder(){
+        try {
+            super.getReader().showInFolder(LogReader.USELOCAL);
+        } catch (Exception e){
+            LOG.error(e.getMessage(), e);
+        }
+    }
+    
+    @Override
     public void openScreenshot(){
         try {
             super.getReader().openScreenshots(LogReader.USELOCAL);
         } catch (Exception e){
-            e.printStackTrace();
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
     }
     
@@ -216,8 +218,7 @@ public class LogManager_local extends LogManager{
         try {
             super.getReader().regExSearch(LogReader.USELOCAL, super.isTws(), useManual, regEx, isCaseSensitive, textPane);
         } catch (Exception e){
-            e.printStackTrace();
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
     }
     
@@ -225,8 +226,7 @@ public class LogManager_local extends LogManager{
         try {
             return super.getReader().checkFileSizeForAll(LogReader.USELOCAL, super.isTws(), useManual);
         } catch (Exception e){
-            e.printStackTrace();
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
         return false;
     }
@@ -242,8 +242,7 @@ public class LogManager_local extends LogManager{
                 super.getReader().parseTwsLogFileShallow(LogReader.USELOCAL, choice, super.isTws(), useManual, textPaneList);
             }
         } catch (Exception e){
-            e.printStackTrace();
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
     }
     

@@ -7,16 +7,18 @@ import com.ib.parser.*;
 import com.ib.message.*;
 import java.io.File;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
+import com.ib.workerThreads.ExtractWorkerTaskServer;
+import com.ib.workerThreads.ExtractWorkerTaskLocal;
 
 public class LogReader {
+    private static final Logger LOG = Logger.getLogger(LogReader.class);
+    
     public final static int USESERVER = 1;
     public final static int USELOCAL = 2;
     // Name of selected log file from server download for analyze
@@ -84,11 +86,9 @@ public class LogReader {
     private final ApiSettingsMessage apiSettingsMessage;
     private final EnvSettingsMessage envSettingsMessage;
     
-    private boolean autoCls = true; // Auto clear display pane after extraction
-    private boolean includeXml = true; // Include settings xml examination
-    private boolean includeTrd = false; // Include .trd file exmanination
-    
-    private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    //private boolean autoCls = true; // Auto clear display pane after extraction
+    //private boolean includeXml = true; // Include settings xml examination
+    //private boolean includeTrd = false; // Include .trd file exmanination
     
     public LogReader(){
         mdSettingsMessage = new MarketDataSettingsMessage();
@@ -103,6 +103,16 @@ public class LogReader {
             else if(method == LogReader.USELOCAL)
                 outputDirectory_local = dir;
         }
+        LOG.debug("Set Outpu Directory. Method: " + method + ", Directory: " + dir);
+    }
+    
+    public String getOutputDirectory(int method){
+        if(method == LogReader.USESERVER)
+            return outputDirectory_server;
+        else if(method == LogReader.USELOCAL)
+            return outputDirectory_local;
+        else
+            return null;
     }
     
     public void setZipLocation(int method, String dir){
@@ -112,6 +122,7 @@ public class LogReader {
             else if(method == LogReader.USELOCAL)
                 zipLocation_local = dir;
         }
+        LOG.debug("Set Zip Location. Method: " + method + ", Directory: " + dir);
     }
     
     public String getZipLocation(int method){
@@ -144,18 +155,6 @@ public class LogReader {
         } else {
             return false;
         }
-    }
-    
-    public void setAutoCls(boolean autoCls){
-        this.autoCls = autoCls;
-    }
-    
-    public void setIncludeXml(boolean includeXml){
-        this.includeXml = includeXml;
-    }
-    
-    public void setIncludeTrd(boolean includeTrd){
-        this.includeTrd = includeTrd;
     }
     
     // Reset read list
@@ -233,15 +232,17 @@ public class LogReader {
     
     // Extract file at zipLocation_local to outputDirectory_local
     public void extractZip(int method) throws Exception{
-        LOGGER.info((new Date()).toString() + " - " + "Extracting diagnostic file...");
+        LOG.debug("Extracting diagnostic file...");
         
         if(method == LogReader.USESERVER){
             if(zipLocation_server != null && outputDirectory_server != null){
-                ExtractZip.unZipIt(zipLocation_server, outputDirectory_server);
+                //ExtractZip.unZipIt(zipLocation_server, outputDirectory_server);
+                ExtractWorkerTaskServer.getInstance().unZipIt(zipLocation_server, outputDirectory_server);
             }
         } else if(method == LogReader.USELOCAL){
             if(zipLocation_local != null && outputDirectory_local != null){
-                ExtractZip.unZipIt(zipLocation_local, outputDirectory_local);
+                //ExtractZip.unZipIt(zipLocation_local, outputDirectory_local);
+                ExtractWorkerTaskLocal.getInstance().unZipIt(zipLocation_local, outputDirectory_local);
             }
         }
     }
@@ -260,8 +261,7 @@ public class LogReader {
                     } else
                         return null;
                 } catch (Exception e){
-                    e.printStackTrace();
-                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                    LOG.error(e.getMessage(), e);
                     return null;
                 }
             } else {
@@ -283,8 +283,7 @@ public class LogReader {
                     } else
                         return null;
                 } catch (Exception e){
-                    e.printStackTrace();
-                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                    LOG.error(e.getMessage(), e);
                     return null;
                 }
             } else {
@@ -312,8 +311,7 @@ public class LogReader {
                     } else
                         return null;
                 } catch (Exception e){
-                    e.printStackTrace();
-                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                    LOG.error(e.getMessage(), e);
                     return null;
                 }
             } else {
@@ -335,8 +333,7 @@ public class LogReader {
                     } else
                         return null;
                 } catch (Exception e){
-                    e.printStackTrace();
-                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                    LOG.error(e.getMessage(), e);
                     return null;
                 }
             } else {
@@ -364,8 +361,7 @@ public class LogReader {
                     } else
                         return null;
                 } catch (Exception e){
-                    e.printStackTrace();
-                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                    LOG.error(e.getMessage(), e);
                     return null;
                 }
             } else {
@@ -387,8 +383,7 @@ public class LogReader {
                     } else
                         return null;
                 } catch (Exception e){
-                    e.printStackTrace();
-                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                    LOG.error(e.getMessage(), e);
                     return null;
                 }
             } else {
@@ -416,8 +411,7 @@ public class LogReader {
                     } else
                         return null;
                 } catch (Exception e){
-                    e.printStackTrace();
-                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                    LOG.error(e.getMessage(), e);
                     return null;
                 }
             } else {
@@ -439,8 +433,7 @@ public class LogReader {
                     } else
                         return null;
                 } catch (Exception e){
-                    e.printStackTrace();
-                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                    LOG.error(e.getMessage(), e);
                     return null;
                 }
             } else {
@@ -468,8 +461,7 @@ public class LogReader {
                     } else
                         return null;
                 } catch (Exception e){
-                    e.printStackTrace();
-                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                    LOG.error(e.getMessage(), e);
                     return null;
                 }
             } else {
@@ -491,8 +483,7 @@ public class LogReader {
                     } else
                         return null;
                 } catch (Exception e){
-                    e.printStackTrace();
-                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                    LOG.error(e.getMessage(), e);
                     return null;
                 }
             } else {
@@ -520,8 +511,7 @@ public class LogReader {
                     } else
                         return null;
                 } catch (Exception e){
-                    e.printStackTrace();
-                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                    LOG.error(e.getMessage(), e);
                     return null;
                 }
             } else {
@@ -543,8 +533,7 @@ public class LogReader {
                     } else
                         return null;
                 } catch (Exception e){
-                    e.printStackTrace();
-                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                    LOG.error(e.getMessage(), e);
                     return null;
                 }
             } else {
@@ -1296,7 +1285,7 @@ public class LogReader {
     }
     
     public void parseSettingsFile(int method, int choice, boolean isTws, boolean useManual, HashMap<Integer, javax.swing.JTextPane> textPaneList) throws Exception{
-        if(includeXml == true){
+        if(com.ib.analyzerGui.AnalyzerGUI.getInstance().includeXmlCheck.isSelected() == true){
             
             File currentSettingsFile;
             if(useManual){
@@ -1332,7 +1321,7 @@ public class LogReader {
     }
     
     public void parseTradeFile(int method, int choice, HashMap<Integer, javax.swing.JTextPane> textPaneList) throws Exception{
-        if(includeTrd == true){
+        if(com.ib.analyzerGui.AnalyzerGUI.getInstance().includeTrdFileCheck.isSelected() == true){
             File currentTradeFile = this.getSelectedTradeFile(method);
             
             if(currentTradeFile == null){
@@ -1375,52 +1364,52 @@ public class LogReader {
         
         switch (choice) {
             case Choices.ENV:
-                if(autoCls == true){
+                if(com.ib.analyzerGui.AnalyzerGUI.getInstance().autoClsCheck.isSelected() == true){
                     clearTextPane(textPaneList.get(choice));
                 }
                 parseSettingsFile(method, choice, isTws, useManual, textPaneList);
                 TwsLogParserDeep.parseTwsEnvInfo(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.LOGINSEQ:
-                if(autoCls == true){
+                if(com.ib.analyzerGui.AnalyzerGUI.getInstance().autoClsCheck.isSelected() == true){
                     clearTextPane(textPaneList.get(choice));
                 }
                 TwsLogParserDeep.parseTwsLoginSeqInfo(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.SYSRES:
-                if(autoCls == true){
+                if(com.ib.analyzerGui.AnalyzerGUI.getInstance().autoClsCheck.isSelected() == true){
                     clearTextPane(textPaneList.get(choice));
                 }
                 TwsLogParserDeep.parseTwsSysRes(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.MKTDATA:
-                if(autoCls == true){
+                if(com.ib.analyzerGui.AnalyzerGUI.getInstance().autoClsCheck.isSelected() == true){
                     clearTextPane(textPaneList.get(choice));
                 }
                 parseSettingsFile(method, choice, isTws, useManual, textPaneList);
                 TwsLogParserDeep.parseTwsMktData(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.CONN:
-                if(autoCls == true){
+                if(com.ib.analyzerGui.AnalyzerGUI.getInstance().autoClsCheck.isSelected() == true){
                     clearTextPane(textPaneList.get(choice));
                 }
                 TwsLogParserDeep.parseTwsConn(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.HTBP:
-                if(autoCls == true){
+                if(com.ib.analyzerGui.AnalyzerGUI.getInstance().autoClsCheck.isSelected() == true){
                     clearTextPane(textPaneList.get(choice));
                 }
                 TwsLogParserDeep.parseTwsHtbp(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.API:
-                if(autoCls == true){
+                if(com.ib.analyzerGui.AnalyzerGUI.getInstance().autoClsCheck.isSelected() == true){
                     clearTextPane(textPaneList.get(choice));
                 }
                 parseSettingsFile(method, choice, isTws, useManual, textPaneList);
                 TwsLogParserDeep.parseTwsApi(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.ORDERSTRDS:
-                if(autoCls == true){
+                if(com.ib.analyzerGui.AnalyzerGUI.getInstance().autoClsCheck.isSelected() == true){
                     clearTextPane(textPaneList.get(choice));
                 }
                 parseTradeFile(method, choice, textPaneList);
@@ -1445,52 +1434,52 @@ public class LogReader {
         
         switch (choice) {
             case Choices.ENV:
-                if(autoCls == true){
+                if(com.ib.analyzerGui.AnalyzerGUI.getInstance().autoClsCheck.isSelected() == true){
                     clearTextPane(textPaneList.get(choice));
                 }
                 parseSettingsFile(method, choice, isTws, useManual, textPaneList);
                 TwsLogParserShallow.parseTwsEnvInfo(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.LOGINSEQ:
-                if(autoCls == true){
+                if(com.ib.analyzerGui.AnalyzerGUI.getInstance().autoClsCheck.isSelected() == true){
                     clearTextPane(textPaneList.get(choice));
                 }
                 TwsLogParserShallow.parseTwsLoginSeqInfo(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.SYSRES:
-                if(autoCls == true){
+                if(com.ib.analyzerGui.AnalyzerGUI.getInstance().autoClsCheck.isSelected() == true){
                     clearTextPane(textPaneList.get(choice));
                 }
                 TwsLogParserShallow.parseTwsSysRes(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.MKTDATA:
-                if(autoCls == true){
+                if(com.ib.analyzerGui.AnalyzerGUI.getInstance().autoClsCheck.isSelected() == true){
                     clearTextPane(textPaneList.get(choice));
                 }
                 parseSettingsFile(method, choice, isTws, useManual, textPaneList);
                 TwsLogParserShallow.parseTwsMktData(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.CONN:
-                if(autoCls == true){
+                if(com.ib.analyzerGui.AnalyzerGUI.getInstance().autoClsCheck.isSelected() == true){
                     clearTextPane(textPaneList.get(choice));
                 }
                 TwsLogParserShallow.parseTwsConn(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.HTBP:
-                if(autoCls == true){
+                if(com.ib.analyzerGui.AnalyzerGUI.getInstance().autoClsCheck.isSelected() == true){
                     clearTextPane(textPaneList.get(choice));
                 }
                 TwsLogParserShallow.parseTwsHtbp(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.API:
-                if(autoCls == true){
+                if(com.ib.analyzerGui.AnalyzerGUI.getInstance().autoClsCheck.isSelected() == true){
                     clearTextPane(textPaneList.get(choice));
                 }
                 parseSettingsFile(method, choice, isTws, useManual, textPaneList);
                 TwsLogParserShallow.parseTwsApi(currentLogFile, textPaneList.get(choice));
                 break;
             case Choices.ORDERSTRDS:
-                if(autoCls == true){
+                if(com.ib.analyzerGui.AnalyzerGUI.getInstance().autoClsCheck.isSelected() == true){
                     clearTextPane(textPaneList.get(choice));
                 }
                 parseTradeFile(method, choice, textPaneList);
@@ -1533,6 +1522,17 @@ public class LogReader {
         }
         
         java.awt.Desktop.getDesktop().open(currentLogFile);
+    }
+    
+    public void showInFolder(int method) throws Exception{
+        String currentFolderStr = this.getOutputDirectory(method);
+        if(currentFolderStr != null){
+            java.awt.Desktop.getDesktop().open(new File(currentFolderStr));
+        }
+    }
+    
+    public void openLogFolder(int method, boolean isTws, boolean useManual) throws Exception{
+        
     }
     
     public void openScreenshots(int method) throws Exception{

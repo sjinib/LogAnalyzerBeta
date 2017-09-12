@@ -7,10 +7,9 @@ package com.ib.manager;
 
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
-import java.util.Date;
 import java.util.Properties;
 import java.util.prefs.*;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -18,7 +17,7 @@ import java.util.logging.Logger;
  * @credit to Ernie Parker
  */
 public class ProxyManager {
-    private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    private final static Logger LOG = Logger.getLogger(ProxyManager.class);
     
     public final static String USECUSTOMPROXYPREF = "LOGANALYZER_USD_CUSTOM_PROXY";
     public final static String PROXYPREF = "LOGANALYZER_PROXY_HOST";
@@ -37,7 +36,7 @@ public class ProxyManager {
     }
     
     public void setupProxyManual(String proxy, String port){
-        LOGGER.info((new Date()).toString() + " - " + "Manually settings proxy host: " + proxy + ", port: " + port);
+        LOG.debug("Manually settings proxy host: " + proxy + ", port: " + port);
         
         System.setProperty("java.net.useSystemProxies","false");
         
@@ -47,7 +46,7 @@ public class ProxyManager {
         systemProperties.setProperty("https.proxyHost", proxy);
         systemProperties.setProperty("https.proxyPort", port);
         
-        LOGGER.info((new Date()).toString() + " - " + "Setup done with proxy host: " + proxy + ", port: " + port + " from manual input.");
+        LOG.debug("Setup done with proxy host: " + proxy + ", port: " + port + " from manual input.");
         /*
         LOGGER.info((new Date()).toString() + " - " + "Http.ProxyHost: " + systemProperties.getProperty("http.proxyHost") +
         ", Http.ProxyPort: " + systemProperties.getProperty("http.proxyPort") +
@@ -59,7 +58,7 @@ public class ProxyManager {
     }
     
     public void setupProxyUsingPref(){
-        LOGGER.info((new Date()).toString() + " - " + "Setting up proxy from Prefeference");
+        LOG.debug("Setting up proxy from Prefeference");
         
         String[] proxyPrefs = getProxyPref();
         String useCustomProxyPref = proxyPrefs[0];
@@ -75,11 +74,11 @@ public class ProxyManager {
             systemProperties.setProperty("https.proxyHost", proxy);
             systemProperties.setProperty("https.proxyPort", port);
             
-            LOGGER.info((new Date()).toString() + " - " + "Setup done with proxy host: " + proxy + ", port: " + port + " from Preference.");
+            LOG.debug("Setup done with proxy host: " + proxy + ", port: " + port + " from Preference.");
         } else {
             System.setProperty("java.net.useSystemProxies","true");
             
-            LOGGER.info((new Date()).toString() + " - " + "Setup done with use system proxy from Preference");
+            LOG.debug("Setup done with use system proxy from Preference");
         }
         
         setupAuthentication();

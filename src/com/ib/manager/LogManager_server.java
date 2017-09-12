@@ -20,14 +20,16 @@ import java.net.UnknownServiceException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 import org.jsoup.nodes.Element;
 import java.util.prefs.Preferences;
+import org.apache.log4j.Logger;
 
 public class LogManager_server extends LogManager{
+    private static final Logger LOG = Logger.getLogger(LogManager_server.class);
+    
+    private static LogManager_server _instance = null;
     //private final LogReader reader;
     //private boolean isDeepDiagnostic = true; // True if use deep analysis
     //private boolean isTWS; // If the files being investigated are from TWS (true) or IBG (false)
@@ -38,12 +40,17 @@ public class LogManager_server extends LogManager{
     private String selectedUserDiagnosticFile = new String();
     private ProxyManager proxyManager = new ProxyManager();
     
-    private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-    
     public LogManager_server(){
         super();
         proxyManager.setupProxyUsingPref();
         setTrustManagerForSSL();
+    }
+    
+    public static LogManager_server getInstance(){
+        if(_instance == null){
+            _instance = new LogManager_server();
+        }
+        return _instance;
     }
     
     public void setupProxyPreference(Boolean useCustomProxy, String proxyHost, String proxyPort){
@@ -65,7 +72,7 @@ public class LogManager_server extends LogManager{
     
     @Override
     public void setLoadDirectoryPref(String loadDirectory){
-        LOGGER.info((new Date()).toString() + " - " + "Adding Loading Directory [" + loadDirectory + "] to Preference");
+        LOG.debug("Adding Loading Directory [" + loadDirectory + "] to Preference");
         
         Preferences prefs = super.getPref();
         prefs.put(LOADDIRECTORYPREFSERVER, loadDirectory);
@@ -74,14 +81,14 @@ public class LogManager_server extends LogManager{
     @Override
     public String getLoadDirectoryPref(){
         Preferences prefs = super.getPref();
-        LOGGER.info((new Date()).toString() + " - " + "Returning preference load directory: [" + prefs.get(LOADDIRECTORYPREFSERVER, "") + "]");
+        LOG.debug("Returning preference load directory: [" + prefs.get(LOADDIRECTORYPREFSERVER, "") + "]");
         return prefs.get(LOADDIRECTORYPREFSERVER, "");
     }
     
     
     @Override
     public void setExtractDirectoryPref(String extractDirectory){
-        LOGGER.info((new Date()).toString() + " - " + "Adding Extract Directory [" + extractDirectory + "] to Preference");
+        LOG.debug("Adding Extract Directory [" + extractDirectory + "] to Preference");
         
         Preferences prefs = super.getPref();
         prefs.put(EXTRACTDIRECTORYPREFSERVER, extractDirectory);
@@ -90,7 +97,7 @@ public class LogManager_server extends LogManager{
     @Override
     public String getExtractDirectoryPref(){
         Preferences prefs = super.getPref();
-        LOGGER.info((new Date()).toString() + " - " + "Returning preference extract directory: [" + prefs.get(EXTRACTDIRECTORYPREFSERVER, "") + "]");
+        LOG.debug("Returning preference extract directory: [" + prefs.get(EXTRACTDIRECTORYPREFSERVER, "") + "]");
         return prefs.get(EXTRACTDIRECTORYPREFSERVER, "");
     }
     
@@ -121,14 +128,12 @@ public class LogManager_server extends LogManager{
                 }
                 return userDiagnosticFileList.isEmpty() ? false : true;
             } catch (UnknownServiceException e){
-                e.printStackTrace();
                 javax.swing.JOptionPane.showMessageDialog(null, e.getMessage());
-                LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                LOG.error(e.getMessage(), e);
             } catch (IOException e){
-                e.printStackTrace();
                 javax.swing.JOptionPane.showMessageDialog(null, e.getMessage() + "\n\n" + 
                         "Please navigate to Settings > Proxy to manually setup Proxy Host and Port to resolve the issue.");
-                LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                LOG.error(e.getMessage(), e);
             }
         } else {
             try{
@@ -150,13 +155,11 @@ public class LogManager_server extends LogManager{
                 in.close();
                 return userDiagnosticFileList.isEmpty() ? false : true;
             } catch (UnknownServiceException e){
-                e.printStackTrace();
                 javax.swing.JOptionPane.showMessageDialog(null, e.getMessage());
-                LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                LOG.error(e.getMessage(), e);
             } catch (IOException e){
-                e.printStackTrace();
                 javax.swing.JOptionPane.showMessageDialog(null, e.getMessage());
-                LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                LOG.error(e.getMessage(), e);
             }
         }
         
@@ -188,38 +191,12 @@ public class LogManager_server extends LogManager{
             return new String(selectedUserDiagnosticFile);
     }
     
-    public boolean downloadDiagnosticFile(String zipLocation){
-        try{
-            URL downloadLink = new URL(new String("https://206.106.137.34/tws/data/" + selectedUserDiagnosticFile));
-            LOGGER.info((new Date()).toString() + " - " + "Downloading diagnostic file from: " + downloadLink.toString());
-            HttpURLConnection con = (HttpURLConnection)downloadLink.openConnection();
-            
-            con.setRequestMethod("GET");
-            InputStream input = con.getInputStream();
-            FileOutputStream output = new FileOutputStream(zipLocation);
-            CopyFile.copy(input, output, 1024);
-            this.getReader().setZipLocation(LogReader.USESERVER, zipLocation);
-            return true;
-        } catch (UnknownServiceException e){
-            e.printStackTrace();
-            javax.swing.JOptionPane.showMessageDialog(null, e.getMessage());
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
-            return false;
-        } catch (IOException e){
-            e.printStackTrace();
-            javax.swing.JOptionPane.showMessageDialog(null, e.getMessage());
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
-            return false;
-        }
-    }
-    
     // Invoke to extract file
     public void extract(){
         try {
             super.getReader().extractZip(LogReader.USESERVER);
         } catch (Exception e){
-            e.printStackTrace();
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            LOG.debug(e.getMessage(), e);
         }
     }
     
@@ -230,18 +207,6 @@ public class LogManager_server extends LogManager{
     public void setDeepDiagnostic(boolean isDeepDiag){
         // Deprecated
         //super.setDeepDiagnostic(isDeepDiag);
-    }
-    
-    public void setAutoCls(boolean autoCls){
-        super.getReader().setAutoCls(autoCls);
-    }
-    
-    public void setIncludeXml(boolean includeXml){
-        super.getReader().setIncludeXml(includeXml);
-    }
-    
-    public void setIncludeTrd(boolean includeTrd){
-        super.getReader().setIncludeTrd(includeTrd);
     }
     
     // Set location of zipLocation and outputDirectory
@@ -359,21 +324,30 @@ public class LogManager_server extends LogManager{
         super.getReader().selectScreenshot(LogReader.USESERVER, s);
     }
     
+    @Override
     public void openLogFileInNotePad(boolean useManual){
         try {
             super.getReader().openLogFileInNotePad(LogReader.USESERVER, super.isTws(), useManual);
         } catch (Exception e){
-            e.printStackTrace();
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
     }
     
+    @Override
+    public void showInFolder(){
+        try {
+            super.getReader().showInFolder(LogReader.USESERVER);
+        } catch (Exception e){
+            LOG.error(e.getMessage(), e);
+        }
+    }
+    
+    @Override
     public void openScreenshot(){
         try {
             super.getReader().openScreenshots(LogReader.USESERVER);
         } catch (Exception e){
-            e.printStackTrace();
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
     }
     
@@ -381,8 +355,7 @@ public class LogManager_server extends LogManager{
         try {
             super.getReader().regExSearch(LogReader.USESERVER, super.isTws(), false, regEx, isCaseSensitive, textPane);
         } catch (Exception e){
-            e.printStackTrace();
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
     }
     
@@ -390,8 +363,7 @@ public class LogManager_server extends LogManager{
         try {
             return super.getReader().checkFileSizeForAll(LogReader.USESERVER, super.isTws(), false);
         } catch (Exception e){
-            e.printStackTrace();
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
         return false;
     }
@@ -407,8 +379,7 @@ public class LogManager_server extends LogManager{
                 super.getReader().parseTwsLogFileShallow(LogReader.USESERVER, choice, super.isTws(), false, textPaneList);
             }
         } catch (Exception e){
-            e.printStackTrace();
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
     }
     

@@ -324,7 +324,8 @@ public class TwsLogParserDeep {
         
         String[] filter2 = { ":ERR]", "Address already in use" };
         
-        String[] filter3 = { "has not responded", "OutOfMemoryError:" };
+        //String[] filter3 = { "has not responded", "OutOfMemoryError:" };
+        String[] filter3 = {};
         
         StyledDocument doc = textPane.getStyledDocument();
         AnalyzerGUI.addStylesToDocument(doc);
