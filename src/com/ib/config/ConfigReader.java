@@ -33,9 +33,8 @@ public class ConfigReader {
     public void readProperties(){
         try{
             File file = new File(FILENAME);
-            LOG.debug("Config File path: " + file.getAbsolutePath());
             if(file.exists() && !file.isDirectory()){
-                LOG.debug("Config file found. Reading configs...");
+                LOG.info("Config file found. Reading configs...");
                 Properties m_prop = new Properties();
                 FileInputStream fileInput = new FileInputStream(file);
                 m_prop = new Properties();
@@ -56,12 +55,12 @@ public class ConfigReader {
                         m_config.put(key, value);
                     }
                 }
-                LOG.debug("Successfully loaded config: " + m_config.toString());
+                LOG.info("Successfully loaded config: " + m_config.toString());
             } else {
-                LOG.debug("Config file not found. Creating new configs...");
+                LOG.info("Config file not found. Creating new configs...");
                 ConfigWriter.getInstance().createDefaultConfigFile();
                 m_config = ConfigWriter.getInstance().createDefaultConfigsMap();
-                LOG.debug("Successfully created new config: " + m_config.toString());
+                LOG.info("Successfully created new config: " + m_config.toString());
             }
         } catch (IOException ex){
             LOG.error(ex.getMessage(), ex);
@@ -98,6 +97,7 @@ public class ConfigReader {
         m_analyzerGUI.includeXmlCheck.setSelected(includeXmlInAnalysis.equalsIgnoreCase("YES"));
         m_analyzerGUI.includeTrdFileCheck.setSelected(includeTrdInAnalysis.equalsIgnoreCase("YES"));
         m_analyzerGUI.matchCaseCheck.setSelected(matchCaseInRegSearch.equalsIgnoreCase("YES"));
+        LOG.info("Configs are assigned to GUI successfully.");
     }
     
     public String getConfig(String key){

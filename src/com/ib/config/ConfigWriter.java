@@ -36,7 +36,7 @@ public class ConfigWriter {
             FileOutputStream fos = new FileOutputStream(configFile);
             props.store(fos, "");
             fos.close();
-            LOG.debug("Created new config file.");
+            LOG.info("Created new config file.");
         } catch (Exception e){
             LOG.error(e.getMessage(), e);
         }

@@ -92,8 +92,8 @@ public class DownloadWorkerTask extends SwingWorker<Boolean, Integer>{
                 if(currentProgress > lastUpdatedProgress){
                     publish(currentProgress);
                     lastUpdatedProgress = currentProgress;
-                    LOG.debug("Downloaded File Size = " + downloadedFileSize + ", Downloaded Percentage = " + downloadedPct + 
-                        ", Current Progress = " + currentProgress);
+                    //LOG.debug("Downloaded File Size = " + downloadedFileSize + ", Downloaded Percentage = " + downloadedPct + 
+                    //    ", Current Progress = " + currentProgress);
                 }
                 
                 n = input.read(buf);

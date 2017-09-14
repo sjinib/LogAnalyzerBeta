@@ -114,7 +114,7 @@ public class ExtractWorkerTaskLocal extends SwingWorker<Boolean, Integer>{
             }
             zippedFileSize += (int) entry.getCompressedSize();
             int zippedPct = (int) ((((double)zippedFileSize) / ((double)zipFileSize)) * 100d);
-            LOG.debug("Zipped Percentage = " + zippedPct + ", Current Progress = " + zippedPct);
+            //LOG.debug("Zipped Percentage = " + zippedPct + ", Current Progress = " + zippedPct);
             publish(zippedPct);
             zipIn.closeEntry();
         }
