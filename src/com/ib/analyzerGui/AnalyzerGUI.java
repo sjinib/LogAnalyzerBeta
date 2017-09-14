@@ -14,7 +14,6 @@ import com.ib.parser.Choices;
 import com.ib.reader.LogReader;
 import java.awt.event.KeyEvent;
 import java.net.URL;
-import java.util.List;
 import javax.swing.Box;
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
@@ -28,6 +27,7 @@ import javax.swing.SwingWorker;
 import javax.swing.text.*;
 import com.ib.workerThreads.*;
 import org.apache.log4j.Logger;
+import com.ib.config.*;
 
 /**
  *
@@ -81,7 +81,6 @@ public class AnalyzerGUI extends javax.swing.JFrame {
      */
     public AnalyzerGUI() {        
         m_serverManager = LogManager_server.getInstance();
-        m_localManager = LogManager_local.getInstance();
         
         initComponents(); // Default initializer called by NetBeans
         customInitTextPaneComponents(); // Initializing contents for display panes
@@ -315,7 +314,6 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         extractLabel1.setText("Extraction Progress:");
 
         extractDirectoryServer.setEditable(false);
-        extractDirectoryServer.setText(m_serverManager.getExtractDirectoryPref().isEmpty() ? System.getProperty("java.io.tmpdir") : m_serverManager.getExtractDirectoryPref());
         extractDirectoryServer.setToolTipText("Select the directory where you want the diagnostic file to be extracted.");
         extractDirectoryServer.setMaximumSize(new java.awt.Dimension(300, 20));
         extractDirectoryServer.setPreferredSize(new java.awt.Dimension(100, 28));
@@ -337,7 +335,6 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         });
 
         loadDirectory1.setEditable(false);
-        loadDirectory1.setText(m_serverManager.getLoadDirectoryPref().isEmpty() ? System.getProperty("java.io.tmpdir") : m_serverManager.getLoadDirectoryPref());
         loadDirectory1.setToolTipText("Select the directory where the diagnostic file will be downloaded to.");
         loadDirectory1.setMaximumSize(new java.awt.Dimension(300, 20));
         loadDirectory1.setPreferredSize(new java.awt.Dimension(100, 28));
@@ -364,6 +361,11 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         todayOnlyCheckBox.setSelected(true);
         todayOnlyCheckBox.setText("Today Only");
         todayOnlyCheckBox.setToolTipText("Check to only load diagnostic files uploaded today");
+        todayOnlyCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                todayOnlyCheckBoxActionPerformed(evt);
+            }
+        });
 
         zipLocationLabel1.setText("Diagnostic zip file location:");
 
@@ -981,12 +983,27 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         autoClsCheck.setSelected(true);
         autoClsCheck.setText("Auto Clear");
         autoClsCheck.setToolTipText("Automatic clear all display panes after extraction of diagnostic file");
+        autoClsCheck.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                autoClsCheckActionPerformed(evt);
+            }
+        });
 
         includeXmlCheck.setText("Include Tws.xml in analysis");
         includeXmlCheck.setToolTipText("Select to include settings xml file analysis");
+        includeXmlCheck.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                includeXmlCheckActionPerformed(evt);
+            }
+        });
 
         includeTrdFileCheck.setText("Include .Trd files in analysis");
         includeTrdFileCheck.setToolTipText("Select to include day.trd file analysis in Orders & Trades");
+        includeTrdFileCheck.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                includeTrdFileCheckActionPerformed(evt);
+            }
+        });
 
         openLogFileBtn.setText("Open Log File");
         openLogFileBtn.setToolTipText("Open the selected log file with the default Text Editor on your computer");
@@ -1012,6 +1029,11 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         });
 
         matchCaseCheck.setText("Match Case");
+        matchCaseCheck.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                matchCaseCheckActionPerformed(evt);
+            }
+        });
 
         regExSearchBtn.setText("Search");
         regExSearchBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -1840,7 +1862,6 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                 try{
                     FileUtils.cleanDirectory(directory); // Clear extract directory
                 } catch (IOException e){
-                    e.printStackTrace();
                     javax.swing.JOptionPane.showMessageDialog(null, "Failed to clear directory");
                     LOG.error(e.getMessage(), e);
                 }
@@ -1899,7 +1920,6 @@ public class AnalyzerGUI extends javax.swing.JFrame {
                     loadingLabel.setVisible(false);
                 }
             } catch (Exception e){
-                e.printStackTrace();
                 LOG.error(e.getMessage(), e);
             }
         }
@@ -1912,16 +1932,14 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         // Loading circle
         try{
             loadingLabel.setText("");
-            URL image = this.getClass().getClassLoader().getResource("resources/loading.gif");
+            URL image = this.getClass().getClassLoader().getResource("loading.gif");
             Icon icon = new ImageIcon(image);
             loadingLabel.setIcon(icon);
             loadingLabel.setVisible(true);
             
-            LoadingWorkTask task = new LoadingWorkTask(usernameText.getText());
-            task.execute();
-            
+            LoadUserWorkerTask.getInstance().setInstanceUsername(username);
+            LoadUserWorkerTask.getInstance().execute();
         } catch (Exception e){
-            e.printStackTrace();
             LOG.error(e.getMessage(), e);
         }
         
@@ -1938,7 +1956,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             String diagnosticFileNameNoZip = diagnosticFileName.substring(0, diagnosticFileName.lastIndexOf(".zip"));
             m_serverManager.setReaderLocation(null, extractDirectoryServer.getText() + "\\" + diagnosticFileNameNoZip);
             
-            //serverManager.setExtractDirectoryPref(extractDirectory1.getText());
+            ConfigWriter.getInstance().overwriteConfig(Configs.DEFAULT_EXTRACT_DIRECTORY, extractDirectoryServer.getText());
         } else if (returnVal == javax.swing.JFileChooser.CANCEL_OPTION){
         } else {
             javax.swing.JOptionPane.showMessageDialog(null, "Failed to find directory.");
@@ -1958,12 +1976,14 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             extractDirectoryServer.setText(diagnosticFile_server.getAbsolutePath());
             
             String diagnosticFileName = m_serverManager.getSelectedUserDiagnosticFile();
-                    
-            String diagnosticFileNameNoZip = diagnosticFileName.substring(0, diagnosticFileName.lastIndexOf(".zip"));
-            m_serverManager.setReaderLocation(loadDirectory1.getText(), extractDirectoryServer.getText() + "\\" + diagnosticFileNameNoZip);
+            if(diagnosticFileName != null){
+                LOG.debug("-------" + diagnosticFileName);
+                String diagnosticFileNameNoZip = diagnosticFileName.substring(0, diagnosticFileName.lastIndexOf(".zip"));
+                m_serverManager.setReaderLocation(loadDirectory1.getText(), extractDirectoryServer.getText() + "\\" + diagnosticFileNameNoZip);
+            }
             
-            m_serverManager.setLoadDirectoryPref(loadDirectory1.getText());
-            m_serverManager.setExtractDirectoryPref(extractDirectoryServer.getText());
+            ConfigWriter.getInstance().overwriteConfig(Configs.DEFAULT_DOWNLOAD_DIRECTORY, loadDirectory1.getText());
+            ConfigWriter.getInstance().overwriteConfig(Configs.DEFAULT_EXTRACT_DIRECTORY, extractDirectoryServer.getText());
         } else if (returnVal == javax.swing.JFileChooser.CANCEL_OPTION){
         } else {
             javax.swing.JOptionPane.showMessageDialog(null, "Failed to find directory.");
@@ -2514,32 +2534,32 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         proxyPanel.add(portField);
         proxyPanel.add(useSystemProxyCheckBox);
         
-        String[] proxyPrefs = m_serverManager.getProxyPreference();
-        String useCustomProxyPref = proxyPrefs[0];
-        String proxy = proxyPrefs[1];
-        String port = proxyPrefs[2];
+        String useSystemProxy = ConfigReader.getInstance().getConfig(Configs.USE_SYSTEM_PROXY);
+        String proxy = ConfigReader.getInstance().getConfig(Configs.PREFERRED_PROXY_HOST);
+        String port = ConfigReader.getInstance().getConfig(Configs.PREFERRED_PROXY_PORT);
         
-        if(useCustomProxyPref.equalsIgnoreCase("TRUE")){
-            useSystemProxyCheckBox.setSelected(false);
-            proxyField.setText(proxy);
-            portField.setText(port);
-        } else {
+        if(useSystemProxy.equalsIgnoreCase("YES")){
             useSystemProxyCheckBox.setSelected(true);
             proxyField.setEnabled(false);
             portField.setEnabled(false);
+        } else {
+            useSystemProxyCheckBox.setSelected(false);
+            proxyField.setText(proxy);
+            portField.setText(port);
         }
         
         int result = JOptionPane.showConfirmDialog(null, proxyPanel, "Please enter proxy settings", JOptionPane.OK_CANCEL_OPTION);
         if(result == JOptionPane.OK_OPTION){
             if(useSystemProxyCheckBox.isSelected()){
-                m_serverManager.setupProxyPreference(false, "", "");
-                
-                if(useCustomProxyPref.equalsIgnoreCase("TRUE")){
-                    JOptionPane.showMessageDialog(null, "Please restart the application to reflect the change.");
-                }
+                ConfigWriter.getInstance().overwriteConfig(Configs.USE_SYSTEM_PROXY, "YES");
+                ConfigWriter.getInstance().overwriteConfig(Configs.PREFERRED_PROXY_HOST, proxyField.getText());
+                ConfigWriter.getInstance().overwriteConfig(Configs.PREFERRED_PROXY_PORT, portField.getText());
             } else {
-                m_serverManager.setupProxyPreference(true, proxyField.getText(), portField.getText());
+                ConfigWriter.getInstance().overwriteConfig(Configs.USE_SYSTEM_PROXY, "NO");
+                ConfigWriter.getInstance().overwriteConfig(Configs.PREFERRED_PROXY_HOST, proxyField.getText());
+                ConfigWriter.getInstance().overwriteConfig(Configs.PREFERRED_PROXY_PORT, portField.getText());
             }
+            ProxyManager.getInstance().setupProxyUsingConfig();
         }
     }//GEN-LAST:event_proxyMenuItemActionPerformed
     
@@ -2562,8 +2582,28 @@ public class AnalyzerGUI extends javax.swing.JFrame {
             m_localManager.showInFolder();
         }
     }//GEN-LAST:event_showInFolderBtnActionPerformed
+
+    private void autoClsCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_autoClsCheckActionPerformed
+        ConfigWriter.getInstance().overwriteConfig(Configs.AUTO_CLEAR, autoClsCheck.isSelected() ? "YES" : "NO");
+    }//GEN-LAST:event_autoClsCheckActionPerformed
+
+    private void includeXmlCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_includeXmlCheckActionPerformed
+        ConfigWriter.getInstance().overwriteConfig(Configs.INCLUDE_XML_IN_ANALYSIS, includeXmlCheck.isSelected() ? "YES" : "NO");
+    }//GEN-LAST:event_includeXmlCheckActionPerformed
+
+    private void includeTrdFileCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_includeTrdFileCheckActionPerformed
+        ConfigWriter.getInstance().overwriteConfig(Configs.INCLUDE_TRD_IN_ANALYSIS, includeTrdFileCheck.isSelected() ? "YES" : "NO");
+    }//GEN-LAST:event_includeTrdFileCheckActionPerformed
+
+    private void matchCaseCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_matchCaseCheckActionPerformed
+        ConfigWriter.getInstance().overwriteConfig(Configs.MATCH_CASE_IN_REG_SEARCH, matchCaseCheck.isSelected() ? "YES" : "NO");
+    }//GEN-LAST:event_matchCaseCheckActionPerformed
+
+    private void todayOnlyCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_todayOnlyCheckBoxActionPerformed
+        ConfigWriter.getInstance().overwriteConfig(Configs.TODAY_ONLY, todayOnlyCheckBox.isSelected() ? "YES" : "NO");
+    }//GEN-LAST:event_todayOnlyCheckBoxActionPerformed
     
-    private void handleUserDiagnosticFileBox(){
+    public void handleUserDiagnosticFileBox(){
         userDiagnosticsComboBox.removeAllItems();
         String[] list = m_serverManager.getUserDiagnosticFileList();
         for(String s: list){
@@ -2576,6 +2616,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
     }
     
     private void customInitComponents(){
+        LOG.debug("Initializing text panes and configs");
         java.awt.Dimension dim = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width/2-this.getSize().width/2, 0);
         
@@ -2592,7 +2633,12 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         
         useImportServerBtn.setForeground(Color.GREEN.darker());
         downloadDiagnosticPane.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(Color.GREEN.darker(), 2, true), "Download Diagnostic File From Server"));
-            
+        
+    }
+    
+    public void loadConfigSettings(){
+        ConfigReader.getInstance().readProperties();
+        ConfigReader.getInstance().assignProperties();
     }
     
     public void initializedComboBoxServer(){
@@ -3445,6 +3491,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 AnalyzerGUI mainFrame = AnalyzerGUI.getInstance();
+                mainFrame.loadConfigSettings();
                 
                 mainFrame.setVisible(true);
                 
@@ -3503,10 +3550,10 @@ public class AnalyzerGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField loadDirectory1;
+    public javax.swing.JTextField loadDirectory1;
     private javax.swing.JTextField loadDirectory2;
     private javax.swing.JButton loadUserBtn;
-    private javax.swing.JLabel loadingLabel;
+    public javax.swing.JLabel loadingLabel;
     private javax.swing.JComboBox<String> logComboBox1;
     private javax.swing.JComboBox<String> logComboBox2;
     private javax.swing.JComboBox<String> logComboBoxCopy;
@@ -3514,7 +3561,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
     private javax.swing.JLabel logFileStatus;
     private javax.swing.JPanel manualImportPane;
     private javax.swing.JLabel manualSettingsLabel;
-    private javax.swing.JCheckBox matchCaseCheck;
+    public javax.swing.JCheckBox matchCaseCheck;
     private javax.swing.JMenu menu;
     private javax.swing.JButton openLogFileBtn;
     private javax.swing.JButton openScreenshotBtn;
@@ -3535,7 +3582,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
     private javax.swing.JLabel statusLabel;
     private javax.swing.JPanel statusPanel;
     private javax.swing.JPanel textMainPane;
-    private javax.swing.JCheckBox todayOnlyCheckBox;
+    public javax.swing.JCheckBox todayOnlyCheckBox;
     private javax.swing.JComboBox<String> tradeComboBox1;
     private javax.swing.JComboBox<String> tradeComboBox2;
     private javax.swing.JComboBox<String> tradeComboBoxCopy;

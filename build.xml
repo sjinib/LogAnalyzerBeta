@@ -10,6 +10,11 @@
 <project name="LogAnalyzerBeta" default="default" basedir=".">
     <description>Builds, tests, and runs the project LogAnalyzerBeta.</description>
     <import file="nbproject/build-impl.xml"/>
+	    <target name="-post-jar">
+            <copy todir="${dist.jar.dir}/resources">
+				<fileset dir="resources" includes="**"/>
+			</copy>     
+        </target>
     <!--
 
     There exist several targets which are by default empty and which can be 

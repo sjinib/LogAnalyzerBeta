@@ -37,12 +37,10 @@ public class LogManager_server extends LogManager{
     public final static String EXTRACTDIRECTORYPREFSERVER = "LOGANALYZER_EXTRACT_DIR_SERVER";
     
     private ArrayList<String> userDiagnosticFileList = new ArrayList<String>();
-    private String selectedUserDiagnosticFile = new String();
-    private ProxyManager proxyManager = new ProxyManager();
+    private String selectedUserDiagnosticFile = null;
     
     public LogManager_server(){
         super();
-        proxyManager.setupProxyUsingPref();
         setTrustManagerForSSL();
     }
     
@@ -53,15 +51,6 @@ public class LogManager_server extends LogManager{
         return _instance;
     }
     
-    public void setupProxyPreference(Boolean useCustomProxy, String proxyHost, String proxyPort){
-        proxyManager.setupProxyPreference(useCustomProxy, proxyHost, proxyPort);
-        proxyManager.setupProxyUsingPref();
-    }
-    
-    public String[] getProxyPreference(){
-        return proxyManager.getProxyPref();
-    }
-    
     private void setTrustManagerForSSL(){
         SimpleX509TrustManager.disableSSL();
     }
@@ -69,38 +58,6 @@ public class LogManager_server extends LogManager{
     public void clearUserDiagnosticFileList(){
         userDiagnosticFileList.clear();
     }
-    
-    @Override
-    public void setLoadDirectoryPref(String loadDirectory){
-        LOG.debug("Adding Loading Directory [" + loadDirectory + "] to Preference");
-        
-        Preferences prefs = super.getPref();
-        prefs.put(LOADDIRECTORYPREFSERVER, loadDirectory);
-    }
-    
-    @Override
-    public String getLoadDirectoryPref(){
-        Preferences prefs = super.getPref();
-        LOG.debug("Returning preference load directory: [" + prefs.get(LOADDIRECTORYPREFSERVER, "") + "]");
-        return prefs.get(LOADDIRECTORYPREFSERVER, "");
-    }
-    
-    
-    @Override
-    public void setExtractDirectoryPref(String extractDirectory){
-        LOG.debug("Adding Extract Directory [" + extractDirectory + "] to Preference");
-        
-        Preferences prefs = super.getPref();
-        prefs.put(EXTRACTDIRECTORYPREFSERVER, extractDirectory);
-    }
-    
-    @Override
-    public String getExtractDirectoryPref(){
-        Preferences prefs = super.getPref();
-        LOG.debug("Returning preference extract directory: [" + prefs.get(EXTRACTDIRECTORYPREFSERVER, "") + "]");
-        return prefs.get(EXTRACTDIRECTORYPREFSERVER, "");
-    }
-    
     
     public boolean loadUserDiagnosticFileList(String username, boolean todayOnly){
         if(todayOnly){
@@ -387,9 +344,6 @@ public class LogManager_server extends LogManager{
         super.getReader().resetServer();
         
         userDiagnosticFileList.clear();
-        selectedUserDiagnosticFile = "";
-        
-        this.setLoadDirectoryPref("");
-        this.setExtractDirectoryPref("");
+        selectedUserDiagnosticFile = null;
     }
 }

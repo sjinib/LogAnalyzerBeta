@@ -6,7 +6,12 @@
             <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/manager/ProxyManager.java</file>
             <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/manager/LogManager_server.java</file>
             <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/workerThreads/DownloadWorkerTask.java</file>
-            <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/manager/LogManager.java</file>
+            <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/config/ConfigReader.java</file>
+            <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/workerThreads/ExtractWorkerTaskLocal.java</file>
+            <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/workerThreads/ExtractWorkerTaskServer.java</file>
+            <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/workerThreads/LoadUserWorkerTask.java</file>
+            <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/config/Configs.java</file>
+            <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/config/ConfigWriter.java</file>
             <file>file:/C:/Users/Siteng%20Jin/Documents/NetBeansProjects/LogAnalyzerBeta/src/com/ib/analyzerGui/AnalyzerGUI.java</file>
         </group>
     </open-files>

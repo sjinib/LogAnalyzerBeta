@@ -44,14 +44,6 @@ public abstract class LogManager {
         isDeepDiagnostic = isDeepDiag;
     }
     
-    public void setLoadDirectoryPref(String loadDirectory){}
-    
-    public String getLoadDirectoryPref(){return null;}
-    
-    public void setExtractDirectoryPref(String extractDirectory){}
-    
-    public String getExtractDirectoryPref(){return null;}
-    
     public void openLogFileInNotePad(boolean useManual){}
     
     public void showInFolder(){}
