@@ -23,6 +23,9 @@ public class Configs {
     public static final String INCLUDE_TRD_IN_ANALYSIS = "INCLUDE_TRD_IN_ANALYSIS";
     public static final String MATCH_CASE_IN_REG_SEARCH = "MATCH_CASE_IN_REG_SEARCH";
     
+    public static final String USERNAME = "USERNAME";
+    public static final String PASSWORD = "PASSWORD";
+    
     
     public static HashSet<String> getAllConfigs(){
         HashSet<String> configs = new HashSet<String>();
@@ -36,6 +39,10 @@ public class Configs {
         configs.add(INCLUDE_XML_IN_ANALYSIS);
         configs.add(INCLUDE_TRD_IN_ANALYSIS);
         configs.add(MATCH_CASE_IN_REG_SEARCH);
+        
+        configs.add(USERNAME);
+        configs.add(PASSWORD);
+        
         return configs;
     }
 }

@@ -22,6 +22,14 @@
             <Property name="text" type="java.lang.String" value="Settings"/>
           </Properties>
           <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="loginMenuItem">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Login Credentials"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="loginMenuItemActionPerformed"/>
+              </Events>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="proxyMenuItem">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Proxy"/>

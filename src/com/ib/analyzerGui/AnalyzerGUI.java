@@ -28,6 +28,7 @@ import javax.swing.text.*;
 import com.ib.workerThreads.*;
 import org.apache.log4j.Logger;
 import com.ib.config.*;
+import javax.swing.JPasswordField;
 
 /**
  *
@@ -81,6 +82,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
      */
     public AnalyzerGUI() {        
         m_serverManager = LogManager_server.getInstance();
+        m_localManager = LogManager_local.getInstance();
         
         initComponents(); // Default initializer called by NetBeans
         customInitTextPaneComponents(); // Initializing contents for display panes
@@ -205,6 +207,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         textMainPane = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         menu = new javax.swing.JMenu();
+        loginMenuItem = new javax.swing.JMenuItem();
         proxyMenuItem = new javax.swing.JMenuItem();
 
         directoryChooser.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
@@ -1226,6 +1229,14 @@ public class AnalyzerGUI extends javax.swing.JFrame {
 
         menu.setText("Settings");
 
+        loginMenuItem.setText("Login Credentials");
+        loginMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loginMenuItemActionPerformed(evt);
+            }
+        });
+        menu.add(loginMenuItem);
+
         proxyMenuItem.setText("Proxy");
         proxyMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1926,6 +1937,16 @@ public class AnalyzerGUI extends javax.swing.JFrame {
     }
     
     private void loadUserBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadUserBtnActionPerformed
+        // Check if login credentials is setup
+        String user = ConfigReader.getInstance().getConfig(Configs.USERNAME);
+        String pass = ConfigReader.getInstance().getConfig(Configs.PASSWORD);
+        if(user == null || pass == null || user.isEmpty() || pass.isEmpty()){
+            LOG.debug("Username or password is not setup properly. Trigger pop up dialog to setup user credentials");
+            if(!popUpLoginDialog()){
+                return;
+            }
+        }
+        
         LOG.debug("Loading username list...");
         String username = usernameText.getText();
         
@@ -2551,10 +2572,16 @@ public class AnalyzerGUI extends javax.swing.JFrame {
         int result = JOptionPane.showConfirmDialog(null, proxyPanel, "Please enter proxy settings", JOptionPane.OK_CANCEL_OPTION);
         if(result == JOptionPane.OK_OPTION){
             if(useSystemProxyCheckBox.isSelected()){
+                ConfigReader.getInstance().setConfig(Configs.USE_SYSTEM_PROXY, "YES");
+                ConfigReader.getInstance().setConfig(Configs.PREFERRED_PROXY_HOST, proxyField.getText());
+                ConfigReader.getInstance().setConfig(Configs.PREFERRED_PROXY_PORT, portField.getText());
                 ConfigWriter.getInstance().overwriteConfig(Configs.USE_SYSTEM_PROXY, "YES");
                 ConfigWriter.getInstance().overwriteConfig(Configs.PREFERRED_PROXY_HOST, proxyField.getText());
                 ConfigWriter.getInstance().overwriteConfig(Configs.PREFERRED_PROXY_PORT, portField.getText());
             } else {
+                ConfigReader.getInstance().setConfig(Configs.USE_SYSTEM_PROXY, "NO");
+                ConfigReader.getInstance().setConfig(Configs.PREFERRED_PROXY_HOST, proxyField.getText());
+                ConfigReader.getInstance().setConfig(Configs.PREFERRED_PROXY_PORT, portField.getText());
                 ConfigWriter.getInstance().overwriteConfig(Configs.USE_SYSTEM_PROXY, "NO");
                 ConfigWriter.getInstance().overwriteConfig(Configs.PREFERRED_PROXY_HOST, proxyField.getText());
                 ConfigWriter.getInstance().overwriteConfig(Configs.PREFERRED_PROXY_PORT, portField.getText());
@@ -2602,6 +2629,51 @@ public class AnalyzerGUI extends javax.swing.JFrame {
     private void todayOnlyCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_todayOnlyCheckBoxActionPerformed
         ConfigWriter.getInstance().overwriteConfig(Configs.TODAY_ONLY, todayOnlyCheckBox.isSelected() ? "YES" : "NO");
     }//GEN-LAST:event_todayOnlyCheckBoxActionPerformed
+
+    private void loginMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginMenuItemActionPerformed
+        popUpLoginDialog();
+    }//GEN-LAST:event_loginMenuItemActionPerformed
+    
+    public boolean popUpLoginDialog(){
+        JTextField usernameField = new JTextField(15);
+        JTextField passwordField = new JPasswordField(25);
+        
+        JPanel loginPanel = new JPanel();
+        loginPanel.add(new JLabel("Username: "));
+        loginPanel.add(usernameField);
+        loginPanel.add(Box.createHorizontalStrut(15));
+        loginPanel.add(new JLabel("Password: "));
+        loginPanel.add(passwordField);
+        
+        String username = ConfigReader.getInstance().getConfig(Configs.USERNAME);
+        String password = ConfigReader.getInstance().getConfig(Configs.PASSWORD);
+        
+        usernameField.setText(username);
+        passwordField.setText(password);
+        
+        int result = JOptionPane.showConfirmDialog(null, loginPanel, "Please enter username and password", JOptionPane.OK_CANCEL_OPTION);
+        if(result == JOptionPane.OK_OPTION){
+            if(usernameField.getText().isEmpty() || passwordField.getText().isEmpty()){
+                JOptionPane.showMessageDialog(null, "Username or password cannot be empty!");
+                return false;
+            } else{
+                if(username == null || !username.equals(usernameField.getText())){
+                    ConfigReader.getInstance().setConfig(Configs.USERNAME, usernameField.getText());
+                    ConfigWriter.getInstance().overwriteConfig(Configs.USERNAME, usernameField.getText());
+                }
+                
+                if(password == null || !password.equals(passwordField.getText())){
+                    ConfigReader.getInstance().setConfig(Configs.PASSWORD, usernameField.getText());
+                    ConfigWriter.getInstance().overwriteConfig(Configs.PASSWORD, passwordField.getText());
+                }
+                
+                ProxyManager.getInstance().setupAuthentication(usernameField.getText(), passwordField.getText());
+            }
+            return true;
+        } else{
+            return false;
+        }
+    }
     
     public void handleUserDiagnosticFileBox(){
         userDiagnosticsComboBox.removeAllItems();
@@ -3559,6 +3631,7 @@ public class AnalyzerGUI extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> logComboBoxCopy;
     private javax.swing.JTextField logDirectoryManual;
     private javax.swing.JLabel logFileStatus;
+    private javax.swing.JMenuItem loginMenuItem;
     private javax.swing.JPanel manualImportPane;
     private javax.swing.JLabel manualSettingsLabel;
     public javax.swing.JCheckBox matchCaseCheck;

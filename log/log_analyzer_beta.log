@@ -1,0 +1,430 @@
+2017-11-09 13:31:55 844 INFO  [AWT-EventQueue-0] ConfigReader:37 - Config file found. Reading configs...
+2017-11-09 13:31:55 859 INFO  [AWT-EventQueue-0] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=NO, AUTO_CLEAR=YES, TODAY_ONLY=NO, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2017-11-09 13:31:55 870 INFO  [AWT-EventQueue-0] ConfigReader:100 - Configs are assigned to GUI successfully.
+2017-11-09 13:31:55 970 INFO  [AWT-EventQueue-0] AnalyzerGUI:3498 - ======================Log Analyzer Start======================
+2017-11-09 13:36:18 230 INFO  [AWT-EventQueue-0] ConfigReader:37 - Config file found. Reading configs...
+2017-11-09 13:36:18 233 INFO  [AWT-EventQueue-0] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=NO, AUTO_CLEAR=YES, TODAY_ONLY=NO, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2017-11-09 13:36:18 236 INFO  [AWT-EventQueue-0] ConfigReader:100 - Configs are assigned to GUI successfully.
+2017-11-09 13:36:18 260 INFO  [AWT-EventQueue-0] AnalyzerGUI:3499 - ======================Log Analyzer Start======================
+2017-11-09 13:37:59 425 ERROR [SwingWorker-pool-2-thread-7] LogManager_local:245 - 
+java.lang.ArrayIndexOutOfBoundsException
+	at java.lang.System.arraycopy(Native Method)
+	at javax.swing.text.CompositeView.replace(CompositeView.java:204)
+	at javax.swing.text.BoxView.replace(BoxView.java:181)
+	at javax.swing.text.View.updateChildren(View.java:1120)
+	at javax.swing.text.View.insertUpdate(View.java:704)
+	at javax.swing.plaf.basic.BasicTextUI$RootView.insertUpdate(BasicTextUI.java:1610)
+	at javax.swing.plaf.basic.BasicTextUI$UpdateHandler.insertUpdate(BasicTextUI.java:1869)
+	at javax.swing.text.AbstractDocument.fireInsertUpdate(AbstractDocument.java:201)
+	at javax.swing.text.AbstractDocument.handleInsertString(AbstractDocument.java:748)
+	at javax.swing.text.AbstractDocument.insertString(AbstractDocument.java:707)
+	at com.ib.parser.TwsLogParserDeep.parseTwsApi(TwsLogParserDeep.java:342)
+	at com.ib.reader.LogReader.parseTwsLogFileDeep(LogReader.java:1409)
+	at com.ib.manager.LogManager_local.startParse(LogManager_local.java:239)
+	at com.ib.analyzerGui.AnalyzerGUI$AnalyzeWorkTask.doInBackground(AnalyzerGUI.java:1677)
+	at com.ib.analyzerGui.AnalyzerGUI$AnalyzeWorkTask.doInBackground(AnalyzerGUI.java:1664)
+	at javax.swing.SwingWorker$1.call(SwingWorker.java:295)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javax.swing.SwingWorker.run(SwingWorker.java:334)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2018-06-27 10:47:52 820 INFO  [AWT-EventQueue-0] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 10:47:52 846 INFO  [AWT-EventQueue-0] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=NO, AUTO_CLEAR=YES, TODAY_ONLY=NO, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 10:47:52 866 INFO  [AWT-EventQueue-0] ConfigReader:100 - Configs are assigned to GUI successfully.
+2018-06-27 10:47:52 949 INFO  [AWT-EventQueue-0] AnalyzerGUI:3499 - ======================Log Analyzer Start======================
+2018-06-27 10:49:10 060 INFO  [AWT-EventQueue-0] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 10:49:10 063 INFO  [AWT-EventQueue-0] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=NO, AUTO_CLEAR=YES, TODAY_ONLY=YES, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 10:49:10 065 INFO  [AWT-EventQueue-0] ConfigReader:100 - Configs are assigned to GUI successfully.
+2018-06-27 10:49:10 085 INFO  [AWT-EventQueue-0] AnalyzerGUI:3499 - ======================Log Analyzer Start======================
+2018-06-27 10:52:27 072 INFO  [AWT-EventQueue-0] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 10:52:27 076 INFO  [AWT-EventQueue-0] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=NO, AUTO_CLEAR=YES, TODAY_ONLY=YES, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 10:52:27 079 INFO  [AWT-EventQueue-0] ConfigReader:100 - Configs are assigned to GUI successfully.
+2018-06-27 10:52:27 101 INFO  [AWT-EventQueue-0] AnalyzerGUI:3499 - ======================Log Analyzer Start======================
+2018-06-27 10:54:10 090 INFO  [AWT-EventQueue-0] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 10:54:10 094 INFO  [AWT-EventQueue-0] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=NO, AUTO_CLEAR=YES, TODAY_ONLY=YES, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 10:54:10 096 INFO  [AWT-EventQueue-0] ConfigReader:100 - Configs are assigned to GUI successfully.
+2018-06-27 10:54:10 117 INFO  [AWT-EventQueue-0] AnalyzerGUI:3499 - ======================Log Analyzer Start======================
+2018-06-27 10:58:36 415 ERROR [SwingWorker-pool-2-thread-1] LogManager_server:93 - HTTP error fetching URL
+org.jsoup.HttpStatusException: HTTP error fetching URL. Status=401, URL=https://wit1.interactivebrokers.com/cgi-bin/tws/tws_error_reader.pl
+	at org.jsoup.helper.HttpConnection$Response.execute(HttpConnection.java:598)
+	at org.jsoup.helper.HttpConnection$Response.execute(HttpConnection.java:548)
+	at org.jsoup.helper.HttpConnection.execute(HttpConnection.java:235)
+	at org.jsoup.helper.HttpConnection.get(HttpConnection.java:224)
+	at com.ib.manager.LogManager_server.loadUserDiagnosticFileList(LogManager_server.java:67)
+	at com.ib.workerThreads.LoadUserWorkerTask.doInBackground(LoadUserWorkerTask.java:45)
+	at com.ib.workerThreads.LoadUserWorkerTask.doInBackground(LoadUserWorkerTask.java:17)
+	at javax.swing.SwingWorker$1.call(SwingWorker.java:295)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javax.swing.SwingWorker.run(SwingWorker.java:334)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+2018-06-27 11:03:25 017 INFO  [AWT-EventQueue-0] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 11:03:25 023 INFO  [AWT-EventQueue-0] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=NO, AUTO_CLEAR=YES, TODAY_ONLY=YES, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 11:03:25 051 INFO  [AWT-EventQueue-0] ConfigReader:100 - Configs are assigned to GUI successfully.
+2018-06-27 11:03:25 072 INFO  [AWT-EventQueue-0] AnalyzerGUI:3499 - ======================Log Analyzer Start======================
+2018-06-27 11:04:35 495 INFO  [AWT-EventQueue-0] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 11:04:35 499 INFO  [AWT-EventQueue-0] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=NO, AUTO_CLEAR=YES, TODAY_ONLY=YES, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 11:04:35 501 INFO  [AWT-EventQueue-0] ConfigReader:100 - Configs are assigned to GUI successfully.
+2018-06-27 11:04:35 522 INFO  [AWT-EventQueue-0] AnalyzerGUI:3499 - ======================Log Analyzer Start======================
+2018-06-27 11:18:19 449 INFO  [main] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 11:18:19 452 INFO  [main] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=NO, AUTO_CLEAR=YES, TODAY_ONLY=NO, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 11:19:05 763 INFO  [main] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 11:19:05 766 INFO  [main] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=NO, AUTO_CLEAR=YES, TODAY_ONLY=NO, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 11:19:37 346 INFO  [main] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 11:19:37 349 INFO  [main] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=NO, AUTO_CLEAR=YES, TODAY_ONLY=NO, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 15:53:23 797 INFO  [main] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 15:53:23 828 INFO  [main] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=NO, AUTO_CLEAR=YES, TODAY_ONLY=NO, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 15:54:23 357 INFO  [main] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 15:54:23 360 INFO  [main] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=NO, AUTO_CLEAR=YES, TODAY_ONLY=NO, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 15:54:45 499 INFO  [main] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 15:54:45 502 INFO  [main] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=NO, AUTO_CLEAR=YES, TODAY_ONLY=NO, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 16:00:52 065 INFO  [main] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 16:00:52 073 INFO  [main] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=NO, AUTO_CLEAR=YES, TODAY_ONLY=NO, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 16:01:14 812 INFO  [main] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 16:01:14 815 INFO  [main] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=NO, AUTO_CLEAR=YES, TODAY_ONLY=NO, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 16:03:20 825 INFO  [main] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 16:03:20 828 INFO  [main] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=NO, AUTO_CLEAR=YES, TODAY_ONLY=NO, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 16:03:32 861 INFO  [main] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 16:03:32 864 INFO  [main] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=NO, AUTO_CLEAR=YES, TODAY_ONLY=NO, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 16:04:26 764 INFO  [main] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 16:04:26 768 INFO  [main] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=NO, AUTO_CLEAR=YES, TODAY_ONLY=NO, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 16:05:14 663 INFO  [main] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 16:05:14 666 INFO  [main] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=NO, AUTO_CLEAR=YES, TODAY_ONLY=NO, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 16:07:04 118 INFO  [main] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 16:07:04 137 INFO  [main] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=NO, AUTO_CLEAR=YES, TODAY_ONLY=NO, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 16:07:32 475 INFO  [main] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 16:07:32 495 INFO  [main] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=NO, AUTO_CLEAR=YES, TODAY_ONLY=NO, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 16:09:19 193 INFO  [main] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 16:09:19 197 INFO  [main] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=NO, AUTO_CLEAR=YES, TODAY_ONLY=NO, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 16:10:37 893 INFO  [main] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 16:10:37 896 INFO  [main] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=NO, AUTO_CLEAR=YES, TODAY_ONLY=NO, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 16:10:50 166 INFO  [main] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 16:10:50 170 INFO  [main] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=NO, AUTO_CLEAR=YES, TODAY_ONLY=NO, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 16:13:23 108 INFO  [AWT-EventQueue-0] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 16:13:23 114 INFO  [AWT-EventQueue-0] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=NO, AUTO_CLEAR=YES, TODAY_ONLY=NO, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 16:13:23 118 INFO  [AWT-EventQueue-0] ConfigReader:100 - Configs are assigned to GUI successfully.
+2018-06-27 16:13:23 285 INFO  [AWT-EventQueue-0] AnalyzerGUI:3499 - ======================Log Analyzer Start======================
+2018-06-27 17:25:11 660 INFO  [AWT-EventQueue-0] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 17:25:11 697 INFO  [AWT-EventQueue-0] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=NO, AUTO_CLEAR=YES, TODAY_ONLY=NO, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 17:25:20 321 INFO  [AWT-EventQueue-0] ConfigReader:110 - Configs are assigned to GUI successfully.
+2018-06-27 17:25:20 338 INFO  [AWT-EventQueue-0] AnalyzerGUI:3544 - ======================Log Analyzer Start======================
+2018-06-27 17:29:06 173 INFO  [AWT-EventQueue-0] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 17:29:06 177 INFO  [AWT-EventQueue-0] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=NO, AUTO_CLEAR=YES, TODAY_ONLY=NO, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 17:29:17 975 INFO  [AWT-EventQueue-0] ConfigReader:110 - Configs are assigned to GUI successfully.
+2018-06-27 17:29:17 985 INFO  [AWT-EventQueue-0] AnalyzerGUI:3544 - ======================Log Analyzer Start======================
+2018-06-27 17:29:50 296 ERROR [AWT-EventQueue-0] DownloadWorkerTask:59 - java.lang.RuntimeException: java.lang.NullPointerException
+java.util.concurrent.ExecutionException: java.lang.RuntimeException: java.lang.NullPointerException
+	at java.util.concurrent.FutureTask.report(FutureTask.java:122)
+	at java.util.concurrent.FutureTask.get(FutureTask.java:192)
+	at javax.swing.SwingWorker.get(SwingWorker.java:602)
+	at com.ib.workerThreads.LoadUserWorkerTask.done(LoadUserWorkerTask.java:51)
+	at javax.swing.SwingWorker$5.run(SwingWorker.java:737)
+	at javax.swing.SwingWorker$DoSubmitAccumulativeRunnable.run(SwingWorker.java:832)
+	at sun.swing.AccumulativeRunnable.run(AccumulativeRunnable.java:112)
+	at javax.swing.SwingWorker$DoSubmitAccumulativeRunnable.actionPerformed(SwingWorker.java:842)
+	at javax.swing.Timer.fireActionPerformed(Timer.java:313)
+	at javax.swing.Timer$DoPostEvent.run(Timer.java:245)
+	at java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:311)
+	at java.awt.EventQueue.dispatchEventImpl(EventQueue.java:756)
+	at java.awt.EventQueue.access$500(EventQueue.java:97)
+	at java.awt.EventQueue$3.run(EventQueue.java:709)
+	at java.awt.EventQueue$3.run(EventQueue.java:703)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:76)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:726)
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:201)
+	at java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:116)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:105)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:93)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:82)
+Caused by: java.lang.RuntimeException: java.lang.NullPointerException
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1455)
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1441)
+	at sun.net.www.protocol.http.HttpURLConnection.getHeaderField(HttpURLConnection.java:2979)
+	at java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:489)
+	at sun.net.www.protocol.https.HttpsURLConnectionImpl.getResponseCode(HttpsURLConnectionImpl.java:338)
+	at org.jsoup.helper.HttpConnection$Response.execute(HttpConnection.java:575)
+	at org.jsoup.helper.HttpConnection$Response.execute(HttpConnection.java:548)
+	at org.jsoup.helper.HttpConnection.execute(HttpConnection.java:235)
+	at org.jsoup.helper.HttpConnection.get(HttpConnection.java:224)
+	at com.ib.manager.LogManager_server.loadUserDiagnosticFileList(LogManager_server.java:67)
+	at com.ib.workerThreads.LoadUserWorkerTask.doInBackground(LoadUserWorkerTask.java:45)
+	at com.ib.workerThreads.LoadUserWorkerTask.doInBackground(LoadUserWorkerTask.java:17)
+	at javax.swing.SwingWorker$1.call(SwingWorker.java:295)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javax.swing.SwingWorker.run(SwingWorker.java:334)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.NullPointerException
+	at com.ib.manager.ProxyManager$1.getPasswordAuthentication(ProxyManager.java:69)
+	at java.net.Authenticator.requestPasswordAuthentication(Authenticator.java:317)
+	at sun.net.www.protocol.http.HttpURLConnection$1.run(HttpURLConnection.java:420)
+	at sun.net.www.protocol.http.HttpURLConnection$1.run(HttpURLConnection.java:415)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at sun.net.www.protocol.http.HttpURLConnection.privilegedRequestPasswordAuthentication(HttpURLConnection.java:414)
+	at sun.net.www.protocol.http.HttpURLConnection.getServerAuthentication(HttpURLConnection.java:2382)
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1683)
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1441)
+	at java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:480)
+	... 14 more
+2018-06-27 17:30:36 245 INFO  [AWT-EventQueue-0] ConfigReader:62 - Config file not found. Creating new configs...
+2018-06-27 17:30:36 256 INFO  [AWT-EventQueue-0] ConfigReader:39 - Created new config file.
+2018-06-27 17:30:36 258 INFO  [AWT-EventQueue-0] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 17:30:36 258 INFO  [AWT-EventQueue-0] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=C:\Users\SITENG~1\AppData\Local\Temp\, MATCH_CASE_IN_REG_SEARCH=YES, AUTO_CLEAR=YES, TODAY_ONLY=YES, USE_SYSTEM_PROXY=YES, PASSWORD=, USERNAME=, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=C:\Users\SITENG~1\AppData\Local\Temp\}
+2018-06-27 17:30:53 812 INFO  [AWT-EventQueue-0] ConfigReader:69 - Successfully created new config: {DEFAULT_EXTRACT_DIRECTORY=C:\Users\SITENG~1\AppData\Local\Temp\, MATCH_CASE_IN_REG_SEARCH=YES, AUTO_CLEAR=YES, TODAY_ONLY=YES, USE_SYSTEM_PROXY=YES, PASSWORD=, USERNAME=, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=C:\Users\SITENG~1\AppData\Local\Temp\}
+2018-06-27 17:30:53 813 INFO  [AWT-EventQueue-0] ConfigReader:110 - Configs are assigned to GUI successfully.
+2018-06-27 17:30:53 825 INFO  [AWT-EventQueue-0] AnalyzerGUI:3544 - ======================Log Analyzer Start======================
+2018-06-27 17:31:48 569 INFO  [AWT-EventQueue-0] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 17:31:48 572 INFO  [AWT-EventQueue-0] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=YES, AUTO_CLEAR=YES, TODAY_ONLY=YES, USE_SYSTEM_PROXY=YES, PASSWORD=, USERNAME=, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 17:31:55 603 INFO  [AWT-EventQueue-0] ConfigReader:110 - Configs are assigned to GUI successfully.
+2018-06-27 17:31:55 620 INFO  [AWT-EventQueue-0] AnalyzerGUI:3544 - ======================Log Analyzer Start======================
+2018-06-27 17:32:56 969 INFO  [AWT-EventQueue-0] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 17:32:56 972 INFO  [AWT-EventQueue-0] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=YES, AUTO_CLEAR=YES, TODAY_ONLY=YES, USE_SYSTEM_PROXY=YES, PASSWORD=uncles-jobs-limo-bleats, USERNAME=twslogviewer, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 17:32:56 974 INFO  [AWT-EventQueue-0] ConfigReader:110 - Configs are assigned to GUI successfully.
+2018-06-27 17:32:56 993 INFO  [AWT-EventQueue-0] AnalyzerGUI:3544 - ======================Log Analyzer Start======================
+2018-06-27 17:35:46 031 INFO  [AWT-EventQueue-0] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 17:35:46 035 INFO  [AWT-EventQueue-0] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=YES, AUTO_CLEAR=YES, TODAY_ONLY=YES, USE_SYSTEM_PROXY=YES, PASSWORD=uncles-jobs-limo-bleats, USERNAME=twslogviewer, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 17:35:55 303 INFO  [AWT-EventQueue-0] ConfigReader:110 - Configs are assigned to GUI successfully.
+2018-06-27 17:35:55 332 INFO  [AWT-EventQueue-0] AnalyzerGUI:3544 - ======================Log Analyzer Start======================
+2018-06-27 17:36:11 832 INFO  [AWT-EventQueue-0] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 17:36:11 835 INFO  [AWT-EventQueue-0] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=YES, AUTO_CLEAR=YES, TODAY_ONLY=YES, USE_SYSTEM_PROXY=YES, PASSWORD=uncles-jobs-limo-bleats, USERNAME=twslogviewer, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 17:36:11 837 INFO  [AWT-EventQueue-0] ConfigReader:110 - Configs are assigned to GUI successfully.
+2018-06-27 17:36:11 861 INFO  [AWT-EventQueue-0] AnalyzerGUI:3544 - ======================Log Analyzer Start======================
+2018-06-27 17:37:10 305 INFO  [SwingWorker-pool-2-thread-3] ExtractWorkerTaskServer:59 - ExtractWorker: DownloadWorker finished, start extraction.
+2018-06-27 17:37:29 056 INFO  [AWT-EventQueue-0] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 17:37:29 060 INFO  [AWT-EventQueue-0] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=YES, AUTO_CLEAR=YES, TODAY_ONLY=YES, USE_SYSTEM_PROXY=YES, PASSWORD=cheaps-debits-knits-deeded, USERNAME=twslogviewer, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 17:37:29 062 INFO  [AWT-EventQueue-0] ConfigReader:110 - Configs are assigned to GUI successfully.
+2018-06-27 17:37:29 082 INFO  [AWT-EventQueue-0] AnalyzerGUI:3544 - ======================Log Analyzer Start======================
+2018-06-27 17:38:56 812 INFO  [AWT-EventQueue-0] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 17:38:56 816 INFO  [AWT-EventQueue-0] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=YES, AUTO_CLEAR=YES, TODAY_ONLY=YES, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 17:39:19 408 INFO  [AWT-EventQueue-0] ConfigReader:110 - Configs are assigned to GUI successfully.
+2018-06-27 17:39:19 426 INFO  [AWT-EventQueue-0] AnalyzerGUI:3544 - ======================Log Analyzer Start======================
+2018-06-27 17:39:22 211 ERROR [AWT-EventQueue-0] DownloadWorkerTask:59 - java.lang.RuntimeException: java.lang.NullPointerException
+java.util.concurrent.ExecutionException: java.lang.RuntimeException: java.lang.NullPointerException
+	at java.util.concurrent.FutureTask.report(FutureTask.java:122)
+	at java.util.concurrent.FutureTask.get(FutureTask.java:192)
+	at javax.swing.SwingWorker.get(SwingWorker.java:602)
+	at com.ib.workerThreads.LoadUserWorkerTask.done(LoadUserWorkerTask.java:51)
+	at javax.swing.SwingWorker$5.run(SwingWorker.java:737)
+	at javax.swing.SwingWorker$DoSubmitAccumulativeRunnable.run(SwingWorker.java:832)
+	at sun.swing.AccumulativeRunnable.run(AccumulativeRunnable.java:112)
+	at javax.swing.SwingWorker$DoSubmitAccumulativeRunnable.actionPerformed(SwingWorker.java:842)
+	at javax.swing.Timer.fireActionPerformed(Timer.java:313)
+	at javax.swing.Timer$DoPostEvent.run(Timer.java:245)
+	at java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:311)
+	at java.awt.EventQueue.dispatchEventImpl(EventQueue.java:756)
+	at java.awt.EventQueue.access$500(EventQueue.java:97)
+	at java.awt.EventQueue$3.run(EventQueue.java:709)
+	at java.awt.EventQueue$3.run(EventQueue.java:703)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:76)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:726)
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:201)
+	at java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:116)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:105)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:93)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:82)
+Caused by: java.lang.RuntimeException: java.lang.NullPointerException
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1455)
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1441)
+	at sun.net.www.protocol.http.HttpURLConnection.getHeaderField(HttpURLConnection.java:2979)
+	at java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:489)
+	at sun.net.www.protocol.https.HttpsURLConnectionImpl.getResponseCode(HttpsURLConnectionImpl.java:338)
+	at org.jsoup.helper.HttpConnection$Response.execute(HttpConnection.java:575)
+	at org.jsoup.helper.HttpConnection$Response.execute(HttpConnection.java:548)
+	at org.jsoup.helper.HttpConnection.execute(HttpConnection.java:235)
+	at org.jsoup.helper.HttpConnection.get(HttpConnection.java:224)
+	at com.ib.manager.LogManager_server.loadUserDiagnosticFileList(LogManager_server.java:67)
+	at com.ib.workerThreads.LoadUserWorkerTask.doInBackground(LoadUserWorkerTask.java:45)
+	at com.ib.workerThreads.LoadUserWorkerTask.doInBackground(LoadUserWorkerTask.java:17)
+	at javax.swing.SwingWorker$1.call(SwingWorker.java:295)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javax.swing.SwingWorker.run(SwingWorker.java:334)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.NullPointerException
+	at com.ib.manager.ProxyManager$1.getPasswordAuthentication(ProxyManager.java:69)
+	at java.net.Authenticator.requestPasswordAuthentication(Authenticator.java:317)
+	at sun.net.www.protocol.http.HttpURLConnection$1.run(HttpURLConnection.java:420)
+	at sun.net.www.protocol.http.HttpURLConnection$1.run(HttpURLConnection.java:415)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at sun.net.www.protocol.http.HttpURLConnection.privilegedRequestPasswordAuthentication(HttpURLConnection.java:414)
+	at sun.net.www.protocol.http.HttpURLConnection.getServerAuthentication(HttpURLConnection.java:2382)
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1683)
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1441)
+	at java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:480)
+	... 14 more
+2018-06-27 17:46:31 410 INFO  [AWT-EventQueue-0] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 17:46:31 413 INFO  [AWT-EventQueue-0] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=YES, AUTO_CLEAR=YES, TODAY_ONLY=YES, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 17:46:31 416 INFO  [AWT-EventQueue-0] ConfigReader:105 - Configs are assigned to GUI successfully.
+2018-06-27 17:46:31 438 INFO  [AWT-EventQueue-0] AnalyzerGUI:3549 - ======================Log Analyzer Start======================
+2018-06-27 17:51:22 368 INFO  [AWT-EventQueue-0] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 17:51:22 371 INFO  [AWT-EventQueue-0] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=YES, AUTO_CLEAR=YES, TODAY_ONLY=YES, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 17:51:22 373 INFO  [AWT-EventQueue-0] ConfigReader:105 - Configs are assigned to GUI successfully.
+2018-06-27 17:51:22 393 INFO  [AWT-EventQueue-0] AnalyzerGUI:3557 - ======================Log Analyzer Start======================
+2018-06-27 17:51:34 752 ERROR [AWT-EventQueue-0] DownloadWorkerTask:59 - java.lang.RuntimeException: java.lang.NullPointerException
+java.util.concurrent.ExecutionException: java.lang.RuntimeException: java.lang.NullPointerException
+	at java.util.concurrent.FutureTask.report(FutureTask.java:122)
+	at java.util.concurrent.FutureTask.get(FutureTask.java:192)
+	at javax.swing.SwingWorker.get(SwingWorker.java:602)
+	at com.ib.workerThreads.LoadUserWorkerTask.done(LoadUserWorkerTask.java:51)
+	at javax.swing.SwingWorker$5.run(SwingWorker.java:737)
+	at javax.swing.SwingWorker$DoSubmitAccumulativeRunnable.run(SwingWorker.java:832)
+	at sun.swing.AccumulativeRunnable.run(AccumulativeRunnable.java:112)
+	at javax.swing.SwingWorker$DoSubmitAccumulativeRunnable.actionPerformed(SwingWorker.java:842)
+	at javax.swing.Timer.fireActionPerformed(Timer.java:313)
+	at javax.swing.Timer$DoPostEvent.run(Timer.java:245)
+	at java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:311)
+	at java.awt.EventQueue.dispatchEventImpl(EventQueue.java:756)
+	at java.awt.EventQueue.access$500(EventQueue.java:97)
+	at java.awt.EventQueue$3.run(EventQueue.java:709)
+	at java.awt.EventQueue$3.run(EventQueue.java:703)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:76)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:726)
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:201)
+	at java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:116)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:105)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:93)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:82)
+Caused by: java.lang.RuntimeException: java.lang.NullPointerException
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1455)
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1441)
+	at sun.net.www.protocol.http.HttpURLConnection.getHeaderField(HttpURLConnection.java:2979)
+	at java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:489)
+	at sun.net.www.protocol.https.HttpsURLConnectionImpl.getResponseCode(HttpsURLConnectionImpl.java:338)
+	at org.jsoup.helper.HttpConnection$Response.execute(HttpConnection.java:575)
+	at org.jsoup.helper.HttpConnection$Response.execute(HttpConnection.java:548)
+	at org.jsoup.helper.HttpConnection.execute(HttpConnection.java:235)
+	at org.jsoup.helper.HttpConnection.get(HttpConnection.java:224)
+	at com.ib.manager.LogManager_server.loadUserDiagnosticFileList(LogManager_server.java:67)
+	at com.ib.workerThreads.LoadUserWorkerTask.doInBackground(LoadUserWorkerTask.java:45)
+	at com.ib.workerThreads.LoadUserWorkerTask.doInBackground(LoadUserWorkerTask.java:17)
+	at javax.swing.SwingWorker$1.call(SwingWorker.java:295)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javax.swing.SwingWorker.run(SwingWorker.java:334)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.NullPointerException
+	at com.ib.manager.ProxyManager$1.getPasswordAuthentication(ProxyManager.java:69)
+	at java.net.Authenticator.requestPasswordAuthentication(Authenticator.java:317)
+	at sun.net.www.protocol.http.HttpURLConnection$1.run(HttpURLConnection.java:420)
+	at sun.net.www.protocol.http.HttpURLConnection$1.run(HttpURLConnection.java:415)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at sun.net.www.protocol.http.HttpURLConnection.privilegedRequestPasswordAuthentication(HttpURLConnection.java:414)
+	at sun.net.www.protocol.http.HttpURLConnection.getServerAuthentication(HttpURLConnection.java:2382)
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1683)
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1441)
+	at java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:480)
+	... 14 more
+2018-06-27 17:51:44 089 INFO  [AWT-EventQueue-0] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 17:51:44 092 INFO  [AWT-EventQueue-0] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=YES, AUTO_CLEAR=YES, TODAY_ONLY=YES, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 17:51:44 094 INFO  [AWT-EventQueue-0] ConfigReader:105 - Configs are assigned to GUI successfully.
+2018-06-27 17:51:44 114 INFO  [AWT-EventQueue-0] AnalyzerGUI:3557 - ======================Log Analyzer Start======================
+2018-06-27 17:53:32 238 INFO  [AWT-EventQueue-0] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 17:53:32 240 INFO  [AWT-EventQueue-0] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=YES, AUTO_CLEAR=YES, TODAY_ONLY=YES, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 17:53:32 243 INFO  [AWT-EventQueue-0] ConfigReader:105 - Configs are assigned to GUI successfully.
+2018-06-27 17:53:32 265 INFO  [AWT-EventQueue-0] AnalyzerGUI:3562 - ======================Log Analyzer Start======================
+2018-06-27 17:53:45 402 ERROR [AWT-EventQueue-0] DownloadWorkerTask:59 - java.lang.RuntimeException: java.lang.NullPointerException
+java.util.concurrent.ExecutionException: java.lang.RuntimeException: java.lang.NullPointerException
+	at java.util.concurrent.FutureTask.report(FutureTask.java:122)
+	at java.util.concurrent.FutureTask.get(FutureTask.java:192)
+	at javax.swing.SwingWorker.get(SwingWorker.java:602)
+	at com.ib.workerThreads.LoadUserWorkerTask.done(LoadUserWorkerTask.java:51)
+	at javax.swing.SwingWorker$5.run(SwingWorker.java:737)
+	at javax.swing.SwingWorker$DoSubmitAccumulativeRunnable.run(SwingWorker.java:832)
+	at sun.swing.AccumulativeRunnable.run(AccumulativeRunnable.java:112)
+	at javax.swing.SwingWorker$DoSubmitAccumulativeRunnable.actionPerformed(SwingWorker.java:842)
+	at javax.swing.Timer.fireActionPerformed(Timer.java:313)
+	at javax.swing.Timer$DoPostEvent.run(Timer.java:245)
+	at java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:311)
+	at java.awt.EventQueue.dispatchEventImpl(EventQueue.java:756)
+	at java.awt.EventQueue.access$500(EventQueue.java:97)
+	at java.awt.EventQueue$3.run(EventQueue.java:709)
+	at java.awt.EventQueue$3.run(EventQueue.java:703)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:76)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:726)
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:201)
+	at java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:116)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:105)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:93)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:82)
+Caused by: java.lang.RuntimeException: java.lang.NullPointerException
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1455)
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1441)
+	at sun.net.www.protocol.http.HttpURLConnection.getHeaderField(HttpURLConnection.java:2979)
+	at java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:489)
+	at sun.net.www.protocol.https.HttpsURLConnectionImpl.getResponseCode(HttpsURLConnectionImpl.java:338)
+	at org.jsoup.helper.HttpConnection$Response.execute(HttpConnection.java:575)
+	at org.jsoup.helper.HttpConnection$Response.execute(HttpConnection.java:548)
+	at org.jsoup.helper.HttpConnection.execute(HttpConnection.java:235)
+	at org.jsoup.helper.HttpConnection.get(HttpConnection.java:224)
+	at com.ib.manager.LogManager_server.loadUserDiagnosticFileList(LogManager_server.java:67)
+	at com.ib.workerThreads.LoadUserWorkerTask.doInBackground(LoadUserWorkerTask.java:45)
+	at com.ib.workerThreads.LoadUserWorkerTask.doInBackground(LoadUserWorkerTask.java:17)
+	at javax.swing.SwingWorker$1.call(SwingWorker.java:295)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at javax.swing.SwingWorker.run(SwingWorker.java:334)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.NullPointerException
+	at com.ib.manager.ProxyManager$1.getPasswordAuthentication(ProxyManager.java:69)
+	at java.net.Authenticator.requestPasswordAuthentication(Authenticator.java:317)
+	at sun.net.www.protocol.http.HttpURLConnection$1.run(HttpURLConnection.java:420)
+	at sun.net.www.protocol.http.HttpURLConnection$1.run(HttpURLConnection.java:415)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at sun.net.www.protocol.http.HttpURLConnection.privilegedRequestPasswordAuthentication(HttpURLConnection.java:414)
+	at sun.net.www.protocol.http.HttpURLConnection.getServerAuthentication(HttpURLConnection.java:2382)
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1683)
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1441)
+	at java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:480)
+	... 14 more
+2018-06-27 17:55:46 359 INFO  [AWT-EventQueue-0] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 17:55:46 362 INFO  [AWT-EventQueue-0] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=YES, AUTO_CLEAR=YES, TODAY_ONLY=YES, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 17:55:46 364 INFO  [AWT-EventQueue-0] ConfigReader:105 - Configs are assigned to GUI successfully.
+2018-06-27 17:55:46 388 INFO  [AWT-EventQueue-0] AnalyzerGUI:3558 - ======================Log Analyzer Start======================
+2018-06-27 17:56:36 085 INFO  [AWT-EventQueue-0] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 17:56:36 088 INFO  [AWT-EventQueue-0] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=YES, AUTO_CLEAR=YES, TODAY_ONLY=YES, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 17:56:36 090 INFO  [AWT-EventQueue-0] ConfigReader:105 - Configs are assigned to GUI successfully.
+2018-06-27 17:56:36 111 INFO  [AWT-EventQueue-0] AnalyzerGUI:3563 - ======================Log Analyzer Start======================
+2018-06-27 17:59:54 486 INFO  [AWT-EventQueue-0] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 17:59:54 489 INFO  [AWT-EventQueue-0] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=YES, AUTO_CLEAR=YES, TODAY_ONLY=YES, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 17:59:54 493 INFO  [AWT-EventQueue-0] ConfigReader:105 - Configs are assigned to GUI successfully.
+2018-06-27 17:59:54 521 INFO  [AWT-EventQueue-0] AnalyzerGUI:3571 - ======================Log Analyzer Start======================
+2018-06-27 18:00:09 226 INFO  [AWT-EventQueue-0] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 18:00:09 229 INFO  [AWT-EventQueue-0] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=YES, AUTO_CLEAR=YES, TODAY_ONLY=YES, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 18:00:09 231 INFO  [AWT-EventQueue-0] ConfigReader:105 - Configs are assigned to GUI successfully.
+2018-06-27 18:00:09 250 INFO  [AWT-EventQueue-0] AnalyzerGUI:3571 - ======================Log Analyzer Start======================
+2018-06-27 18:02:54 081 INFO  [AWT-EventQueue-0] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 18:02:54 084 INFO  [AWT-EventQueue-0] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=YES, AUTO_CLEAR=YES, TODAY_ONLY=YES, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 18:02:54 087 INFO  [AWT-EventQueue-0] ConfigReader:105 - Configs are assigned to GUI successfully.
+2018-06-27 18:02:54 109 INFO  [AWT-EventQueue-0] AnalyzerGUI:3571 - ======================Log Analyzer Start======================
+2018-06-27 18:03:49 018 INFO  [AWT-EventQueue-0] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 18:03:49 021 INFO  [AWT-EventQueue-0] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=YES, AUTO_CLEAR=YES, TODAY_ONLY=YES, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 18:03:49 024 INFO  [AWT-EventQueue-0] ConfigReader:105 - Configs are assigned to GUI successfully.
+2018-06-27 18:03:49 043 INFO  [AWT-EventQueue-0] AnalyzerGUI:3571 - ======================Log Analyzer Start======================
+2018-06-27 18:06:26 817 INFO  [AWT-EventQueue-0] ConfigReader:37 - Config file found. Reading configs...
+2018-06-27 18:06:26 820 INFO  [AWT-EventQueue-0] ConfigReader:58 - Successfully loaded config: {DEFAULT_EXTRACT_DIRECTORY=D:\Steven Jin\Error Reports, MATCH_CASE_IN_REG_SEARCH=YES, AUTO_CLEAR=YES, TODAY_ONLY=YES, USE_SYSTEM_PROXY=YES, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=D:\Steven Jin\Error Reports}
+2018-06-27 18:06:26 823 INFO  [AWT-EventQueue-0] ConfigReader:105 - Configs are assigned to GUI successfully.
+2018-06-27 18:06:26 846 INFO  [AWT-EventQueue-0] AnalyzerGUI:3570 - ======================Log Analyzer Start======================
+2018-06-27 18:08:51 053 INFO  [AWT-EventQueue-0] ConfigReader:60 - Config file not found. Creating new configs...
+2018-06-27 18:08:51 062 INFO  [AWT-EventQueue-0] ConfigReader:39 - Created new config file.
+2018-06-27 18:08:51 062 INFO  [AWT-EventQueue-0] ConfigReader:64 - Successfully created new config: {DEFAULT_EXTRACT_DIRECTORY=C:\Users\SITENG~1\AppData\Local\Temp\, MATCH_CASE_IN_REG_SEARCH=YES, AUTO_CLEAR=YES, TODAY_ONLY=YES, USE_SYSTEM_PROXY=YES, PASSWORD=, USERNAME=, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=C:\Users\SITENG~1\AppData\Local\Temp\}
+2018-06-27 18:08:51 065 INFO  [AWT-EventQueue-0] ConfigReader:105 - Configs are assigned to GUI successfully.
+2018-06-27 18:08:51 086 INFO  [AWT-EventQueue-0] AnalyzerGUI:3570 - ======================Log Analyzer Start======================
+2018-06-27 18:10:36 202 INFO  [AWT-EventQueue-0] ConfigReader:60 - Config file not found. Creating new configs...
+2018-06-27 18:10:36 212 INFO  [AWT-EventQueue-0] ConfigReader:39 - Created new config file.
+2018-06-27 18:10:36 212 INFO  [AWT-EventQueue-0] ConfigReader:64 - Successfully created new config: {DEFAULT_EXTRACT_DIRECTORY=C:\Users\SITENG~1\AppData\Local\Temp\, MATCH_CASE_IN_REG_SEARCH=YES, AUTO_CLEAR=YES, TODAY_ONLY=YES, USE_SYSTEM_PROXY=YES, PASSWORD=, USERNAME=, INCLUDE_TRD_IN_ANALYSIS=NO, INCLUDE_XML_IN_ANALYSIS=YES, PREFERRED_PROXY_PORT=, PREFERRED_PROXY_HOST=, DEFAULT_DOWNLOAD_DIRECTORY=C:\Users\SITENG~1\AppData\Local\Temp\}
+2018-06-27 18:10:36 215 INFO  [AWT-EventQueue-0] ConfigReader:105 - Configs are assigned to GUI successfully.
+2018-06-27 18:10:36 236 INFO  [AWT-EventQueue-0] AnalyzerGUI:3570 - ======================Log Analyzer Start======================

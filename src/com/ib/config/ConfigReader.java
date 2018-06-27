@@ -59,6 +59,7 @@ public class ConfigReader {
             } else {
                 LOG.info("Config file not found. Creating new configs...");
                 ConfigWriter.getInstance().createDefaultConfigFile();
+                
                 m_config = ConfigWriter.getInstance().createDefaultConfigsMap();
                 LOG.info("Successfully created new config: " + m_config.toString());
             }
@@ -78,6 +79,10 @@ public class ConfigReader {
         
         // Proxy configs
         ProxyManager.getInstance().setupProxyUsingConfig();
+        
+        // Authentication setup
+        ProxyManager.getInstance().setupAuthentication(m_config.get(Configs.USERNAME)
+                , m_config.get(Configs.PASSWORD));
         
         // Today only
         String todayOnly = m_config.get(Configs.TODAY_ONLY);
@@ -111,6 +116,8 @@ public class ConfigReader {
     public void setConfig(String key, String value){
         if(m_config.containsKey(key)){
             m_config.replace(key, value);
+        } else{
+            m_config.put(key, value);
         }
     }
     

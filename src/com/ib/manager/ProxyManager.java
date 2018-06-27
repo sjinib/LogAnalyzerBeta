@@ -61,14 +61,12 @@ public class ProxyManager {
             
             LOG.debug("Setup done with using system proxy from Configs");
         }
-        
-        setupAuthentication();
     }
     
-    private void setupAuthentication(){
+    public void setupAuthentication(String username, String password){
         Authenticator.setDefault (new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication ("twserror", "twserr67".toCharArray());
+                return new PasswordAuthentication (username, password.toCharArray());
             }
         });
     }

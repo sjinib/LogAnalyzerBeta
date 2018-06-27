@@ -11,6 +11,7 @@ import org.w3c.dom.Element;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 import javax.swing.text.StyledDocument;
+
 import com.ib.analyzerGui.AnalyzerGUI;
 
 import com.ib.message.*;

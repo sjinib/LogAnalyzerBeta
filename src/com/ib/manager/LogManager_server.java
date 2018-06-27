@@ -96,6 +96,7 @@ public class LogManager_server extends LogManager{
             try{
                 URL url = new URL("https://wit1.interactivebrokers.com/cgi-bin/tws/tws_error_reader.pl");
                 HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+                connection.setConnectTimeout(10000);
                 BufferedReader in = new BufferedReader(new InputStreamReader(
                         connection.getInputStream()));
                 

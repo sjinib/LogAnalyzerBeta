@@ -70,6 +70,10 @@ public class ConfigWriter {
         props.setProperty(Configs.INCLUDE_XML_IN_ANALYSIS, "YES");
         props.setProperty(Configs.INCLUDE_TRD_IN_ANALYSIS, "NO");
         props.setProperty(Configs.MATCH_CASE_IN_REG_SEARCH, "YES");
+        
+        props.setProperty(Configs.USERNAME, "");
+        props.setProperty(Configs.PASSWORD, "");
+        
         return props;
     }
     
